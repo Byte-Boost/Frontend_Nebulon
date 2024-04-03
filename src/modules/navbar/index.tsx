@@ -1,29 +1,18 @@
 import Image from "next/image";
+import NBSearchbar from "../nb-searchbox";
 
 const Navbar = () => {
     return(
-        <nav className="navbar navbar--fixed-top">
-            <div className="navbar__inner">
-                <div className="navbar__items">
-                    <a className="navbar__brand">
-                        <Image
-                        className="navbar__logo"
-                        src={'/Nebulon_icon.png'}
-                        
-                        // default size of the logo 
-                        // CSS overrides this
-                        width={526} 
-                        height={526}
-                        
-                        alt="NebulonIcon"
-                        />
-                        <strong className='navbar__title'>by Byte-Boost</strong>
-                    </a>
+        <nav className="navbar navbar--fixed-top max-sm:grid-cols-1 max-sm:grid">
+            <div className="navbar__inner ">
+                <div className="navbar__items navbar__items--left ">
+                  <p className="font-thin text-white text-opacity-75 select-none ">Nebulon-v0.0.0a</p>
                 </div>
-                    <p className="font-bold text-center">This is just a test, final layout will be different.<br/> This text also breaks responsivity :P</p>
                 <div className="navbar__items navbar__items--right">
-                    <a href="https://github.com/Byte-Boost/Nebulon" target="_blank" rel="noopener noreferrer" className="navbar__item navbar__link">GitHub</a>
-                    <a href="https://github.com/Byte-Boost" target="_blank" rel="noopener noreferrer" className="navbar__item navbar__link">Team</a>
+                    <div className="bar-search max-sm:invisible max-sm:w-0 max-sm:h-0"/>
+                    <div>
+                    <NBSearchbar/>
+                    </div>
                 </div>
             </div>
         </nav>

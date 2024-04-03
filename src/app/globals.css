@@ -4,16 +4,17 @@
 
 /* Default Settings */
 :root{
-  --navbar-bg-color: transparent;
+  --navbar-size:4.75rem;
+  --navbar-bg-color: #1F1F1F;
   --navbar-shadow-color: transparent;
   --navbar-title-color:#413459;
   --navbar-link-color:#413459;
   --navbar-link-onhover-color: #c14379;
 
+  --test-color:#493860;
   --navbar-logo-size: 200%;
 
 }
-
 .navbar{
   box-sizing: border-box;
   box-shadow: 0 0 0 1px var(--navbar-shadow-color);
@@ -86,4 +87,41 @@
   color: var(--navbar-link-onhover-color);
   text-decoration: none;
   transition: color 200ms cubic-bezier(0.08,0.52,0.52,1);
+}
+.bar-search{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 125%;
+  width: 18px;
+  background-color: var(--test-color);
+  margin-inline: 2rem;
+}
+.nb-searchbar{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height:35px; 
+  border-radius: 0.15rem;
+}
+.container--searchbar{
+  display: flex;
+  align-items: center;
+  width: 140%;
+  padding-right: 15rem;
+  height: 100%;
+}
+
+input[type="search"]:focus{
+  outline: none;
+}
+
+input[type="search"]{
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 0.15rem;
 }
