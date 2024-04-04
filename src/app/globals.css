@@ -125,3 +125,14 @@ input[type="search"]{
   padding: 0.5rem;
   border-radius: 0.15rem;
 }
+
+.card{
+  background-color: white;
+  /* height: 20rem; */
+  border-radius: 1rem;
+  border-width: 0.1rem;
+  border-color: rgb(214, 214, 214);
+}
+
+.card--content{
+}
