@@ -108,7 +108,7 @@
 .container--searchbar{
   display: flex;
   align-items: center;
-  width: 140%;
+  width: 100%;
   padding-right: 15rem;
   height: 100%;
 }
