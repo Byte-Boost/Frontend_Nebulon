@@ -6,7 +6,7 @@
 :root{
   --navbar-size:4.75rem;
   --navbar-bg-color: #1F1F1F;
-  --navbar-shadow-color: transparent;
+  --navbar-shadow-color: none;
   --navbar-title-color:#413459;
   --navbar-link-color:#413459;
   --navbar-link-onhover-color: #c14379;
@@ -14,10 +14,18 @@
   --test-color:#493860;
   --navbar-logo-size: 200%;
 
+  --sidebar-bg-color: #E6E6E6;
+  --sidebar-shadow-color: none;
+  --sidebar-item-color: #413459;
+  --sidebar-item-onhover-color: #c14379;
+
+
 }
+
+/* Navbar */
 .navbar{
   box-sizing: border-box;
-  box-shadow: 0 0 0 1px var(--navbar-shadow-color);
+  box-shadow: 0 0 10px 5px var(--navbar-shadow-color);
   display: flex;
   padding: calc(1rem * 0.5 ) 1rem;
   height: 4.75rem;
@@ -88,6 +96,8 @@
   text-decoration: none;
   transition: color 200ms cubic-bezier(0.08,0.52,0.52,1);
 }
+
+/* Searchbar */
 .bar-search{
   display: flex;
   justify-content: center;
@@ -124,6 +134,34 @@ input[type="search"]{
   background-color: white;
   padding: 0.5rem;
   border-radius: 0.15rem;
+}
+
+/* Sidebar */
+.sidebar{
+  display: flex;
+  width: fit-content;
+  background-color: var(--sidebar-bg-color);
+  outline: 5px solid #D9D9D9;
+}
+.sidebar--items{
+  display: grid;      
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+.sidebar--item{
+  display: grid;
+  grid-template-columns: 1fr ;;
+  padding: 0.5rem 1rem;
+  cursor: "pointer";
+}
+.sidebar--item__icon{
+  margin-right: 0.5rem; 
+  align-self: center;
+  color: var(--sidebar-item-color);
+
+}
+.sidebar--item__icon:hover{
+  color: var(--sidebar-item-onhover-color);
 }
 
 .card{
