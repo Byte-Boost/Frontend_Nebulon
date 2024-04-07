@@ -1,5 +1,5 @@
 import Image from "next/image";
-import NBSearchbar from "../nb-searchbox";
+import NBSearchbar from "../nb_searchbox";
 
 const Navbar = () => {
     return(
