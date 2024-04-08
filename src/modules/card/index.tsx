@@ -1,9 +1,15 @@
 
-const Card = () => {
+const Card = (props) => {
     return(
     <>
-        <div className="card flex basis-1/2 m-4 drop-shadow-md place-content-center col-span">
-                <p>Test</p>
+        <div className="card drop-shadow-md grid grid-cols-1">
+                <div>
+                    <p className="card--title">{props.title}</p>
+                </div>
+
+                <div className="">
+                    {props.children}
+                </div>
         </div>
     </>
     )
