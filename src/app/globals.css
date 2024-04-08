@@ -15,6 +15,7 @@
   --navbar-logo-size: 200%;
 
   --sidebar-bg-color: #E6E6E6;
+  --sidebar-border-color:none;
   --sidebar-shadow-color: none;
   --sidebar-item-color: #413459;
   --sidebar-item-onhover-color: #c14379;
@@ -139,9 +140,10 @@ input[type="search"]{
 /* Sidebar */
 .sidebar{
   display: flex;
+  height: 100%;
   width: fit-content;
   background-color: var(--sidebar-bg-color);
-  outline: 5px solid #D9D9D9;
+  outline: 5px solid var(--sidebar-border-color);
 }
 .sidebar--items{
   display: grid;      
@@ -214,4 +216,10 @@ input[type="search"]{
   display: block;
   margin-top: 10px;
   cursor: pointer;
+}
+.content-container{
+  display : flex;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
