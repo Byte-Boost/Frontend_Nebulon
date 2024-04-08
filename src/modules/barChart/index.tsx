@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import Chart from 'chart.js/auto'; // Importe o pacote Chart.js
 
-let MeuComponente = ({data}) => {
+let BarChart = () => {
   useEffect(() => {
 
     // Dados do gráfico
-    var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+    var xValues = ['10','11','12','13','14','15', '16'];
     var yValues = [55, 49, 44, 24, 15];
     var barColors = ["red", "green","blue","orange","brown"];
 
@@ -24,7 +24,7 @@ let MeuComponente = ({data}) => {
         legend: {display: false},
         title: {
           display: true,
-          text: "World Wine Production 2018"
+          text: "Test Grafico"
         }
       }
     });
@@ -35,5 +35,5 @@ let MeuComponente = ({data}) => {
   );
 }
 
-export default MeuComponente;
+export default BarChart;
 
