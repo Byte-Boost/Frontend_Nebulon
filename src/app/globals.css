@@ -173,13 +173,19 @@ input[type="search"]{
   border-radius: 1rem;
   border-width: 0.1rem;
   border-color: rgb(214, 214, 214);
+  overflow: auto;
 }
 
 .card--content{
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
 .card--title{
   text-align: center;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  height: 1.5rem;
 }
 
 /* Product page*/
@@ -225,4 +231,28 @@ input[type="search"]{
   height: 100%;
   padding: 0;
   margin: 0;
+}
+
+/* Client page*/
+
+.container-c{
+  display: flex;
+  justify-content: start;
+  filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.50));
+  border-radius: 1rem;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(225, 225, 225); 
+}
+
+.container-table{
+  margin: 2rem;
+  height: 100%;
+  width: 80%;
+}
+
+.info{
+  display: flex;
+  justify-content: center;
+  height: 100%;
 }
