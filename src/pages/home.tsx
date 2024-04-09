@@ -4,6 +4,10 @@ import Card from '@/modules/card/index';
 import Navbar from '@/modules/navbar';
 import Sidebar from '@/modules/sidebar';
 export default function Home() {
+
+  // json data for bar chart
+  // const data = require('../json/test.json')
+
   return (
     <main>
         <Navbar/>
@@ -33,6 +37,11 @@ export default function Home() {
             </Card>
             <Card title='Anotacoes' width='20rem' height="10rem">
               Anotacoes loucas eeeeeaaaaaaofjoiefhwuiehfweikfjoi
+            </Card> */}
+
+            {/* Card with bar Chat with json data
+            <Card title='Vendas Em R$' width='50rem' height='25rem'>
+              <BarChart id='VendasEmR$' width='100%' height='20rem' title='Vendas Em R$' data = {data}/>
             </Card> */}
 
           </div>

@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import Chart from 'chart.js/auto'; // Importe o pacote Chart.js
 
-let BarChart = ({id, width, height}) => {
-  useEffect(() => {
+let BarChart = ({id, width, height, title, data}) => {
 
-    // Dados do gráfico
-    var xValues = ['10','11','12','13','14','15', '16'];
-    var yValues = [55, 49, 44, 24, 15];
-    var barColors = ["red", "green","blue","orange","brown"];
+  let barColors = ['rgba(210,65,108,0.7)'];
+
+  let xValues = data['Planilha1']['Vendedor']
+  let yValues = data['Planilha1']['Valor de Venda']
+
+  useEffect(() => {
 
     // Criar o gráfico usando Chart.js
     var ctx = document.getElementById(id).getContext('2d');
@@ -16,15 +17,21 @@ let BarChart = ({id, width, height}) => {
       data: {
         labels: xValues,
         datasets: [{
+          label: 'Valor em R$',
+          data: yValues,
           backgroundColor: barColors,
-          data: yValues
-        }]
+          borderColor: 'rgba(210,65,108,1)',
+          borderWidth: 2
+        }
+        ]
       },
       options: {
-        legend: {display: false},
+        legend: {
+          position: 'top',
+        },
         title: {
           display: true,
-          text: "Test Grafico"
+          text: title
         }
       }
     });

@@ -1,16 +1,67 @@
 {
-    "Planilha1": {
-      "Data da venda": [ "15/04/2024", "20/04/2024", "25/04/2024", "10/04/2024", "05/04/2024" ],
-      "Vendedor": [ "Rafael Araújo Moreno Monteiro", "Juliana Oliveira Santos", "Lucas Mendes Costa", "Rafael Araújo Moreno Monteiro", "Juliana Oliveira Santos" ],
-      "CPF Vendedor": [ "123.456.789-00", "987.654.321-00", "111.222.333-44", "123.456.789-00", "987.654.321-00" ],
-      "Produto": [ "Sistema de descrição de cargos", "Software de contabilidade", "Sistema de gestão de estoque", "Software de contabilidade", "Sistema de descrição de cargos" ],
-      "ID Produto": [ 1, 2, 3, 2, 1 ],
-      "Cliente": [ "Jorge e Lucas escritório contábil", "Fernanda Consultoria Financeira", "Anderson & Silva Comércio de Peças", "Fernanda Consultoria Financeira", "Jorge e Lucas escritório contábil" ],
-      "CNPJ/CPF Cliente": [ "30.062.036/0001-60", "40.123.456/0001-20", "50.987.654/0001-30", "40.123.456/0001-20", "30.062.036/0001-60" ],
-      "Segmento do Cliente": [ "Contábil", "Financeiro", "Comércio", "Financeiro", "Contábil" ],
-      "Valor de Venda": [ 1500, 2000, 1800, 1900, 1600 ]
-    }
+  "Planilha1": {
+    "Data da venda": [
+      "15/04/2024",
+      "20/04/2024",
+      "25/04/2024",
+      "10/04/2024",
+      "05/04/2024"
+    ],
+    "Vendedor": [
+      "Rafael Araújo Moreno Monteiro",
+      "Juliana Oliveira Santos",
+      "Lucas Mendes Costa",
+      "Rafael Araújo Moreno Monteiro",
+      "Juliana Oliveira Santos"
+    ],
+    "CPF Vendedor": [
+      "123.456.789-00",
+      "987.654.321-00",
+      "111.222.333-44",
+      "123.456.789-00",
+      "987.654.321-00"
+    ],
+    "Produto": [
+      "Sistema de descrição de cargos",
+      "Software de contabilidade",
+      "Sistema de gestão de estoque",
+      "Software de contabilidade",
+      "Sistema de descrição de cargos"
+    ],
+    "ID Produto": [
+      1,
+      2,
+      3,
+      2,
+      1
+    ],
+    "Cliente": [
+      "Jorge e Lucas escritório contábil",
+      "Fernanda Consultoria Financeira",
+      "Anderson & Silva Comércio de Peças",
+      "Fernanda Consultoria Financeira",
+      "Jorge e Lucas escritório contábil"
+    ],
+    "CNPJ/CPF Cliente": [
+      "30.062.036/0001-60",
+      "40.123.456/0001-20",
+      "50.987.654/0001-30",
+      "40.123.456/0001-20",
+      "30.062.036/0001-60"
+    ],
+    "Segmento do Cliente": [
+      "Contábil",
+      "Financeiro",
+      "Comércio",
+      "Financeiro",
+      "Contábil"
+    ],
+    "Valor de Venda": [
+      1500,
+      2000,
+      1800,
+      1900,
+      1600
+    ]
   }
-  
-  
-  
+}
