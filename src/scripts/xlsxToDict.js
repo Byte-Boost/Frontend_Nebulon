@@ -1,11 +1,11 @@
 
 
-export default function extrairTabela(filename){
+export default function xlsxToDict(filename){
 
     const XLSX = require('xlsx')
 
     let worksheets = {}
-    let planilha = XLSX.readFile(filename)
+    let planilha = XLSX.readFile(filename) // This only works locally. It won't work on the server use xlsxToJSON instead or adapt this one.
     
     let pegarColuna = (letra,pagina) => {
     
