@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Chart from 'chart.js/auto'; // Importe o pacote Chart.js
 
-let BarChart = () => {
+let BarChart = ({id, width, height}) => {
   useEffect(() => {
 
     // Dados do gráfico
@@ -10,7 +10,7 @@ let BarChart = () => {
     var barColors = ["red", "green","blue","orange","brown"];
 
     // Criar o gráfico usando Chart.js
-    var ctx = document.getElementById('myChart').getContext('2d');
+    var ctx = document.getElementById(id).getContext('2d');
     new Chart(ctx, {
       type: "bar",
       data: {
@@ -31,7 +31,9 @@ let BarChart = () => {
   }, []);
 
   return (
-    <canvas id="myChart" style={{ width: '100%', maxWidth: '600px' }}></canvas>
+    <div className='grow'>
+      <canvas id={id} style={{ width: width, height: height}}></canvas>
+    </div>
   );
 }
 

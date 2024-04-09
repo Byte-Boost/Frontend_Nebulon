@@ -1,15 +1,15 @@
 
-const Card = (props) => {
+const Card = ({ title, children, width, height }) => {
     return(
     <>
-        <div className="card drop-shadow-md grid grid-cols-1">
-                <div>
-                    <p className="card--title">{props.title}</p>
-                </div>
+        <div className="card drop-shadow-md" style={{ width: width, height: height}}>
 
-                <div className="">
-                    {props.children}
+                <h2 className="card--title m-2">{title}</h2>
+
+                <div className="card--content m-2 flex place-content-center">
+                    {children}
                 </div>
+    
         </div>
     </>
     )
