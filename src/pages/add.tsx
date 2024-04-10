@@ -3,7 +3,8 @@ import Navbar from '@/modules/navbar';
 import Sidebar from '@/modules/sidebar';
 import axios from 'axios';
 import { useState } from 'react';
-import extrairTabela from '../scripts/xlsxToDict';
+import extrairTabela from '../scripts/xlsxUtils/xlsxToDict';
+import PageContent from '@/modules/page_content';
 export default function Products() {
 
 
@@ -44,9 +45,8 @@ export default function Products() {
   return (
     <main>
         <Navbar/>
-        <div className='flex flex-row'>
-        <Sidebar/>
-          <div className='w-full p-14'>
+        <PageContent>
+        <div className='w-full p-14'>
             <div className='container p-14'>
                 <div className='flex items-center flex-col justify-center'>
                     <label className='label-p m-6' htmlFor='file'>Selecionar arquivo</label>
@@ -57,7 +57,7 @@ export default function Products() {
                 </div>
             </div>
           </div>
-        </div>
+        </PageContent>
     </main>
   );
 }

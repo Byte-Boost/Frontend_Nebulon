@@ -1,22 +1,17 @@
 import '@/app/globals.css'
 import ClientTableRow from '@/modules/client_table_row';
 import Navbar from '@/modules/navbar';
+import PageContent from '@/modules/page_content';
 import Sidebar from '@/modules/sidebar';
 import { Table } from 'flowbite-react';
 export default function Clients() {
-
-  
-  const data = fetch('', {
-    method: 'GET'
-})
 
 
   return (
     <main>
         <Navbar/>
-        <div className='flex flex-row'>
-        <Sidebar/>
-          <div className='w-full p-8'>
+        <PageContent>
+        <div className='w-full p-14'>
             <div className='container-c'>
               <div className='container-table'>
                 <Table className=" rounded-lg bg-violet-300">
@@ -39,9 +34,9 @@ export default function Clients() {
                   </Table.Body>
                 </Table>
               </div>
-            </div>            
-          </div>
-        </div>
+            </div>
+          </div>            
+        </PageContent>
     </main>
   );
 }
