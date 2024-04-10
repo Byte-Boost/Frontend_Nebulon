@@ -1,47 +1,68 @@
 import '@/app/globals.css'
 import Navbar from '@/modules/navbar';
-import Sidebar from '@/modules/sidebar';
+import PageContent from '@/modules/page_content';
+import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
 import axios from 'axios';
 import { useState } from 'react';
-import extrairTabela from '../scripts/xlsxUtils/xlsxToDict';
-import PageContent from '@/modules/page_content';
+
 export default function Products() {
 
-
-  let commission_table;
+  let jsonData: Array<any> = [];
 
   const [file, setFile] = useState()
 
   function handleChange(event) {
     setFile(event.target.files[0])
   }
-  const onSend = ( ) =>{
-    commission_table = file;
-    console.log(commission_table)
-  }
- 
-  // axios.post('localhost:3200/clients',{
-  //   name:commission_table.Cliente,
-  //   cpf:commission_table.CNPJCPFCliente,
-  //   segment:commission_table.SegmentoCliente,
-  //   bonus:null
-  // })
-  // .then(function(response){
-  //   console.log("nice")
-  // })
-  // .then(function(error){
-  //   console.log("deu ruim")
-  // })
-  
-  // axios.get('localhost:3200/seller/')
+  const onSend = async () =>{
+    if(file) {
+      const jsonData = await xlsxToJSON(file);
+      axios.post('http://127.0.0.1:3200/sellers',{
+        name: jsonData[0].Vendedor,
+        cpf: jsonData[0]["CPF Vendedor"].replace(/[^[^\w\s]/gi, '')
+      })
+      .then(function(response){
+        console.log("Seller added")
+      })
+      .catch(error =>{
+        console.log("Error adding seller")
+      })
 
-  // axios.post('localhost:3200/commissions',{
-  //   date:commission_table.DatadaVenda,
-  //   value:commission_table.ValordaVenda,
-  //   paymentMethod:commission_table.MetododePagamento,
-  //   productId:commission_table.IDProduto,
-  // })
+      axios.post('http://127.0.0.1:3200/clientes',{
+        name: jsonData[0].Cliente,
+        cpf: jsonData[0]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, ''),
+        segment: jsonData[0]["Segmento do Cliente"],
+        bonus: null
+      })
+      .then(function(response){
+        console.log("Cliente added")
+      })
+      .catch(error =>{
+        console.log("Error adding client")
+      })
 
+      let sellerData = await axios.get(`http:/127.0.0.1:3200/seller/cpf/${jsonData[0]["CPF Vendedor"].replace(/[^\w\s]/gi, '')}`)
+
+      let clienteData = await axios.get(`http://129.0.0.1:3200/clientes/cpf/${jsonData[0]["CNPJ/CPF Cliente"].replace(/[^\w\s]/)/gi, ''}`)
+
+      axios.post('http://127.0.0.1:3200/comissions',{
+        date: jsonData[0]["Data da Venda"],
+        value: jsonData[0]["Valor da Venda"],
+        paymentMethod: jsonData[0]("Forma de Pagamento"),
+        sellerId: sellerData.data[0]["id"],
+        clienteId: clienteData.data[0]["id"],
+        productId: jsonData[0]["ID Produto"]
+      })
+      .then(function(response){
+        console.log("Commission added")
+      })
+      .catch(error =>{
+        console.log("Error adding commission")
+      })
+      }
+      else{console.log("No file selected")}
+    }; 
+    
   return (
     <main>
         <Navbar/>
