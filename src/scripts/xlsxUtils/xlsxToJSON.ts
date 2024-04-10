@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 
-export async function xlsxToJSON(file: File | null): Promise<any[]> {
+export default async function xlsxToJSON(file: File | null): Promise<any[]> {
   if (file === null) {
     console.error('File is null');
     return [];
