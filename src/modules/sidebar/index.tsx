@@ -1,16 +1,27 @@
-import SidebarItem from "../sidebar_item";
-const Sidebar = ()=> {
-    return (
-        <aside className="sidebar max-md:invisible  max-md:h-0 max-md:w-0">
-            <ul className="sidebar--items sticky">
-                <SidebarItem label={"Home"} src={"/homeicon.svg"} link={"/home"} alt={"Home Icon"}/>
-                <SidebarItem label={"Add"} src={"/addicon.svg"} link={"/add"} alt={"Add Icon"}/>
-                <SidebarItem label={"Analytics"} src={"/anaylticsicon.svg"} link={"/analytics"} alt={"Analytics Icon"}/>
-                <SidebarItem label={"DataHub"} src={"/datahubicon.svg"} link={"/datahub"} alt={"DataHub Icon"}/>
-                <SidebarItem label={"Settings"} src={"/settingsicon.svg"} link={"/settings"} alt={"Settings Icon"}/>
-                <SidebarItem label={"Log Off"} src={""} link={"/"} alt={"Log Off Icon"}/>
-            </ul>
-        </aside>
-    )
-}
+import React, { useState } from 'react';
+import SidebarItem from '../sidebar_item';
+
+const Sidebar = () => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div 
+      className={`transition-all duration-200 ease-in-out ${isHovered ? 'w-44' : 'w-10'} bg-gradient-to-b from-purple-500 to-[#805C90] h-screen fixed`} 
+      onMouseEnter={() => setIsHovered(true)} 
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="text-white px-2 py-4">
+        <ul>
+          {/* Add more menu items as needed */}
+          <SidebarItem title={'HOME'} isHovered={isHovered} icon={'home'} link={'/home'} />
+          <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'} link={'/dashboard'} />
+          <SidebarItem title={'ADD'} isHovered={isHovered} icon={'add'} link={'/add'} />
+          <SidebarItem title={'OPTIONS'} isHovered={isHovered} icon={'options'} link={'/options'} />
+          <SidebarItem title={'LOGOUT'} isHovered={isHovered} icon={'logout'} link={'/'} />
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 export default Sidebar;

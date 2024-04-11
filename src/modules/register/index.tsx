@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Checkbox, Label, TextInput, Card } from "flowbite-react";
+import { Button, Label, TextInput, Card } from "flowbite-react";
 
 function UserFormCard() {
   return (
