@@ -1,6 +1,7 @@
 import '@/app/globals.css'
-import Navbar from '@/modules/navbar';
-import PageContent from '@/modules/page_content';
+import ContentArea from '@/modules/content_area';
+import Sidebar from '@/modules/sidebar';
+import TopBar from '@/modules/topbar';
 import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
 import axios from 'axios';
 import { useState } from 'react';
@@ -65,8 +66,9 @@ export default function Products() {
     
   return (
     <main>
-        <Navbar/>
-        <PageContent>
+        <TopBar/>
+        <Sidebar/>
+        <ContentArea>
         <div className='w-full p-14'>
             <div className='container p-14'>
                 <div className='flex items-center flex-col justify-center'>
@@ -78,7 +80,7 @@ export default function Products() {
                 </div>
             </div>
           </div>
-        </PageContent>
+        </ContentArea>
     </main>
   );
 }
