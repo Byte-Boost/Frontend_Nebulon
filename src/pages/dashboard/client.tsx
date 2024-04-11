@@ -8,7 +8,7 @@ import { Table } from 'flowbite-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
-export default async function Clients() {
+export default function Clients() {
   
   const [data, setData] = useState([]);
   
