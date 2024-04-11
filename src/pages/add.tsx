@@ -12,7 +12,7 @@ export default function Products() {
 
   const [file, setFile] = useState()
 
-  function handleChange(event) {
+  function handleChange(event:any) {
     setFile(event.target.files[0])
   }
   const onSend = async () =>{
@@ -42,9 +42,9 @@ export default function Products() {
         console.log("Error adding client")
       })
 
-      let sellerData = await axios.get(`http:/127.0.0.1:3200/seller/cpf/${jsonData[0]["CPF Vendedor"].replace(/[^\w\s]/gi, '')}`)
+      let sellerData = await axios.get(`http://127.0.0.1:3200/seller/cpf/${jsonData[0]["CPF Vendedor"].replace(/[^\w\s]/gi, '')}`)
 
-      let clienteData = await axios.get(`http://129.0.0.1:3200/clientes/cpf/${jsonData[0]["CNPJ/CPF Cliente"].replace(/[^\w\s]/)/gi, ''}`)
+      let clienteData = await axios.get(`http://129.0.0.1:3200/clientes/cpf/${jsonData[0]["CPF Vendedor"].replace(/[^\w\s]/gi, '')}`)
 
       axios.post('http://127.0.0.1:3200/comissions',{
         date: jsonData[0]["Data da Venda"],
