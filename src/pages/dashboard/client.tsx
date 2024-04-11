@@ -13,15 +13,17 @@ export default function Clients() {
   const [data, setData] = useState([]);
   
   useEffect(() => {
-    async function getData(){
+    async function getData() {
       const clients = await axios.get("http://127.0.0.1:3200/clients");
       setData(clients.data);
     }
-    getData();
-  }, []); 
+    setInterval(() =>{
+    getData()
+    },2500)
+  }, [])
   
   return (
-    <main>
+    <main> 
         <Head>
         <title>Nebulon - Dashboard Client</title>
         </Head>
