@@ -2,8 +2,8 @@ import '@/app/globals.css'
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
 import TopBar from '@/modules/topbar';
+import instance from '@/scripts/requests/instance';
 import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
-import axios from 'axios';
 import { useState } from 'react';
 
 export default function Products() {
@@ -22,11 +22,11 @@ export default function Products() {
       while (jsonData.length > i) {
         console.log(i)
 
-      let sellerData = await axios.get(`http://127.0.0.1:3200/sellers/cpf/${jsonData[i]["CPF Vendedor"].replace(/[^\w\s]/gi, '')}`)
-      let clientData = await axios.get(`http://127.0.0.1:3200/clients/cnpj/${jsonData[i]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, '')}`)
+      let sellerData = await instance.get(`http://127.0.0.1:3200/sellers/cpf/${jsonData[i]["CPF Vendedor"].replace(/[^\w\s]/gi, '')}`)
+      let clientData = await instance.get(`http://127.0.0.1:3200/clients/cnpj/${jsonData[i]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, '')}`)
 
       console.log(clientData)
-      axios.post('http://127.0.0.1:3200/commissions',{
+      instance.post('http://127.0.0.1:3200/commissions',{
         date: jsonData[i]["Data da venda"],
         value: jsonData[i][" Valor de Venda "],
         paymentMethod: jsonData[i]["Forma de Pagamento"],

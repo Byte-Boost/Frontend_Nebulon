@@ -2,8 +2,8 @@ import '@/app/globals.css'
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
 import TopBar from '@/modules/topbar';
+import instance from '@/scripts/requests/instance';
 import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
-import axios from 'axios';
 import { useState } from 'react';
 
 export default function Client(){
@@ -20,7 +20,7 @@ export default function Client(){
       const jsonData = await xlsxToJSON(file);
       let i = 0;
       while(jsonData.length > i) {
-      axios.post('http://127.0.0.1:3200/clients',{
+      instance.post('http://127.0.0.1:3200/clients',{
         tradingName: jsonData[i]["Nome Fantasia"],
         companyName: jsonData[i]["Razão Social"],
         cnpj: jsonData[i]["CNPJ"].replace(/[^\w\s]/gi, ''),

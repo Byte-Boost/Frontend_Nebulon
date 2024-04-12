@@ -1,10 +1,10 @@
-import '@/app/globals.css'
+import '@/app/globals.css'    
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
 import TopBar from '@/modules/topbar';
 import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
-import axios from 'axios';
 import { useState } from 'react';
+import instance from '@/scripts/requests/instance';
 
 export default function Products() {
 
@@ -20,12 +20,15 @@ export default function Products() {
       const jsonData = await xlsxToJSON(file);
       let i:number = 0;
       while (jsonData.length > i) {
-      axios.post('http://127.0.0.1:3200/products',{
+  
+
+      instance.post('http://127.0.0.1:3200/products',{
         name: jsonData[i].Nome,
         description: jsonData[i]["Descrição"],
         percentage: jsonData[i]["Alíquota"],
         status: jsonData[i].Status,
-      })
+      }
+      )
       .then(function(response){
         console.log("Product added")
       })
