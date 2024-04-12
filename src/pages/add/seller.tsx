@@ -6,7 +6,7 @@ import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
 import axios from 'axios';
 import { useState } from 'react';
 
-export default function Products() {
+export default function Client(){
 
   let jsonData: Array<any> = [];
 
@@ -17,10 +17,13 @@ export default function Products() {
   }
   const onSend = async () =>{
     if(file) {
-      const jsonData = await xlsxToJSON(file);
+    const jsonData = await xlsxToJSON(file);
+    let i:number = 0;
+    while(jsonData.length > i) {
+
       axios.post('http://127.0.0.1:3200/sellers',{
-        name: jsonData[0].Vendedor,
-        cpf: jsonData[0]["CPF Vendedor"].replace(/[^[^\w\s]/gi, '')
+        name: jsonData[i].Nome,
+        cpf: jsonData[i]["CPF"].replace(/[^[^\w\s]/gi, '')
       })
       .then(function(response){
         console.log("Seller added")
@@ -28,44 +31,13 @@ export default function Products() {
       .catch(error =>{
         console.log("Error adding seller")
       })
-
-      axios.post('http://127.0.0.1:3200/clientes',{
-        name: jsonData[0].Cliente,
-        cpf: jsonData[0]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, ''),
-        segment: jsonData[0]["Segmento do Cliente"],
-        bonus: null
-      })
-      .then(function(response){
-        console.log("Cliente added")
-      })
-      .catch(error =>{
-        console.log("Error adding client")
-      })
-
-      let sellerData = await axios.get(`http://127.0.0.1:3200/seller/cpf/${jsonData[0]["CPF Vendedor"].replace(/[^\w\s]/gi, '')}`)
-
-      let clienteData = await axios.get(`http://129.0.0.1:3200/clientes/cpf/${jsonData[0]["CPF Vendedor"].replace(/[^\w\s]/gi, '')}`)
-
-      axios.post('http://127.0.0.1:3200/comissions',{
-        date: jsonData[0]["Data da Venda"],
-        value: jsonData[0]["Valor da Venda"],
-        paymentMethod: jsonData[0]("Forma de Pagamento"),
-        sellerId: sellerData.data[0]["id"],
-        clienteId: clienteData.data[0]["id"],
-        productId: jsonData[0]["ID Produto"]
-      })
-      .then(function(response){
-        console.log("Commission added")
-      })
-      .catch(error =>{
-        console.log("Error adding commission")
-      })
-      }
-      else{console.log("No file selected")}
-    }; 
+      i++;
+    }
+    }
+}
     
   return (
-    <main>
+ <main>
         <TopBar/>
         <Sidebar/>
         <ContentArea>
