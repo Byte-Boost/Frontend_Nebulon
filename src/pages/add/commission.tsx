@@ -23,9 +23,9 @@ export default function Products() {
         console.log(i)
 
       let sellerData = await axios.get(`http://127.0.0.1:3200/sellers/cpf/${jsonData[i]["CPF Vendedor"].replace(/[^\w\s]/gi, '')}`)
-      let clientData = await axios.get(`http://127.0.0.1:3200/clients/cpf/${jsonData[i]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, '')}`)
+      let clientData = await axios.get(`http://127.0.0.1:3200/clients/cnpj/${jsonData[i]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, '')}`)
 
-
+      console.log(clientData)
       axios.post('http://127.0.0.1:3200/commissions',{
         date: jsonData[i]["Data da venda"],
         value: jsonData[i][" Valor de Venda "],
