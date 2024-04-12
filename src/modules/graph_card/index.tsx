@@ -1,5 +1,5 @@
 
-const GraphCard = ({ title, children, width, height }: { title: string, children: React.ReactNode, width: number, height: number }) => {
+const GraphCard = ({ title, children, width, height }: { title: string, children: React.ReactNode, width: string, height: string }) => {
     return(
     <>
         <div className="graph-card drop-shadow-md" style={{ width: width, height: height}}>
@@ -11,7 +11,7 @@ const GraphCard = ({ title, children, width, height }: { title: string, children
                 </div>
     
         </div>
-    </>
+    </> 
     )
 }
 export default GraphCard;

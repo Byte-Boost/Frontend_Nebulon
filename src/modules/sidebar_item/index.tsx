@@ -9,7 +9,7 @@ import DashboardIcon from "../sidebar_icons/dashboard_icon";
 const SidebarItem = ({ title, icon,isHovered,link}: {title:string, icon:string, isHovered:boolean, link:string}) => {
     return (
         <li className="my-2 ">
-        <a href={link} className="flex items-center  transition-all duration-200  ease-in-out hover:scale-105 ">
+        <a href={link} className="flex items-center  transition-all duration-200  ease-in-out hover:scale-105 active:scale-90">
           {icon == 'home' && <HomeIcon/>}
           {icon == 'dashboard' && <DashboardIcon/>}
           {icon == 'add' && <AddIcon/>}

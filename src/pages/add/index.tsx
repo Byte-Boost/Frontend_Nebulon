@@ -6,6 +6,9 @@ import TopBar from '@/modules/topbar';
 import Head from 'next/head';
 export default function Home() {
 
+
+
+  
   return (
     <main>
       <Head>
@@ -16,25 +19,33 @@ export default function Home() {
       <div>
         <ContentArea>
             <QuickCard link='/add/commission'>
-              <div className='flex justify-center items-center'> 
+              <div className='flex '>
               </div> 
               <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>Add New Commission</h1>    
+              <h1 className='inline-block  self-end'>Add New Commission</h1>
               </div>     
             </QuickCard>
-            <QuickCard  link={'/dashboard/client'}>
-              <div className='flex justify-center items-center'> 
-               
+            <QuickCard  link={'/add/client'}>
+              <div className='flex '> 
               </div> 
               <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>See All Commissions</h1>   
+              <h1 className='inline-block  self-end'>Add New Client</h1> 
               </div> 
             </QuickCard>    
-            <QuickCard  link={''}>
-              <div className='flex justify-center items-center'> 
+            <QuickCard  link={'/add/seller'}>
+              <div className='flex '>
+              
               </div> 
               <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'></h1>    
+              <h1 className='inline-block  self-end'>Add New Seller</h1>  
+              </div>     
+            </QuickCard>
+            <QuickCard  link={'/add/product'}>
+              <div className='flex '>
+
+              </div> 
+              <div className='bg-[#E6E6E6]'>
+              <h1 className='inline-block  self-end'>Add New Product</h1>  
               </div>     
             </QuickCard>
         </ContentArea>
