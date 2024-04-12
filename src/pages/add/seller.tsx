@@ -2,6 +2,7 @@ import '@/app/globals.css'
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
 import TopBar from '@/modules/topbar';
+import instance from '@/scripts/requests/instance';
 import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
 import axios from 'axios';
 import { useState } from 'react';
@@ -21,9 +22,11 @@ export default function Client(){
     let i:number = 0;
     while(jsonData.length > i) {
 
-      axios.post('http://127.0.0.1:3200/sellers',{
+      instance.post('http://127.0.0.1:3200/account/register',{
         name: jsonData[i].Nome,
-        cpf: jsonData[i]["CPF"].replace(/[^[^\w\s]/gi, '')
+        username:jsonData[i].Nome.replace(/\s/g, '').toLowerCase(),
+        cpf: jsonData[i]["CPF"].replace(/[^[^\w\s]/gi, ''),
+        password: '12345678',
       })
       .then(function(response){
         console.log("Seller added")

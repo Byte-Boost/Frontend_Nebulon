@@ -3,7 +3,7 @@ import ClientTableRow from '@/modules/client_table_row';
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
 import TopBar from '@/modules/topbar';
-import axios from 'axios';
+import instance from '@/scripts/requests/instance';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -14,8 +14,8 @@ export default function Clients() {
   
   useEffect(() => {
     async function getData() {
-      const clients = await axios.get("http://127.0.0.1:3200/clients");
-      setData(clients.data);
+      const commissions = await instance.get("http://127.0.0.1:3200/commissions");
+      setData(commissions.data);
     }
     setInterval(() =>{
     getData()
@@ -31,19 +31,30 @@ export default function Clients() {
         <Sidebar/>
         <ContentArea>
         <div className='w-full p-14'>
-            <div className='container-c'>
-              <div className='container-table'>
-                <Table className=" rounded-lg bg-violet-300">
+            <div className=''>
+              <div className=''>
+                <Table className=" rounded-lg bg-slate-600  ">
                   <Table.Head className='w-full text-left text-lg'>
-                    <Table.HeadCell>Nome Fantasia</Table.HeadCell>
-                    <Table.HeadCell>Razão Social</Table.HeadCell>
-                    <Table.HeadCell>CNPJ</Table.HeadCell>
-                    <Table.HeadCell>Contato</Table.HeadCell>
+                    <Table.HeadCell>Data da Commissão</Table.HeadCell>
+                    <Table.HeadCell>Vendendor</Table.HeadCell>
+                    <Table.HeadCell>CPF do Vendendor</Table.HeadCell>
+                    <Table.HeadCell>Cliente</Table.HeadCell>
+                    <Table.HeadCell>CNPJ/CPF do Cliente</Table.HeadCell>
+                    <Table.HeadCell>Produto</Table.HeadCell>
+                    <Table.HeadCell>Valor da Venda</Table.HeadCell>
+                    <Table.HeadCell>Commissão</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                    {data.map((client: { name: string, cpf: string }, index: number) => {
+                    {data.map((commission: { date: string , value:string,clientId:string, productId:string, sellerId:string, paymentMethod:string }, index: number) => {
                       return (
-                        <ClientTableRow nomefantasia={client.name} cnpj={client.cpf} razaosocial={client.name} contato='-' key={index} />
+                        <ClientTableRow
+                          key={index}
+                          date={commission.date}
+                          seller_id={commission.sellerId}
+                          client_id={commission.clientId}
+                          product_id={commission.productId}
+                          sale_value={parseFloat(commission.value)}
+                        />
                       )
                     })}
                   </Table.Body>
