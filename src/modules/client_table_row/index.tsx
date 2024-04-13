@@ -41,35 +41,44 @@ const ClientTableRow = ({
         let client_status = clientData.data.status === "novo";
         let product_status = productData.data.status === "novo";
         let product_percentage = productData.data.percentage;
-
+       
         if (client_status && product_status){
           setCommission(
-            ((sale_value * (product_percentage + 0.5) )  ).toFixed(2)
+            ((sale_value * (product_percentage + Number(process.env.NEXT_PUBLIC_PNCN)) )  ).toFixed(2)
           );
+          console.log(commission_value)
         }
         else if (client_status && !product_status){
           setCommission(
-            ((sale_value * (product_percentage + 0.25) )  ).toFixed(2)
+            ((sale_value * (product_percentage + Number(process.env.NEXT_PUBLIC_PVCN)) )  ).toFixed(2)
           );
         }
         else if (!client_status && product_status){
           setCommission(
-            ((sale_value * (product_percentage + 0.15) )  ).toFixed(2)
+            ((sale_value * (product_percentage +  Number(process.env.NEXT_PUBLIC_PNCV)) )  ).toFixed(2)
           );
         }
         else if (!client_status && !product_status){
           setCommission(
-            ((sale_value * (product_percentage + 0) )  ).toFixed(2)
+            ((sale_value * (product_percentage +  Number(process.env.NEXT_PUBLIC_PVCV)) )  ).toFixed(2)
           );
         }
       };
-
       fetchData();
     }, []);
+    
+    var parts = date.split("-");
+    if (parts.length != 3) {
+        return undefined;
+    }
+    var year = parseInt(parts[0]);
+    var month = parseInt(parts[1]) - 1; // months indexes are zero based, e.g. 9 == Octobre
+    var day = parseInt(parts[2]);
+    let new_date = new Date(year, month, day).toJSON().slice(0,10).split(/-/).reverse().join('/');
     return(
         <Table.Row className="odd:bg-white even:bg-gray-50">
         <Table.Cell className="whitespace-nowrap font-medium text-gray-900">
-          {date}
+          {new_date}
         </Table.Cell>
         <Table.Cell>
           {sellerName}
@@ -86,11 +95,33 @@ const ClientTableRow = ({
         <Table.Cell>
           {product}
         </Table.Cell>
-        <Table.Cell>
-          {sale_value.toFixed(2)}
+        <Table.Cell >
+          <div  className="grid grid-flow-col" >
+          <div className="justify-start">
+            <span className="ml-2">
+              {'R$  '}
+            </span>
+          </div>
+          <div className="justify-end">
+            <span className="ml-2">
+              {sale_value.toFixed(2)}
+            </span> 
+          </div>
+          </div>
         </Table.Cell>
-        <Table.Cell>
-          {commission_value}
+        <Table.Cell >   
+        <div className="flex flex-row flex-1">
+            <div className="justify-start">
+              <span className="ml-2">
+                {'R$  '}
+              </span>
+            </div>
+            <div className="justify-end ">
+              <span className="ml-2">
+              {commission_value}
+              </span> 
+            </div>
+          </div>
         </Table.Cell>
       </Table.Row>
     )
