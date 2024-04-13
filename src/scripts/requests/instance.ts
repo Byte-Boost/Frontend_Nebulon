@@ -1,9 +1,15 @@
 import cookie from '@boiseitguru/cookie-cutter';
 import axios from 'axios';
 
-// Create an axios instance
-const instance = axios.create();
+// Axios configuration
+const axiosConfig = {
+  baseURL: process.env.NEXT_PUBLIC_API_IP,
+  timeout: 30000,
+};
 
+// Create an axios instance
+const instance = axios.create(axiosConfig);
+console.log(instance.defaults.baseURL);
 // Add a request interceptor
 instance.interceptors.request.use((config) => {
   // Get the authorization value

@@ -22,7 +22,7 @@ export default function Products() {
       while (jsonData.length > i) {
   
 
-      instance.post('http://127.0.0.1:3200/products',{
+      instance.post('/products',{
         name: jsonData[i].Nome,
         description: jsonData[i]["Descrição"],
         percentage: jsonData[i]["Alíquota"],

@@ -4,7 +4,6 @@ import Sidebar from '@/modules/sidebar';
 import TopBar from '@/modules/topbar';
 import instance from '@/scripts/requests/instance';
 import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
-import axios from 'axios';
 import { useState } from 'react';
 
 export default function Client(){
@@ -22,7 +21,7 @@ export default function Client(){
     let i:number = 0;
     while(jsonData.length > i) {
 
-      instance.post('http://127.0.0.1:3200/account/register',{
+      instance.post('/account/register',{
         name: jsonData[i].Nome,
         username:jsonData[i].Nome.replace(/\s/g, '').toLowerCase(),
         cpf: jsonData[i]["CPF"].replace(/[^[^\w\s]/gi, ''),

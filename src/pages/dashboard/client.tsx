@@ -14,14 +14,16 @@ export default function Clients() {
   
   useEffect(() => {
     async function getData() {
-      const commissions = await instance.get("http://127.0.0.1:3200/commissions");
+      const commissions = await instance.get("/commissions");
       setData(commissions.data);
     }
+    getData()
     setInterval(() =>{
     getData()
-    },2500)
+    },60000)
   }, [])
-  
+
+
   return (
     <main> 
         <Head>

@@ -20,7 +20,7 @@ export default function Client(){
       const jsonData = await xlsxToJSON(file);
       let i = 0;
       while(jsonData.length > i) {
-      instance.post('http://127.0.0.1:3200/clients',{
+      instance.post('/clients',{
         tradingName: jsonData[i]["Nome Fantasia"],
         companyName: jsonData[i]["Razão Social"],
         cnpj: jsonData[i]["CNPJ"].replace(/[^\w\s]/gi, ''),
