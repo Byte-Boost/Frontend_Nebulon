@@ -18,34 +18,34 @@ export default function Home() {
       <Sidebar/>
       <div>
         <ContentArea>
-            <QuickCard link='/add/commission'>
+            <QuickCard link='/adicionar/comissao'>
               <div className='flex '>
               </div> 
               <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>Add New Commission</h1>
+              <h1 className='inline-block  self-end'>Adicionar nova Venda</h1>
               </div>     
             </QuickCard>
-            <QuickCard  link={'/add/client'}>
+            <QuickCard  link={'/adicionar/cliente'}>
               <div className='flex '> 
               </div> 
               <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>Add New Client</h1> 
+              <h1 className='inline-block  self-end'>Adicionar Novo Cliente</h1> 
               </div> 
             </QuickCard>    
-            <QuickCard  link={'/add/seller'}>
+            <QuickCard  link={'/adicionar/vendedor'}>
               <div className='flex '>
               
               </div> 
               <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>Add New Seller</h1>  
+              <h1 className='inline-block  self-end'>Adicionar Novo Vendedor</h1>  
               </div>     
             </QuickCard>
-            <QuickCard  link={'/add/product'}>
+            <QuickCard  link={'/adicionar/produto'}>
               <div className='flex '>
 
               </div> 
               <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>Add New Product</h1>  
+              <h1 className='inline-block  self-end'>Adicionar Novo Produto</h1>  
               </div>     
             </QuickCard>
         </ContentArea>

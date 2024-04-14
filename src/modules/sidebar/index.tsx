@@ -15,9 +15,9 @@ const Sidebar = () => {
           {/* Add more menu items as needed */}
           <SidebarItem title={'HOME'} isHovered={isHovered} icon={'home'} link={'/home'} />
           <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'} link={'/dashboard'} />
-          <SidebarItem title={'ADD'} isHovered={isHovered} icon={'add'} link={'/add'} />
-          <SidebarItem title={'OPTIONS'} isHovered={isHovered} icon={'options'} link={'/options'} />
-          <SidebarItem title={'LOGOUT'} isHovered={isHovered} icon={'logout'} link={'/'} />
+          <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} link={'/adicionar'} />
+          {/*<SidebarItem title={'OPTIONS'} isHovered={isHovered} icon={'options'} link={'/options'} />*/}
+          <SidebarItem title={'SAIR'} isHovered={isHovered} icon={'logout'} link={'/'} />
         </ul>
       </div>
     </div>

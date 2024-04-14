@@ -9,6 +9,7 @@
 ### Requirements
 > [!WARNING]
 > Node v20.6.0 or above
+> A .env.local archive like the one in the example
 
 
 First, run this command on cmd

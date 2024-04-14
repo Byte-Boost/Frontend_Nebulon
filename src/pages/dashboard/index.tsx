@@ -16,14 +16,15 @@ export default function Home() {
         <TopBar/>
         <Sidebar/>
         <ContentArea>
-        <QuickCard link='/dashboard/client'>
+        <QuickCard link='/dashboard/comissao'>
               <div className='flex justify-center items-center'> 
               <TableIcon/>
               </div> 
               <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>Tables</h1>
+              <h1 className='inline-block  self-end'>Tabela de Comissões</h1>
               </div>     
             </QuickCard>
+            {/*
             <QuickCard  link={'/dashboard/graph'}>
               <div className='flex justify-center items-center'> 
               <GraphIcon/>
@@ -31,7 +32,8 @@ export default function Home() {
               <div className='bg-[#E6E6E6]'>
               <h1 className='inline-block  self-end'>Graphs</h1> 
               </div> 
-            </QuickCard>    
+            </QuickCard>
+            */}    
         </ContentArea>
     </main>
   );

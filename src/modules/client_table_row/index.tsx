@@ -46,7 +46,6 @@ const ClientTableRow = ({
           setCommission(
             ((sale_value * (product_percentage + Number(process.env.NEXT_PUBLIC_PNCN)) )  ).toFixed(2)
           );
-          console.log(commission_value)
         }
         else if (client_status && !product_status){
           setCommission(
@@ -76,8 +75,8 @@ const ClientTableRow = ({
     var day = parseInt(parts[2]);
     let new_date = new Date(year, month, day).toJSON().slice(0,10).split(/-/).reverse().join('/');
     return(
-        <Table.Row className="odd:bg-white even:bg-gray-50">
-        <Table.Cell className="whitespace-nowrap font-medium text-gray-900">
+        <Table.Row className="odd:bg-[#1f1f1f] even:bg-[#2b2b2b]">
+        <Table.Cell className="whitespace-nowrap font-medium text-white">
           {new_date}
         </Table.Cell>
         <Table.Cell>

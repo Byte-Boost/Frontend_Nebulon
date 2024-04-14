@@ -4,10 +4,10 @@ import React from 'react';
 const TopBar = () => {
 const pathname = usePathname();
   return (
-    <div className="bg-[#1F1F1F] p-4 max-md:hidden ">
+    <div className="bg-[#1F1F1F] p-4 max-md:hidden fixed w-screen ">
       <div className="flex items-center justify-between flex-wrap h-5">
         <div className="flex items-center flex-shrink-0 text-white mr-6">
-          <span className="font-semibold text-xl tracking-tight">{'NEBULON' + pathname?.toUpperCase()}</span>
+          <span className="pl-20 font-semibold text-xl tracking-tight">{'NEBULON' + pathname?.toUpperCase()}</span>
         </div>
         {/* Add search bar here if we ever need */}
         {/* this is the icon that appers when the screen is small */}

@@ -15,21 +15,22 @@ export default function Home() {
       <Sidebar/>
       <div>
         <ContentArea>
-            <QuickCard link='/add/commission'>
+            <QuickCard link='/adicionar/comissao'>
               <div className='flex justify-center items-center'> 
               </div> 
               <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>Add New Commission</h1>    
+              <h1 className='inline-block  self-end'>Adicionar Nova Comissão</h1>    
               </div>     
             </QuickCard>
-            <QuickCard  link={'/dashboard/client'}>
+            <QuickCard  link={'/dashboard/comissao'}>
               <div className='flex justify-center items-center'> 
                
               </div> 
               <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>See All Commissions</h1>   
+              <h1 className='inline-block  self-end'>Olhar Tabela de Vendas</h1>   
               </div> 
             </QuickCard>    
+            {/*
             <QuickCard  link={''}>
               <div className='flex justify-center items-center'> 
               </div> 
@@ -37,6 +38,7 @@ export default function Home() {
               <h1 className='inline-block  self-end'></h1>    
               </div>     
             </QuickCard>
+            */}
         </ContentArea>
       </div>
     </main>
