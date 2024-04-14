@@ -2,32 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+/* Default Settings */
+:root{
+  --navbar-size:4.75rem;
+  --navbar-bg-color: #1F1F1F;
+  --navbar-shadow-color: none;
+  --navbar-title-color:#413459;
+  --navbar-link-color:#413459;
+  --navbar-link-onhover-color: #c14379;
+
+  --test-color:#493860;
+  --navbar-logo-size: 200%;
+
+  --sidebar-bg-color: #E6E6E6;
+  --sidebar-border-color:none;
+  --sidebar-shadow-color: none;
+  --sidebar-item-color: #413459;
+  --sidebar-item-onhover-color: #c14379;
+
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* QuickCard */
+
+.quick-card{
+  background: linear-gradient( #C8A3FF, #825EB7);
+  border-radius: 0.25rem;
+  border-width: 0.1rem;
+  overflow: auto;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* GraphCard */
+
+.graph-card{
+  background-color: white;
+  border-radius: 1rem;
+  border-width: 0.1rem;
+  border-color: rgb(214, 214, 214);
+  overflow: auto;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.graph-card--content{
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.graph-card--title{
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  height: 1.5rem;
+}
+
+/* Product page*/
+
+.content-container{
+  display : flex;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* Client page */
+
+.container-c{
+  display: flex;
+  justify-content: start;
+  filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.50));
+  border-radius: 1rem;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(225, 225, 225); 
+}
+
+.container-table{
+  margin: 2rem;
+  height: 100%;
+  width: 80%;
+}
+
+.info{
+  display: flex;
+  justify-content: center;
+  height: 100%;
 }
