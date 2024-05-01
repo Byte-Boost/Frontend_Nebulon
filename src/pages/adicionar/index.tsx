@@ -2,7 +2,6 @@ import '@/app/globals.css'
 import ContentArea from '@/modules/content_area';
 import QuickCard from '@/modules/quick_card';
 import Sidebar from '@/modules/sidebar';
-import TopBar from '@/modules/topbar';
 import Head from 'next/head';
 export default function Home() {
 
@@ -14,7 +13,6 @@ export default function Home() {
       <Head>
         <title>Nebulon - Home</title>
       </Head>
-      <TopBar/>
       <Sidebar/>
       <div>
         <ContentArea>

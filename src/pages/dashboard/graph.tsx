@@ -4,6 +4,7 @@ import GraphCard from '@/modules/graph_card';
 import ContentArea from '@/modules/content_area';
 import TopBar from '@/modules/topbar';
 import Sidebar from '@/modules/sidebar';
+import Head from 'next/head';
 export default function Home() {
 
     // json data for testing bar chart 
@@ -11,6 +12,9 @@ export default function Home() {
 
   return (
     <main>
+        <Head>
+        <title>Nebulon - Dashboard</title>
+        </Head>
         <TopBar/>
         <Sidebar/>
         <ContentArea>

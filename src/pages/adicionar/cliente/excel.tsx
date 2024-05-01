@@ -1,14 +1,14 @@
-import '@/app/globals.css'    
+import '@/app/globals.css'
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
-import TopBar from '@/modules/topbar';
+import instance from '@/scripts/requests/instance';
 import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
 import { useState } from 'react';
-import instance from '@/scripts/requests/instance';
+import Router from 'next/router'
 import UploadCard from '@/modules/upload_card';
 import Head from 'next/head';
 
-export default function Products() {
+export default function Client(){
 
   let jsonData: Array<any> = [];
 
@@ -20,33 +20,32 @@ export default function Products() {
   const onSend = async () =>{
     if(file) {
       const jsonData = await xlsxToJSON(file);
-      let i:number = 0;
-      while (jsonData.length > i) {
-  
-
-      instance.post('/products',{
-        name: jsonData[i].Nome,
-        description: jsonData[i]["Descrição"],
-        percentage: jsonData[i]["Alíquota"],
-        status: jsonData[i].Status,
-      }
-      )
+      let i = 0;
+      while(jsonData.length > i) {
+      instance.post('/clients',{
+        tradingName: jsonData[i]["Nome Fantasia"],
+        companyName: jsonData[i]["Razão Social"],
+        cnpj: jsonData[i]["CNPJ"].replace(/[^\w\s]/gi, ''),
+        segment: jsonData[i]["SEGMENTO"],
+        contact: jsonData[i]["CONTATO"],
+        status: jsonData[i]["STATUS"]
+      })
       .then(function(response){
-        console.log("Product added")
+        console.log("Client added")
       })
       .catch(error =>{
-        console.log("Product adding seller")
+        console.log("Error adding client")
       })
-      i++;
-    };
-    } 
-  }
+    i++;
+    }
+    }
+}
+    
   return (
-    <main>
+ <main>
         <Head>
-        <title>Nebulon - Adicionar - Produto</title>
+        <title>Nebulon - Adicionar - Cliente</title>
         </Head>
-        <TopBar/>
         <Sidebar/>
         <ContentArea>
         <UploadCard handleChange={handleChange} onSend={onSend} />

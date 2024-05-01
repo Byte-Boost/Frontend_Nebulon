@@ -4,7 +4,6 @@ import QuickCard from '@/modules/quick_card';
 import GraphIcon from '@/modules/quick_card_icons/graphs_icon';
 import TableIcon from '@/modules/quick_card_icons/tables_icon';
 import Sidebar from '@/modules/sidebar';
-import TopBar from '@/modules/topbar';
 import Head from 'next/head';
 export default function Home() {
 
@@ -13,7 +12,6 @@ export default function Home() {
         <Head>
         <title>Nebulon - Dashboard</title>
         </Head>
-        <TopBar/>
         <Sidebar/>
         <ContentArea>
         <QuickCard link='/dashboard/comissao'>

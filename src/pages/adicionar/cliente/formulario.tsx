@@ -1,7 +1,7 @@
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
-import TopBar from '@/modules/topbar';
 import Head from 'next/head';
+import Router from 'next/router';
 import React, { useState } from 'react';
 
 interface Cliente {
@@ -40,12 +40,11 @@ const FormularioCadastroCliente: React.FC = () => {
       <Head>
         <title>Nebulon - Criar Cliente</title>
     </Head>
-    <TopBar/>
     <Sidebar/>
     <div className="flex justify-center items-center h-screen">
     <div>
       <h2 className="text-center mb-4 font-bold">Cadastro de Cliente</h2>
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-96">
+      <form onSubmit={handleSubmit} className="bg-white  border-black border-solid border rounded px-8 pt-6 pb-8 mb-4 min-w-96">
         <div className="mb-4">
           <label htmlFor="cnpj" className="block text-gray-700 text-sm font-bold mb-2">CNPJ: </label>
           <input
@@ -98,11 +97,19 @@ const FormularioCadastroCliente: React.FC = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
         </div>
-        <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8' type="submit">Cadastrar</button>
-      </form>
+        <div className='grid grid-flow-col'>
+            <div className="text-left">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8' onClick={() => Router.back()}>Voltar</button>
+              </div>
+            <div className="text-right">
+            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8' type="submit">Cadastrar</button>
+              </div>
+          </div>
+       
+        </form>
     </div>
     </div>
-            </main>
+    </main>
   );
 };
 

@@ -2,7 +2,6 @@ import '@/app/globals.css'
 import ClientTableRow from '@/modules/client_table_row';
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
-import TopBar from '@/modules/topbar';
 import instance from '@/scripts/requests/instance';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
@@ -29,7 +28,6 @@ export default function Commissions() {
         <Head>
         <title>Nebulon - Dashboard - Tabela de Comissões</title>
         </Head>
-        <TopBar/>
         <Sidebar/>
         <ContentArea>
         <div className='w-full p-14'>
