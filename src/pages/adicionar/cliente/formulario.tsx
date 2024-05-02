@@ -1,5 +1,6 @@
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
+import instance from '@/scripts/requests/instance';
 import Head from 'next/head';
 import Router from 'next/router';
 import React, { useState } from 'react';
@@ -8,6 +9,7 @@ interface Cliente {
   cnpj: string;
   nomeFantasia: string;
   razaoSocial: string;
+  segmento: string;
   telefone: string;
 }
 
@@ -16,6 +18,7 @@ const FormularioCadastroCliente: React.FC = () => {
     cnpj: '',
     nomeFantasia: '',
     razaoSocial: '',
+    segmento: '',
     telefone: ''
   });
 
@@ -26,11 +29,27 @@ const FormularioCadastroCliente: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    instance.post('/clients',{
+      tradingName: cliente.nomeFantasia,
+      companyName: cliente.razaoSocial,
+      cnpj: cliente.cnpj,
+      segment: cliente.segmento,
+      contact: cliente.telefone
+    })
+    .then(function(response){
+      console.log("Client added")
+    })
+    .catch(error => {
+      console.log("Error adding new client")
+    })
+
     console.log(cliente);
     setCliente({
       cnpj: '',
       nomeFantasia: '',
       razaoSocial: '',
+      segmento: '',
       telefone: ''
     });
   };
@@ -85,6 +104,19 @@ const FormularioCadastroCliente: React.FC = () => {
             />
         </div>
         <div className="mb-4">
+          <label htmlFor="segmento" className="block text-gray-700 text-sm font-bold mb-2">Segmento: </label>
+          <input
+            type="seg"
+            id="segmento"
+            name="segmento"
+            placeholder="Digite o segmento da empresa"
+            value={cliente.segmento}
+            onChange={handleChange}
+            required
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+        </div>
+        <div className="mb-4">
           <label htmlFor="telefone" className="block text-gray-700 text-sm font-bold mb-2">Telefone: </label>
           <input
             type="tel"
@@ -97,6 +129,7 @@ const FormularioCadastroCliente: React.FC = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
         </div>
+
         <div className='grid grid-flow-col'>
             <div className="text-left">
               <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8' onClick={() => Router.back()}>Voltar</button>
