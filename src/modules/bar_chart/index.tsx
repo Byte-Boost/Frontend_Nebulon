@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 import Chart from 'chart.js/auto'; // Importe o pacote Chart.js
 
-let BarChart = ({id, width, height, title, data}) => {
+let BarChart = ({type, id, width, height, title, dataX, dataY}) => {
 
   let barColors = ['rgba(210,65,108,0.7)'];
 
-  let xValues = data['Planilha1']['Vendedor']
-  let yValues = data['Planilha1']['Valor de Venda']
+  let xValues = dataX
+  let yValues = dataY
 
   useEffect(() => {
 
     // Criar o gráfico usando Chart.js
     var ctx = document.getElementById(id).getContext('2d');
     new Chart(ctx, {
-      type: "bar",
+      type: type,
       data: {
         labels: xValues,
         datasets: [{
