@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import Chart from 'chart.js/auto'; // Importe o pacote Chart.js
 
-let BarChart = ({type, id, width, height, title, dataX, dataY}) => {
+let ChartTemplate = ({type, id, width, height, title, dataX, dataY, colors}) => {
 
-  let barColors = ['rgba(210,65,108,0.7)'];
+  let barColors = colors//['rgba(210,65,108,0.7)'];
 
   let xValues = dataX
   let yValues = dataY
@@ -44,5 +44,5 @@ let BarChart = ({type, id, width, height, title, dataX, dataY}) => {
   );
 }
 
-export default BarChart;
+export default ChartTemplate;
 
