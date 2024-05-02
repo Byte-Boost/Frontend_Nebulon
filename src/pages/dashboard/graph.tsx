@@ -9,10 +9,24 @@ export default function Home() {
 
     // json data for testing bar chart 
     const data = require('@/json/test.json')
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-
+    // Calculate the total sales value for the product with ID x
     let dataX = [1,2,3]
     let dataY = [0,0,0]
+
+    for (let id in data['Planilha1']['ID Produto']){
+      dataY[Number(id)-1] += data['Planilha1']['Valor de Venda'][Number(id)-1]
+    }
+
+    // Calculate the total sales value for each month
+    let dataX2 = months;
+    let dataY2 = Array(12).fill(0);
+
+    for (let i = 0; i < data['Planilha1']['Data da venda'].length; i++) {
+        let mon = data['Planilha1']['Data da venda'][i]
+        dataY2[(Number(mon.substring(3, 5)))-1] = data['Planilha1']['Valor de Venda'][i]
+    }
     
 
   return (
@@ -24,10 +38,10 @@ export default function Home() {
         <Sidebar/>
         <ContentArea>
           <div className='flex grow flex-wrap gap-8 m-8 place-content-center'>
-             <GraphCard title='Vendas Em R$' width='50rem' height='25rem'>
-              <BarChart type='line' id='VendasEmR$' width='100%' height='20rem' title='Vendas Em R$' dataX = {dataX} dataY = {dataY}/>
+             <GraphCard title='Vendas por Mês' width='50rem' height='25rem'>
+              <BarChart type='line' id='VendasEmR$' width='100%' height='20rem' title='Vendas Em R$' dataX = {dataX2} dataY = {dataY2}/>
             </GraphCard> 
-            <GraphCard title='Vendas Em R$' width='50rem' height='25rem'>
+            <GraphCard title='Vendas por Produto' width='50rem' height='25rem'>
               <BarChart type='bar' id='VendasEmR$2' width='100%' height='20rem' title='Vendas Em R$' dataX = {dataX} dataY = {dataY}/>
             </GraphCard> 
             <GraphCard title='Vendas Em R$' width='50rem' height='25rem'>
