@@ -27,7 +27,11 @@ export default function Home() {
         let mon = data['Planilha1']['Data da venda'][i]
         dataY2[(Number(mon.substring(3, 5)))-1] = data['Planilha1']['Valor de Venda'][i]
     }
-    
+
+    //Chart Colors
+    //let pieColors = ['rgba(210,65,108,0.7)', 'rgba(210,65,108,0.7)', 'rgba(210,65,108,0.7)']
+    let pieColors = ['rgba(210,65,108,0.7)', 'rgba(65,210,108,0.7)', 'rgba(108,65,210,0.7)'];
+    let defaultColor = ['rgba(210,65,108,0.7)']
 
   return (
     <main>
@@ -39,17 +43,22 @@ export default function Home() {
         <ContentArea>
           <div className='flex grow flex-wrap gap-8 m-8 place-content-center'>
              <GraphCard title='Vendas por Mês' width='50rem' height='25rem'>
-              <BarChart type='line' id='VendasEmR$' width='100%' height='20rem' title='Vendas Em R$' dataX = {dataX2} dataY = {dataY2}/>
+              <BarChart type='line' id='VendasEmR$' width='100%' height='20rem' title='Vendas Em R$' dataX = {dataX2} dataY = {dataY2} colors = {defaultColor}/>
             </GraphCard> 
             <GraphCard title='Vendas por Produto' width='50rem' height='25rem'>
-              <BarChart type='bar' id='VendasEmR$2' width='100%' height='20rem' title='Vendas Em R$' dataX = {dataX} dataY = {dataY}/>
+              <BarChart type='bar' id='VendasEmR$2' width='100%' height='20rem' title='Vendas Em R$' dataX = {dataX} dataY = {dataY} colors = {defaultColor}/>
             </GraphCard> 
-            <GraphCard title='Vendas Em R$' width='50rem' height='25rem'>
-              <BarChart type='bar' id='VendasEmR$3' width='100%' height='20rem' title='Vendas Em R$' dataX = {dataX} dataY = {dataY}/>
+
+             
+            <GraphCard title='Vendas por Produto' width='25rem' height='25rem'>
+              <BarChart type='pie' id='VendasEmR$3' width='100%' height='20rem' title='Vendas Em R$' dataX = {dataX} dataY = {dataY} colors = {pieColors}/>
             </GraphCard> 
+            {/*
             <GraphCard title='Vendas Em R$' width='50rem' height='25rem'>
               <BarChart type='bar' id='VendasEmR$4' width='100%' height='20rem' title='Vendas Em R$' dataX = {dataX} dataY = {dataY}/>
             </GraphCard> 
+            */}
+
           </div>
         </ContentArea>
     </main>
