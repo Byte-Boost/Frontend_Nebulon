@@ -21,6 +21,8 @@ const FormularioCadastroCliente: React.FC = () => {
     segmento: '',
     telefone: ''
   });
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -38,9 +40,13 @@ const FormularioCadastroCliente: React.FC = () => {
       contact: cliente.telefone
     })
     .then(function(response){
+      setSuccessMessage("Cliente cadastrado com sucesso!");
+      setErrorMessage(null);
       console.log("Client added")
     })
     .catch(error => {
+      setErrorMessage("Erro ao cadastrar cliente. Tente novamente.");
+      setSuccessMessage(null);
       console.log("Error adding new client")
     })
 
@@ -63,6 +69,10 @@ const FormularioCadastroCliente: React.FC = () => {
     <div className="flex justify-center items-center h-screen">
     <div>
       <h2 className="text-center mb-4 font-bold">Cadastro de Cliente</h2>
+      {/* Mensagem de sucesso */}
+      {successMessage && <div className="bg-green-500 text-white px-4 py-2 rounded mb-4"> {successMessage}</div>}
+      {/* Mensagem de erro */}
+      {errorMessage && <div className="bg-red-500 text-white px-4 py-2 rounded mb-4">{errorMessage}</div>}
       <form onSubmit={handleSubmit} className="bg-white  border-black border-solid border rounded px-8 pt-6 pb-8 mb-4 min-w-96">
         <div className="mb-4">
           <label htmlFor="cnpj" className="block text-gray-700 text-sm font-bold mb-2">CNPJ: </label>
