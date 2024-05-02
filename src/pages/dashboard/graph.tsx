@@ -12,8 +12,12 @@ export default function Home() {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     // Calculate the total sales value for the product with ID x
-    let dataX = [1,2,3]
-    let dataY = [0,0,0]
+    let dataX = [...new Set(data['Planilha1']['ID Produto'])].sort();
+    let dataY = Array(dataX.length).fill(0);
+
+    for (let i = 0; i < data['Planilha1']['ID Produto'].length; i++) {
+        dataY[(Number(data['Planilha1']['ID Produto'][i]))-1] += data['Planilha1']['Valor de Venda'][i]
+    }
 
     for (let id in data['Planilha1']['ID Produto']){
       dataY[Number(id)-1] += data['Planilha1']['Valor de Venda'][Number(id)-1]
