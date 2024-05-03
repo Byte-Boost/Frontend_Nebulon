@@ -51,6 +51,7 @@ function LoginFormCard() {
               <Checkbox id="remember" />
               <Label htmlFor="remember">Remember me</Label>
             </div> */}
+              <p className="text-right">Ainda não tem uma conta? <a href="/signup">Cadastre-se!</a></p>
               <Button type="submit" className="bg-purple-800 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-lg">
                 Entrar
               </Button>
