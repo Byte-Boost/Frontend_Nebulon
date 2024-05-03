@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 
 type ClientTableRowProps = {
   date: string;
-  seller_id: string;
-  client_id: string;
-  product_id: string;
+  seller_id: number;
+  client_id: number;
+  product_id: number;
   sale_value: number;
 };
 
@@ -26,20 +26,19 @@ const ClientTableRow = ({
     let [commission_value, setCommission] = useState("");
     useEffect(() => {
       const fetchData = async () => {
-        let clientData = await instance.get("http://localhost:3200/clients/" + client_id);
-        let sellerData = await instance.get("http://localhost:3200/sellers/" + seller_id);
-        let productData = await instance.get("http://localhost:3200/products/" + product_id);
-
+        let clientData = await instance.get("/clients/" + client_id);
+        let productData = await instance.get("/products/" + product_id);
+        let sellerData = await instance.get("/sellers/" + seller_id);
+        console.log(productData.data);
         setClientName(clientData.data.tradingName);
         setClientCnpj(clientData.data.cnpj);
         
         setSellerName(sellerData.data.name);
         setSellerCpf(sellerData.data.cpf);
-
         setProduct(productData.data.name);
 
-        let client_status = clientData.data.status === "novo";
-        let product_status = productData.data.status === "novo";
+        let client_status = clientData.data.status === 0;
+        let product_status = productData.data.status === 0;
         let product_percentage = productData.data.percentage;
        
         if (client_status && product_status){
