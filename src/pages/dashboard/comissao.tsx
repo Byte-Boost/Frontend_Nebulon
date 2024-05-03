@@ -70,35 +70,57 @@ export default function Commissions() {
         <div className='w-full p-14'>
             <div className='bg-slate-100 shadow-2xl rounded-sm py-6 px-6'>
               <div className=''>
-                <div>
-                  <select name="dateSelect" id="dateSelect" onChange={()=>{
-                    filters.date = parseInt((document.getElementById('dateSelect') as HTMLSelectElement).value)
-                    getData()
-                  }}>
-                    <option value={0}>All</option>
-                    <option value={1}>Last month</option>
-                    <option value={2}>Last 3 months</option>
-                    <option value={3}>Last 6 months</option>
-                    <option value={4}>Last year</option>
-                  </select>
-                  <select name="prodSelect" id="prodSelect" onChange={()=>{
-                    filters.prodClass = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
-                    getData()
-                  }}>
-                    <option value={-1}>Any</option>
-                    <option value={0}>New</option>
-                    <option value={1}>Old</option>
-                  </select>
-                  <select name="clientSelect" id="clientSelect" onChange={()=>{
-                    filters.clientClass = parseInt((document.getElementById('clientSelect') as HTMLSelectElement).value)
-                    getData()
-                  }}>
-                    <option value={-1}>Any</option>
-                    <option value={0}>New</option>
-                    <option value={1}>Old</option>
-                  </select>
-                </div>
-                <Table className=" rounded-lg bg-purple-500  text-white">
+                
+                  <div className='w-full text-left flex justify-between'>
+                    <h1 className='text-6xl font-bold text-gray-900 inline'>Commissions</h1>
+                    <div className="inline-block">
+
+
+                      <div className='inline-block m-4'>
+                        <label htmlFor="dateSelect" className="block mb-2 text-lg font-medium text-gray-900">Periodo</label>
+                        <select className="rounded-lg block w-full p-2.5" name="dateSelect" id="dateSelect" onChange={()=>{
+                          filters.date = parseInt((document.getElementById('dateSelect') as HTMLSelectElement).value)
+                          getData()
+                        }}>
+                          <option value={0}>Qualquer</option>
+                          <option value={1}>Ultimo mês</option>
+                          <option value={2}>Ultimos 3 Meses</option>
+                          <option value={3}>Ultimos 6 meses</option>
+                          <option value={4}>Ultimo ano</option>
+                        </select>
+                      </div>
+                      
+                      
+                      <div className="inline-block m-4">
+                        <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de produto</label>
+                        <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
+                          filters.prodClass = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
+                          getData()
+                        }}>
+                          <option value={-1}>Qualquer</option>
+                          <option value={0}>Novo</option>
+                          <option value={1}>Velho</option>
+                        </select>
+                      </div>
+                      
+
+                      <div className="inline-block m-4">
+                        <label htmlFor="clientSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de cliente</label>
+                        <select className="rounded-lg block w-full p-2.5" name="clientSelect" id="clientSelect" onChange={()=>{
+                          filters.clientClass = parseInt((document.getElementById('clientSelect') as HTMLSelectElement).value)
+                          getData()
+                        }}>
+                          <option value={-1}>Qualquer</option>
+                          <option value={0}>Novo</option>
+                          <option value={1}>Velho</option>
+                        </select>
+                      </div>
+
+
+                    </div>
+                  </div>
+
+                <Table className="rounded-lg bg-purple-500  text-white">
                   <Table.Head className='w-full text-left text-md'>
                     <Table.HeadCell>Data da Venda</Table.HeadCell>
                     <Table.HeadCell>Vendendor</Table.HeadCell>
