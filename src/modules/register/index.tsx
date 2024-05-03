@@ -78,8 +78,7 @@ const UserFormCard = () => {
                   <TextInput id="password" type="password" onChange={ (e)=> setUser({...user, password: e.target.value}) } required />
                 </div>
               </div>
-
-              <p className="text-right">Já tem uma conta? <a href="../">Faça Log in!</a></p>
+ 
               <Button type="submit" className="bg-purple-800 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-lg">
                 Registrar
               </Button>

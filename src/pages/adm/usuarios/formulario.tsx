@@ -1,12 +1,14 @@
 import '@/app/globals.css'
 import UserFormCard from '@/modules/register';
 import Head from 'next/head';
-export default function Login() {
+import Sidebar from '@/modules/sidebar';
+export default function registerUser() {
   return (
     <main>
         <Head>
-        <title>Nebulon - Sign up</title>
+        <title>Nebulon - Register seller</title>
         </Head>
+        <Sidebar/>
         <UserFormCard/>
     </main>
   );
