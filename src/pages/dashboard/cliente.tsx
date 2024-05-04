@@ -1,13 +1,13 @@
 import '@/app/globals.css'
+import ClientTableRow from '@/modules/client_table_row';
 import ContentArea from '@/modules/content_area';
-import ProductTableRow from '@/modules/product_table_row';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
-export default function Products() {
+export default function Clients() {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({
     class: -1,
@@ -19,16 +19,13 @@ export default function Products() {
   }
   
   async function getData() {
-    let products: any = await instance.get("/products");
+    let clients: any = await instance.get("/clients");
     if ([0,1].includes(filters.class)){
       let classes = ["new", "old"]
-      products =  await instance.get(`/products/class/${classes[filters.class]}`);
-    }  
-    // else {
-    //   products = await instance.get("/products");
-    // }
+      clients =  await instance.get(`/clients/class/${classes[filters.class]}`);
+    }
 
-    setData(products.data);
+    setData(clients.data);
   }
   useEffect(() => {
     getData()
@@ -40,7 +37,7 @@ export default function Products() {
   return (
     <main> 
         <Head>
-        <title>Nebulon - Dashboard - Tabela de Produtos</title>
+        <title>Nebulon - Dashboard - Tabela de Clientes</title>
         </Head>
         <Sidebar/>
         <ContentArea>
@@ -49,11 +46,11 @@ export default function Products() {
               <div className=''>
                 
                   <div className='w-full text-left flex justify-between'>
-                    <h1 className='text-6xl font-bold text-gray-900 inline'>Produtos</h1>
+                    <h1 className='text-6xl font-bold text-gray-900 inline'>clientes</h1>
                     <div className="inline-block">
                       
                       <div className="inline-block m-4">
-                        <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de produto</label>
+                        <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de cliente</label>
                         <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
                           filters.class = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
                           getData()
@@ -69,19 +66,19 @@ export default function Products() {
 
                 <Table className="rounded-lg bg-purple-500  text-white">
                   <Table.Head className='w-full text-left text-md'>
-                    <Table.HeadCell>Nome</Table.HeadCell>
-                    <Table.HeadCell>Descrição</Table.HeadCell>
-                    <Table.HeadCell>Porcentagem</Table.HeadCell>
+                    <Table.HeadCell>Razão Social</Table.HeadCell>
+                    <Table.HeadCell>Segmento</Table.HeadCell>
+                    <Table.HeadCell>Contato</Table.HeadCell>
                     <Table.HeadCell>Status</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                    {data.map((product: { name: string , description:string, percentage:number, status:number }, index: number) => {
+                    {data.map((product: { companyName: string, segment:string, contact:string, status:number }, index: number) => {
                       return (
-                        <ProductTableRow
+                        <ClientTableRow
                           key={index}
-                          name={product.name}
-                          description={product.description}
-                          percentage={product.percentage}
+                          companyName={product.companyName}
+                          segment={product.segment}
+                          contact={product.contact}
                           status={product.status}
                         />
                       )

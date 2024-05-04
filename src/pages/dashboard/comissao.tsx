@@ -1,5 +1,5 @@
 import '@/app/globals.css'
-import ClientTableRow from '@/modules/client_table_row';
+import CommissionTableRow from '@/modules/commission_table_row';
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
@@ -72,7 +72,7 @@ export default function Commissions() {
               <div className=''>
                 
                   <div className='w-full text-left flex justify-between'>
-                    <h1 className='text-6xl font-bold text-gray-900 inline'>Commissions</h1>
+                    <h1 className='text-6xl font-bold text-gray-900 inline'>Comissões</h1>
                     <div className="inline-block">
 
 
@@ -134,7 +134,7 @@ export default function Commissions() {
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     {data.map((commission: { date: string , value:string, clientId:number, productId:number, sellerId:number, paymentMethod:string }, index: number) => {
                       return (
-                        <ClientTableRow
+                        <CommissionTableRow
                           key={index}
                           date={commission.date}
                           seller_id={commission.sellerId}
