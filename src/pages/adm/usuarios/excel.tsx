@@ -1,7 +1,6 @@
 import '@/app/globals.css'
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
-import TopBar from '@/modules/topbar';
 import UploadCard from '@/modules/upload_card';
 import instance from '@/scripts/requests/instance';
 import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
@@ -45,7 +44,6 @@ export default function Client(){
         <Head>
         <title>Nebulon - Adicionar - Vendendor</title>
         </Head>
-        <TopBar/>
         <Sidebar/>
         <ContentArea>
         <UploadCard handleChange={handleChange} onSend={onSend} />

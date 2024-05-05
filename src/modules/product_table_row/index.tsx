@@ -1,28 +1,30 @@
+import instance from "@/scripts/requests/instance";
 import { Table } from "flowbite-react/components/Table"
+import { useEffect, useState } from "react";
 
-type ClientTableRowProps = {
-  companyName: string;
-  segment: string;
-  contact: string;
+type ProductTableRowProps = {
+  name: string;
+  description: string;
+  percentage: number;
   status: number;
 };
 
-const ClientTableRow = ({
-  companyName,
-  segment,
-  contact,
-  status
-}: ClientTableRowProps) => {
+const ProductTableRow = ({
+  name,
+  description,
+  percentage,
+  status,
+}: ProductTableRowProps) => {
     return(      
         <Table.Row className="odd:bg-[#1f1f1f] even:bg-[#2b2b2b]">
         <Table.Cell className="whitespace-nowrap font-medium text-white">
-          {companyName}
+          {name}
         </Table.Cell>
         <Table.Cell>
-          {segment}
+          {description}
         </Table.Cell>
         <Table.Cell>
-          {contact}
+          {percentage}
         </Table.Cell>
         <Table.Cell>
           {status === 0 ? "Novo" : "Velho"}
@@ -30,4 +32,4 @@ const ClientTableRow = ({
       </Table.Row>
     )
 }
-export default ClientTableRow;
+export default ProductTableRow;

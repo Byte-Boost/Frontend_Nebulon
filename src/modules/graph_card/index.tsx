@@ -2,7 +2,7 @@
 const GraphCard = ({ title, children, width, height }: { title: string, children: React.ReactNode, width: string, height: string }) => {
     return(
     <>
-        <div className="graph-card drop-shadow-md" style={{ width: width, height: height}}>
+        <div className="graph-card" style={{ width: width, height: height}}>
 
                 <h2 className="graph-card--title m-2">{title}</h2>
 
