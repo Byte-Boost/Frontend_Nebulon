@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Button, Label, TextInput, Card } from "flowbite-react";
 import instance from '@/scripts/requests/instance';
+import '@/app/globals.css'
+
+
 
 interface Seller {
   nome: string;
@@ -17,6 +20,7 @@ const UserFormCard = () => {
   });
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
@@ -44,14 +48,17 @@ const UserFormCard = () => {
     <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-lg">
         {/* Mensagem de sucesso */}
-        {successMessage && <div className="bg-green-500 text-white px-4 py-2 rounded mb-4"> {successMessage}</div>}
+        {successMessage && <div className="bg-green-500 text-white px-4 py-2 rounded mb-1"> {successMessage}</div>}
         {/* Mensagem de erro */}
-        {errorMessage && <div className="bg-red-500 text-white px-4 py-2 rounded mb-4">{errorMessage}</div>}
+        {errorMessage && <div className="bg-red-500 text-white px-4 py-2 rounded mb-1">{errorMessage}</div>}
         <Card className="flex justify-center items-center border-2 border-gray-300 rounded-lg bg-white shadow-lg p-8">
-          <img src="/nebulon_cover.png" alt="Nebulon Logo" />
             <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+            <h2 className="text-center mb-4 font-bold text-3xl">Cadastro de Vendedores</h2>
+            <div className="mb-4">
+              <img className="w-min" src="/nebulon_cover.png" alt="Nebulon Logo" />
+            </div>
 
-              <div className="block mt-8">
+              <div className="block">
                 <Label htmlFor="name" value="Nome" className="font-bold" />
                 <div className="border-2 rounded-lg shadow-inner">
                   <TextInput id="name" type="text" onChange={ (e)=> setUser({...user, nome: e.target.value}) } required />

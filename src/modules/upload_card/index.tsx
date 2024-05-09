@@ -1,6 +1,13 @@
 import Router from "next/router";
-
+import React, { useState } from "react";
 export default function UploadCard({handleChange, onSend, }: {handleChange: any, onSend: any}){
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+    setSelectedFile(file);
+    handleChange(event);
+  };
     return (
         <div className='w-full p-14'>
         <div className='bg-slate-100 shadow-2xl rounded-sm py-6 px-6'>
@@ -12,6 +19,7 @@ export default function UploadCard({handleChange, onSend, }: {handleChange: any,
             <label className='mt-12 bg-purple-500 hover:bg-purple-600 text-white p-2 cursor-pointer' htmlFor='file'>Escolha um arquivo</label>
             <input className='hidden' type="file" name="file" id='file' required accept='.xlsx' onChange={handleChange}/>
           </div>
+            {selectedFile && <p className="mt-4">Arquivo selecionado: {selectedFile.name}</p>}
             <div className='grid grid-flow-col'>
             <div className="text-left">
               <button className='mt-4' onClick={() => Router.back()}>Voltar</button>

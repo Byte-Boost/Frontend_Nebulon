@@ -91,7 +91,7 @@ export default function Commissions() {
                       </div>
                       
                       
-                      <div className="inline-block m-4">
+{/*                       <div className="inline-block m-4">
                         <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de produto</label>
                         <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
                           filters.prodClass = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
@@ -114,7 +114,7 @@ export default function Commissions() {
                           <option value={0}>Novo</option>
                           <option value={1}>Velho</option>
                         </select>
-                      </div>
+                      </div> */}
 
 
                     </div>
@@ -128,8 +128,8 @@ export default function Commissions() {
                     <Table.HeadCell>Cliente</Table.HeadCell>
                     <Table.HeadCell>CNPJ/CPF do Cliente</Table.HeadCell>
                     <Table.HeadCell>Produto</Table.HeadCell>
-                    <Table.HeadCell>Valor da Venda</Table.HeadCell>
                     <Table.HeadCell>Comissão</Table.HeadCell>
+                    <Table.HeadCell>Valor da Venda</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     {data.map((commission: { date: string , value:string, clientId:number, productId:number, sellerId:number, paymentMethod:string }, index: number) => {

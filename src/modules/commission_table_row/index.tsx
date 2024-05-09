@@ -93,20 +93,6 @@ const CommissionTableRow = ({
         <Table.Cell>
           {product}
         </Table.Cell>
-        <Table.Cell >
-          <div  className="grid grid-flow-col" >
-          <div className="justify-start">
-            <span className="ml-2">
-              {'R$  '}
-            </span>
-          </div>
-          <div className="justify-end">
-            <span className="ml-2">
-              {sale_value.toFixed(2)}
-            </span> 
-          </div>
-          </div>
-        </Table.Cell>
         <Table.Cell >   
         <div className="flex flex-row flex-1">
             <div className="justify-start">
@@ -119,6 +105,20 @@ const CommissionTableRow = ({
               {commission_value}
               </span> 
             </div>
+          </div>
+        </Table.Cell>
+        <Table.Cell >
+          <div  className="grid grid-flow-col" >
+          <div className="justify-start">
+            <span className="ml-2">
+              {'R$  '}
+            </span>
+          </div>
+          <div className="justify-end">
+            <span className="ml-2">
+              {sale_value.toFixed(2)}
+            </span> 
+          </div>
           </div>
         </Table.Cell>
       </Table.Row>

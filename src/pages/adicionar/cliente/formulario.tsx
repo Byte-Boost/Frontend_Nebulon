@@ -28,7 +28,7 @@ const FormularioCadastroCliente: React.FC = () => {
     const { name, value } = e.target;
     setCliente({ ...cliente, [name]: value });
   };
-
+  
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
@@ -64,17 +64,24 @@ const FormularioCadastroCliente: React.FC = () => {
     <main>
       <Head>
         <title>Nebulon - Criar Cliente</title>
-    </Head>
+      </Head>
     <Sidebar/>
-    <div className="flex justify-center items-center h-screen">
-    <div>
-      <h2 className="text-center mb-4 font-bold">Cadastro de Cliente</h2>
+    <div className="flex justify-center">
+    <div className="mt-4">
       {/* Mensagem de sucesso */}
       {successMessage && <div className="bg-green-500 text-white px-4 py-2 rounded mb-4"> {successMessage}</div>}
       {/* Mensagem de erro */}
       {errorMessage && <div className="bg-red-500 text-white px-4 py-2 rounded mb-4">{errorMessage}</div>}
+      <div className='container mx-auto max-w-xl'>
+
       <form onSubmit={handleSubmit} className="bg-white  border-black border-solid border rounded px-8 pt-6 pb-8 mb-4 min-w-96">
-        <div className="mb-4">
+      <h2 className="text-center mb-4 font-bold text-3xl">Cadastro de Cliente</h2>
+
+      <div className="mb-4">
+        <img className="w-min" src="/nebulon_cover.png" alt="Nebulon Logo" />
+      </div>  
+
+      <div className="mb-4">
           <label htmlFor="cnpj" className="block text-gray-700 text-sm font-bold mb-2">CNPJ: </label>
           <input
             type="text"
@@ -142,14 +149,15 @@ const FormularioCadastroCliente: React.FC = () => {
 
         <div className='grid grid-flow-col'>
             <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8' onClick={() => Router.back()}>Voltar</button>
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4' onClick={() => Router.back()}>Voltar</button>
               </div>
             <div className="text-right">
-            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8' type="submit">Cadastrar</button>
+            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4' type="submit">Cadastrar</button>
               </div>
           </div>
        
         </form>
+    </div>
     </div>
     </div>
     </main>

@@ -16,13 +16,13 @@ export default function Home() {
       <Sidebar/>
       <div>
         <ContentArea>
-            <QuickCard link='/adicionar/produto/formulario'>
+{/*             <QuickCard link='/adicionar/produto/formulario'>
               <div className='flex '>
               </div> 
               <div className='bg-[#E6E6E6]'>
               <h1 className='inline-block  self-end'>Utilizando Formulario</h1>
               </div>     
-            </QuickCard>
+            </QuickCard> */}
             <QuickCard  link={'/adicionar/produto/excel'}>
               <div className='flex '> 
               </div> 
