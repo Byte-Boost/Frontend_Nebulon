@@ -8,11 +8,10 @@ import React, { useState } from 'react';
 interface Comissao {
   sellerData: string;
   clientData: string;
-  date: string;
   value: string;
   paymentMethod: string;
-  sellerId: string;
-  clientId: string;
+  sellerCPF: string;
+  clientCNPJ: string;
   productId: string;
 }
 
@@ -20,11 +19,10 @@ const FormularioCadastroComissao: React.FC = () => {
   const [comissao, setComissao] = useState<Comissao>({
     sellerData: '',
     clientData: '',
-    date: '',
     value: '',
     paymentMethod: '',
-    sellerId: '',
-    clientId: '',
+    sellerCPF: '',
+    clientCNPJ: '',
     productId: ''
   });
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -41,33 +39,32 @@ const FormularioCadastroComissao: React.FC = () => {
     instance.post('/commissions',{
       sellerData: comissao.sellerData,
       clientData: comissao.clientData,
-      date: comissao.date,
+      date: Date.now(),
       value: comissao.value,
       paymentMethod: comissao.paymentMethod,
-      sellerId: comissao.sellerId,
-      clientId: comissao.clientId,
+      sellerCPF: comissao.sellerCPF,
+      clientCNPJ: comissao.clientCNPJ,
       productId: comissao.productId
     })
     .then(function(response){
-      setSuccessMessage("Cliente cadastrado com sucesso!");
+      setSuccessMessage("Commissão cadastrada com sucesso!");
       setErrorMessage(null);
-      console.log("Client added")
+      console.log("Commission added.")
     })
     .catch(error => {
-      setErrorMessage("Erro ao cadastrar cliente. Tente novamente.");
+      setErrorMessage("Erro ao cadastrar comissão. Tente novamente.");
       setSuccessMessage(null);
-      console.log("Error adding new client")
+      console.log("Error adding new commission.")
     })
 
     console.log(comissao);
     setComissao({
       sellerData: '',
       clientData: '',
-      date: '',
       value: '',
       paymentMethod: '',
-      sellerId: '',
-      clientId: '',
+      sellerCPF: '',
+      clientCNPJ: '',
       productId: ''
     });
   };
@@ -93,120 +90,81 @@ const FormularioCadastroComissao: React.FC = () => {
         <img className="w-min" src="/nebulon_cover.png" alt="Nebulon Logo" />
       </div>  
 
-{/*         <div className="mb-">
-          <label htmlFor="sellerData" className="block text-gray-700 text-sm font-bold mb-2">CPF do Vendedor: </label>
-          <input
-            type="text"
-            id="sellerData" 
-            name="sellerData"
-            placeholder="Digite o CPF do vendedor"
-            value={comissao.sellerData}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div> */}
-{/*         <div className="mb-">
-          <label htmlFor="clientData" className="block text-gray-700 text-sm font-bold mb-2">CNPJ/CPF do Cliente: </label>
-          <input
+      <div className="mb-4">
+        <label htmlFor="value" className="block text-gray-700 text-sm font-bold mb-2">Valor de Venda: </label>
+        <input
           type="text"
-          id="clientData"
-          name="clientData"
-          placeholder="Digite o CNPJ/CPF do cliente"
-          value={comissao.clientData}
+          id="value"
+          name="value"
+          placeholder="Digite o valor da venda"
+          value={comissao.value}
           onChange={handleChange}
           required
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
-        </div> */}
-        <div className="mb-4">
-          <label htmlFor="date" className="block text-gray-700 text-sm font-bold mb-2">Data: </label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            placeholder="Insira a data"
-            value={comissao.date}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="paymentMethod" className="block text-gray-700 text-sm font-bold mb-2">Método do pagamento: </label>
+        <input
+          type="text"
+          id="paymentMethod"
+          name="paymentMethod"
+          placeholder="Digite o método de pagamento"
+          value={comissao.paymentMethod}
+          onChange={handleChange}
+          required
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="productId" className="block text-gray-700 text-sm font-bold mb-2">ID do produto: </label>
+        <input
+          type="text"
+          id="productId" 
+          name="productId"
+          placeholder="Digite o Id do produto"
+          value={comissao.productId}
+          onChange={handleChange}
+          required
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="sellerCPF" className="block text-gray-700 text-sm font-bold mb-2">CPF do Vendedor: </label>
+        <input
+          type="text"
+          id="sellerCPF" 
+          name="sellerCPF"
+          placeholder="Digite o CPF do vendedor"
+          value={comissao.sellerCPF}
+          onChange={handleChange}
+          required
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="clientCNPJ" className="block text-gray-700 text-sm font-bold mb-2">CNPJ/CPF do Cliente: </label>
+        <input
+        type="text"
+        id="clientCNPJ"
+        name="clientCNPJ"
+        placeholder="Digite o CNPJ/CPF do cliente"
+        value={comissao.clientCNPJ}
+        onChange={handleChange}
+        required
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      <div className='grid grid-flow-col'>
+        <div className="text-left">
+          <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4' onClick={() => Router.back()}>Voltar</button>
         </div>
-        <div className="mb-4">
-          <label htmlFor="value" className="block text-gray-700 text-sm font-bold mb-2">Valor de Venda: </label>
-          <input
-            type="text"
-            id="value"
-            name="value"
-            placeholder="Digite o valor da venda"
-            value={comissao.value}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
+        <div className="text-right">
+          <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4' type="submit">Cadastrar</button>
         </div>
-        <div className="mb-4">
-          <label htmlFor="paymentMethod" className="block text-gray-700 text-sm font-bold mb-2">Método do pagamento: </label>
-          <input
-            type="text"
-            id="paymentMethod"
-            name="paymentMethod"
-            placeholder="Digite o método de pagamento"
-            value={comissao.paymentMethod}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="sellerId" className="block text-gray-700 text-sm font-bold mb-2">ID do Vendedor: </label>
-          <input
-            type="text"
-            id="sellerId"
-            name="sellerId"
-            placeholder="Digite o Id do vendedor"
-            value={comissao.sellerId}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="clientId" className="block text-gray-700 text-sm font-bold mb-2">ID do Cliente: </label>
-          <input
-            type="text"
-            id="clientId"
-            name="clientId"
-            placeholder="Digite o Id do cliente"
-            value={comissao.clientId}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="productId" className="block text-gray-700 text-sm font-bold mb-2">ID do produto: </label>
-          <input
-            type="text"
-            id="productId" 
-            name="productId"
-            placeholder="Digite o Id do produto"
-            value={comissao.productId}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-        </div>
-        <div className='grid grid-flow-col'>
-            <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4' onClick={() => Router.back()}>Voltar</button>
-              </div>
-            <div className="text-right">
-            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4' type="submit">Cadastrar</button>
-              </div>
-          </div>
-       
-        </form>
+      </div>
+      
+      </form>
     </div>
     </div>
             </div>

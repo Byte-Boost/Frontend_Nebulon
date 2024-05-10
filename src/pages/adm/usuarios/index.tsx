@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <main>
       <Head>
-        <title>Nebulon - Produto</title>
+        <title>Nebulon - Registrar Vendedor</title>
       </Head>
       <Sidebar/>
       <div>
