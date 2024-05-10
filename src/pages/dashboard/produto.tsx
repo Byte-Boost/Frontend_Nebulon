@@ -9,21 +9,17 @@ import { useEffect, useState } from 'react';
 
 export default function Products() {
   const [data, setData] = useState([]);
-  const [filters, setFilters] = useState({
-    class: -1,
+  const [filters, setFilters] = useState<{
+    class: number | null,
+  }>({
+    class: null,
   });
 
-  async function filterAsync(array: Array<any>, filter: any){
-    const filterResults = await Promise.all(array.map(filter));
-    return array.filter((_, index) => filterResults[index]);
-  }
-  
   async function getData() {
-    let products: any = await instance.get("/products");
-    if ([0,1].includes(filters.class)){
-      let classes = ["new", "old"]
-      products =  await instance.get(`/products/class/${classes[filters.class]}`);
-    }
+    let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
+    let products: any = await instance.get("/products", { params: {
+      status: status,
+    }});
 
     setData(products.data);
   }
@@ -55,7 +51,7 @@ export default function Products() {
                           filters.class = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
                           getData()
                         }}>
-                          <option value={-1}>Qualquer</option>
+                          <option value={undefined}>Qualquer</option>
                           <option value={0}>Novo</option>
                           <option value={1}>Velho</option>
                         </select>

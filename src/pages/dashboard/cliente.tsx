@@ -9,21 +9,20 @@ import { useEffect, useState } from 'react';
 
 export default function Clients() {
   const [data, setData] = useState([]);
-  const [filters, setFilters] = useState({
-    class: -1,
+  const [filters, setFilters] = useState<{
+    class: number | null,
+    segment: string | null,
+  }>({
+    class: null,
+    segment: null,
   });
-
-  async function filterAsync(array: Array<any>, filter: any){
-    const filterResults = await Promise.all(array.map(filter));
-    return array.filter((_, index) => filterResults[index]);
-  }
   
   async function getData() {
-    let clients: any = await instance.get("/clients");
-    if ([0,1].includes(filters.class)){
-      let classes = ["new", "old"]
-      clients =  await instance.get(`/clients/class/${classes[filters.class]}`);
-    }
+    let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
+    let clients: any = await instance.get("/clients", { params: {
+      segment: filters.segment,
+      status: status,
+    }});
 
     setData(clients.data);
   }
@@ -55,7 +54,7 @@ export default function Clients() {
                           filters.class = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
                           getData()
                         }}>
-                          <option value={-1}>Qualquer</option>
+                          <option value={undefined}>Qualquer</option>
                           <option value={0}>Novo</option>
                           <option value={1}>Velho</option>
                         </select>
