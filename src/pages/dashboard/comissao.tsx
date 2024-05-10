@@ -9,10 +9,20 @@ import { useEffect, useState } from 'react';
 
 export default function Commissions() {
   const [data, setData] = useState([]);
-  const [filters, setFilters] = useState({
-    date: 0,
-    prodClass: -1,
-    clientClass: -1,
+  const [filters, setFilters] = useState<{
+    date: number | null,
+    clientCNPJ: string | null,
+    sellerCPF: string | null,
+    productID: number | null,
+    prodClass: number | null,
+    clientClass: number | null,
+  }>({
+    date: null,
+    clientCNPJ: null,
+    sellerCPF: null,
+    productID: null,
+    prodClass: null,
+    clientClass: null,
   });
 
   async function filterAsync(array: Array<any>, filter: any){
@@ -22,35 +32,34 @@ export default function Commissions() {
   
   async function getData() {
     let dateRange = [0, 1, 3, 6, 12]
-    const commissions = await instance.get("/commissions");
+    let prodStatus = filters.prodClass == 0 ? "new" : filters.prodClass == 1 ? "old" : undefined
+    let clientStatus = filters.clientClass == 0 ? "new" : filters.clientClass == 1 ? "old" : undefined
+    
+    const commissions = await instance.get("/commissions", { params: {
+      client_cnpj: filters.clientCNPJ,
+      seller_cpf: filters.sellerCPF,
+      product_id: filters.productID,
+      product_status: prodStatus,
+      client_status: clientStatus,
+    }});
+
+
     const filteredCommissions: any = await filterAsync(commissions.data, (async (commission: any) =>{
       // Filter booleans
       let dateFilterBool: boolean = true;
-      let prodClassFilterBool: boolean = true;
-      let clientClassFilterBool: boolean = true;
-
-      // First filter (DATE)
-      if ([1,2,3,4].includes(filters.date)){
+      let dateFilter = filters.date || 0;
+      // Filter
+      if ([1,2,3,4].includes(dateFilter)){
         const now = new Date(Date.now());
-        const start = now.setMonth(now.getMonth() - dateRange[filters.date]);
+        const start = now.setMonth(now.getMonth() - dateRange[dateFilter]);
         const end = Date.now();
         const d = Date.parse(commission.date);
         dateFilterBool = d.valueOf() >= start.valueOf() && d.valueOf() <= end.valueOf()
       } 
-      // Second filter (PRODUCT CLASS)
-      if ([0,1].includes(filters.prodClass)){
-        let productData = await instance.get(`/products/` + commission.productId);
-        prodClassFilterBool = productData.data.status == filters.prodClass;
-      } 
-      // Third filter (CLIENT CLASS)
-      if ([0,1].includes(filters.clientClass)){
-        let clientData = await instance.get(`/clients/` + commission.clientId);
-        clientClassFilterBool = clientData.data.status == filters.clientClass;
-      } 
-
-      return (dateFilterBool && prodClassFilterBool && clientClassFilterBool);
+      return (dateFilterBool);
       
     }));
+
     setData(filteredCommissions);
   }
   useEffect(() => {
@@ -89,32 +98,30 @@ export default function Commissions() {
                           <option value={4}>Ultimo ano</option>
                         </select>
                       </div>
-                      
-                      
-{/*                       <div className="inline-block m-4">
+
+                      <div className="inline-block m-4">
                         <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de produto</label>
                         <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
                           filters.prodClass = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
                           getData()
                         }}>
-                          <option value={-1}>Qualquer</option>
+                          <option value={undefined}>Qualquer</option>
                           <option value={0}>Novo</option>
                           <option value={1}>Velho</option>
                         </select>
                       </div>
                       
-
                       <div className="inline-block m-4">
                         <label htmlFor="clientSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de cliente</label>
                         <select className="rounded-lg block w-full p-2.5" name="clientSelect" id="clientSelect" onChange={()=>{
                           filters.clientClass = parseInt((document.getElementById('clientSelect') as HTMLSelectElement).value)
                           getData()
                         }}>
-                          <option value={-1}>Qualquer</option>
+                          <option value={undefined}>Qualquer</option>
                           <option value={0}>Novo</option>
                           <option value={1}>Velho</option>
                         </select>
-                      </div> */}
+                      </div>
 
 
                     </div>

@@ -27,7 +27,7 @@ const CommissionTableRow = ({
         let clientData = await instance.get("/clients/cnpj/" + client_cnpj);
         let productData = await instance.get("/products/" + product_id);
         let sellerData = await instance.get("/sellers/cpf/" + seller_cpf);
-        console.log(productData.data);
+        
         setClientName(clientData.data.tradingName);
         
         setSellerName(sellerData.data.name);
