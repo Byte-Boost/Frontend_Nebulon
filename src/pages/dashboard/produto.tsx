@@ -23,10 +23,7 @@ export default function Products() {
     if ([0,1].includes(filters.class)){
       let classes = ["new", "old"]
       products =  await instance.get(`/products/class/${classes[filters.class]}`);
-    }  
-    // else {
-    //   products = await instance.get("/products");
-    // }
+    }
 
     setData(products.data);
   }
@@ -67,8 +64,8 @@ export default function Products() {
                     </div>
                   </div>
 
-                <Table className="rounded-lg bg-purple-500  text-white">
-                  <Table.Head className='w-full text-left text-md'>
+                <Table className="w-100 rounded-lg bg-purple-500  text-white">
+                  <Table.Head className=' text-left text-md'>
                     <Table.HeadCell>Nome</Table.HeadCell>
                     <Table.HeadCell>Descrição</Table.HeadCell>
                     <Table.HeadCell>Porcentagem</Table.HeadCell>

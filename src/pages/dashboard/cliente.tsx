@@ -64,7 +64,7 @@ export default function Clients() {
                     </div>
                   </div>
 
-                <Table className="rounded-lg bg-purple-500  text-white">
+                <Table className="w-100 rounded-lg bg-purple-500  text-white">
                   <Table.Head className='w-full text-left text-md'>
                     <Table.HeadCell>Razão Social</Table.HeadCell>
                     <Table.HeadCell>Segmento</Table.HeadCell>

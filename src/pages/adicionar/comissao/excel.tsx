@@ -21,18 +21,14 @@ export default function Products() {
       const jsonData = await xlsxToJSON(file);
       let i = 0
       while (jsonData.length > i) {
-        console.log(i)
-
-      let sellerData = await instance.get(`/sellers/cpf/${jsonData[i]["CPF Vendedor"].replace(/[^\w\s]/gi, '')}`)
-      let clientData = await instance.get(`/clients/cnpj/${jsonData[i]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, '')}`)
+      console.log(i)
       console.log(new Date(jsonData[i]["Data da venda"]).toISOString().slice(0, 19).replace('T', ' '),)
-      console.log(clientData)
       instance.post('/commissions',{
         date: new Date(jsonData[i]["Data da venda"]).toISOString().slice(0, 19).replace('T', ' '),
         value: jsonData[i]["Valor de Venda"],
         paymentMethod: jsonData[i]["Forma de Pagamento"],
-        sellerId: sellerData.data[0]["id"],
-        clientId: clientData.data[0]["id"],
+        sellerCPF: jsonData[i]["CPF Vendedor"].replace(/[^\w\s]/gi, ''),
+        clientCNPJ: jsonData[i]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, ''),
         productId: jsonData[i]["ID Produto"]
       })
       .then(function(response){

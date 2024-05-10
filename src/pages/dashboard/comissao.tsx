@@ -120,7 +120,7 @@ export default function Commissions() {
                     </div>
                   </div>
 
-                <Table className="rounded-lg bg-purple-500  text-white">
+                <Table className="w-100 rounded-lg bg-purple-500  text-white">
                   <Table.Head className='w-full text-left text-md'>
                     <Table.HeadCell>Data da Venda</Table.HeadCell>
                     <Table.HeadCell>Vendendor</Table.HeadCell>
@@ -132,13 +132,13 @@ export default function Commissions() {
                     <Table.HeadCell>Valor da Venda</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                    {data.map((commission: { date: string , value:string, clientId:number, productId:number, sellerId:number, paymentMethod:string }, index: number) => {
+                    {data.map((commission: { date: string , value:string, clientCNPJ:number, productId:number, sellerCPF:number, paymentMethod:string }, index: number) => {
                       return (
                         <CommissionTableRow
                           key={index}
                           date={commission.date}
-                          seller_id={commission.sellerId}
-                          client_id={commission.clientId}
+                          seller_cpf={commission.sellerCPF}
+                          client_cnpj={commission.clientCNPJ}
                           product_id={commission.productId}
                           sale_value={parseFloat(commission.value)}
                         />

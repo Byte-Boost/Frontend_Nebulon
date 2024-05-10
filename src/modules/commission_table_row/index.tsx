@@ -4,16 +4,16 @@ import { useEffect, useState } from "react";
 
 type CommissionTableRowProps = {
   date: string;
-  seller_id: number;
-  client_id: number;
+  seller_cpf: number;
+  client_cnpj: number;
   product_id: number;
   sale_value: number;
 };
 
 const CommissionTableRow = ({
   date,
-  seller_id,
-  client_id,
+  seller_cpf,
+  client_cnpj,
   product_id,
   sale_value,
 }: CommissionTableRowProps) => {
@@ -21,20 +21,16 @@ const CommissionTableRow = ({
     let [clientName, setClientName] = useState("");	
     let [sellerName, setSellerName] = useState("");
     let [product, setProduct] = useState("");
-    let [client_cnpj, setClientCnpj] = useState("");
-    let [seller_cpf, setSellerCpf] = useState("");
     let [commission_value, setCommission] = useState("");
     useEffect(() => {
       const fetchData = async () => {
-        let clientData = await instance.get("/clients/" + client_id);
+        let clientData = await instance.get("/clients/cnpj/" + client_cnpj);
         let productData = await instance.get("/products/" + product_id);
-        let sellerData = await instance.get("/sellers/" + seller_id);
+        let sellerData = await instance.get("/sellers/cpf/" + seller_cpf);
         console.log(productData.data);
         setClientName(clientData.data.tradingName);
-        setClientCnpj(clientData.data.cnpj);
         
         setSellerName(sellerData.data.name);
-        setSellerCpf(sellerData.data.cpf);
         setProduct(productData.data.name);
 
         let client_status = clientData.data.status === 0;
