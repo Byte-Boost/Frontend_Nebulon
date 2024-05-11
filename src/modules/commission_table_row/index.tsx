@@ -6,8 +6,12 @@ type CommissionTableRowProps = {
   date: string;
   seller_data: {name: string, cpf: string},
   client_data: {name: string, status: number, cnpj: string},
-  product_data: {name: string, status: number, percentage: number},
-  sale_value: number;
+  product_data: {name: string, status: number, percentage: number, id: number},
+  sale_value: number,
+  handleSellerFilter: Function,
+  handleClientFilter: Function,
+  handleProductFilter: Function,
+  
 };
 
 const CommissionTableRow = ({
@@ -16,8 +20,11 @@ const CommissionTableRow = ({
   client_data,
   product_data,
   sale_value,
+  handleSellerFilter,
+  handleClientFilter,
+  handleProductFilter
 }: CommissionTableRowProps) => {
-  
+
     const RateMatrix = [[
         process.env.NEXT_PUBLIC_PNCN,
         process.env.NEXT_PUBLIC_PNCV
@@ -42,19 +49,19 @@ const CommissionTableRow = ({
         <Table.Cell className="whitespace-nowrap font-medium text-white">
           {new_date}
         </Table.Cell>
-        <Table.Cell>
+        <Table.Cell onClick={(e:any)=>handleSellerFilter(seller_data.cpf, e.target.innerText)} className="cursor-pointer">
           {seller_data.name}
         </Table.Cell>
-        <Table.Cell>
+        <Table.Cell onClick={(e:any)=>handleSellerFilter(seller_data.cpf, e.target.innerText)} className="cursor-pointer">
           {seller_data.cpf}
         </Table.Cell>
-        <Table.Cell>
+        <Table.Cell onClick={(e:any)=>handleClientFilter(client_data.cnpj, e.target.innerText)} className="cursor-pointer">
           {client_data.name}
         </Table.Cell>
-        <Table.Cell>
+        <Table.Cell onClick={(e:any)=>handleClientFilter(client_data.cnpj, e.target.innerText)} className="cursor-pointer">
           {client_data.cnpj}
         </Table.Cell>
-        <Table.Cell>
+        <Table.Cell onClick={(e:any)=>handleProductFilter(product_data.id, e.target.innerText)} className="cursor-pointer">
           {product_data.name}
         </Table.Cell>
         <Table.Cell >   

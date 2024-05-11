@@ -9,6 +9,15 @@ import { useEffect, useState } from 'react';
 
 export default function Commissions() {
   const [data, setData] = useState([]);
+  const [filterLabel, setFilterLabel] = useState<{
+    client: string | null,
+    seller: string | null,
+    product: string | null,
+  }>({
+    client: null,
+    seller: null,
+    product: null,
+  });
   const [filters, setFilters] = useState<{
     date: number | null,
     clientCNPJ: string | null,
@@ -25,6 +34,24 @@ export default function Commissions() {
     clientClass: null,
   });
 
+  const changeSellerFilter = (cpf: string | null, label: string | null) => {
+    console.log("filtering by seller")
+    filters.sellerCPF = cpf;
+    setFilterLabel({...filterLabel, seller: label})
+    getData();
+  }
+  const changeClientFilter = (cnpj: string | null, label: string | null) => {
+    console.log("filtering by client")
+    filters.clientCNPJ = cnpj;
+    setFilterLabel({...filterLabel, client: label})
+    getData();
+  }
+  const changeProductFilter = (id: number | null, label: string | null) => {
+    console.log("filtering by product")
+    filters.productID = id;
+    setFilterLabel({...filterLabel, product: label})
+    getData();
+  }
   async function filterAsync(array: Array<any>, filter: any){
     const filterResults = await Promise.all(array.map(filter));
     return array.filter((_, index) => filterResults[index]);
@@ -42,7 +69,6 @@ export default function Commissions() {
       product_status: prodStatus,
       client_status: clientStatus,
     }});
-
 
     const filteredCommissions: any = await filterAsync(commissions.data, (async (commission: any) =>{
       // Filter booleans
@@ -86,6 +112,42 @@ export default function Commissions() {
                   <div className='w-full text-left flex justify-between'>
                     <h1 className='text-6xl font-bold text-gray-900 inline'>Comissões</h1>
                     <div className="inline-block">
+                      { filterLabel.seller ? 
+                        <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-green-800 bg-green-100 rounded dark:bg-green-900 dark:text-green-300">
+                          Seller: {filterLabel.seller}
+                          <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-green-400 bg-transparent rounded-sm hover:bg-green-200 hover:text-green-900 dark:hover:bg-green-800 dark:hover:text-green-300" aria-label="Remove" onClick={(e)=>{changeSellerFilter(null, null)}}>
+                            <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span className="sr-only">Remove badge</span>
+                          </button>
+                        </span>
+                        : null
+                      } 
+                      { filterLabel.client ? 
+                        <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-indigo-800 bg-indigo-100 rounded dark:bg-indigo-900 dark:text-indigo-300">
+                        Client: {filterLabel.client}
+                        <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-indigo-400 bg-transparent rounded-sm hover:bg-indigo-200 hover:text-indigo-900 dark:hover:bg-indigo-800 dark:hover:text-indigo-300" aria-label="Remove" onClick={(e)=>{changeClientFilter(null, null)}}>
+                          <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span className="sr-only">Remove badge</span>
+                        </button>
+                      </span>
+                        : null
+                      }
+                      { filterLabel.product ? 
+                        <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-pink-800 bg-pink-100 rounded dark:bg-pink-900 dark:text-pink-300">
+                        Product: {filterLabel.product}
+                        <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-pink-400 bg-transparent rounded-sm hover:bg-pink-200 hover:text-pink-900 dark:hover:bg-pink-800 dark:hover:text-pink-300" aria-label="Remove" onClick={(e)=>{changeProductFilter(null, null)}}>
+                          <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span className="sr-only">Remove badge</span>
+                        </button>
+                      </span>
+                        : null
+                      }
 
 
                       <div className='inline-block m-4'>
@@ -159,11 +221,15 @@ export default function Commissions() {
                             status: commission.client_data.status,
                           }}
                           product_data={{
+                            id: commission.product_data.id,
                             name: commission.product_data.name,
                             percentage: commission.product_data.percentage,
                             status: commission.product_data.status,
                           }}
                           sale_value={parseFloat(commission.value)}
+                          handleSellerFilter={changeSellerFilter}
+                          handleClientFilter={changeClientFilter}
+                          handleProductFilter={changeProductFilter}
                         />
                       )
                     })}
