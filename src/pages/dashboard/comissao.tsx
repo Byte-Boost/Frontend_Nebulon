@@ -56,12 +56,15 @@ export default function Commissions() {
         const d = Date.parse(commission.date);
         dateFilterBool = d.valueOf() >= start.valueOf() && d.valueOf() <= end.valueOf()
       } 
-      return (dateFilterBool);
-      
-    }));
 
+      commission.seller_data = await instance.get(`/sellers/cpf/${commission.sellerCPF}`).then(res=>res.data);
+      commission.client_data = await instance.get(`/clients/cnpj/${commission.clientCNPJ}`).then(res=>res.data);
+      commission.product_data = await instance.get(`/products/${commission.productId}`).then(res=>res.data);
+      return (dateFilterBool);
+    }));
     setData(filteredCommissions);
   }
+
   useEffect(() => {
     getData()
     setInterval(() =>{
@@ -111,7 +114,8 @@ export default function Commissions() {
                         </select>
                       </div>
                       
-                      <div className="inline-block m-4">
+                      {/* This might not need to exist // or need to be modified. there are no 'new' clients who have purchased something. */}
+                      {/* <div className="inline-block m-4">
                         <label htmlFor="clientSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de cliente</label>
                         <select className="rounded-lg block w-full p-2.5" name="clientSelect" id="clientSelect" onChange={()=>{
                           filters.clientClass = parseInt((document.getElementById('clientSelect') as HTMLSelectElement).value)
@@ -121,7 +125,7 @@ export default function Commissions() {
                           <option value={0}>Novo</option>
                           <option value={1}>Velho</option>
                         </select>
-                      </div>
+                      </div> */}
 
 
                     </div>
@@ -139,14 +143,26 @@ export default function Commissions() {
                     <Table.HeadCell>Valor da Venda</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                    {data.map((commission: { date: string , value:string, clientCNPJ:number, productId:number, sellerCPF:number, paymentMethod:string }, index: number) => {
+                    {data.map((commission: { date: string , value:string, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {
+                                           
                       return (
                         <CommissionTableRow
                           key={index}
                           date={commission.date}
-                          seller_cpf={commission.sellerCPF}
-                          client_cnpj={commission.clientCNPJ}
-                          product_id={commission.productId}
+                          seller_data={{
+                            cpf: commission.seller_data.cpf,
+                            name: commission.seller_data.name,
+                          }}
+                          client_data={{
+                            cnpj: commission.client_data.cnpj,
+                            name: commission.client_data.tradingName,
+                            status: commission.client_data.status,
+                          }}
+                          product_data={{
+                            name: commission.product_data.name,
+                            percentage: commission.product_data.percentage,
+                            status: commission.product_data.status,
+                          }}
                           sale_value={parseFloat(commission.value)}
                         />
                       )

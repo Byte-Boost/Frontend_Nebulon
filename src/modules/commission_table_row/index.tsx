@@ -4,62 +4,30 @@ import { useEffect, useState } from "react";
 
 type CommissionTableRowProps = {
   date: string;
-  seller_cpf: number;
-  client_cnpj: number;
-  product_id: number;
+  seller_data: {name: string, cpf: string},
+  client_data: {name: string, status: number, cnpj: string},
+  product_data: {name: string, status: number, percentage: number},
   sale_value: number;
 };
 
 const CommissionTableRow = ({
   date,
-  seller_cpf,
-  client_cnpj,
-  product_id,
+  seller_data,
+  client_data,
+  product_data,
   sale_value,
 }: CommissionTableRowProps) => {
-
-    let [clientName, setClientName] = useState("");	
-    let [sellerName, setSellerName] = useState("");
-    let [product, setProduct] = useState("");
-    let [commission_value, setCommission] = useState("");
-    useEffect(() => {
-      const fetchData = async () => {
-        let clientData = await instance.get("/clients/cnpj/" + client_cnpj);
-        let productData = await instance.get("/products/" + product_id);
-        let sellerData = await instance.get("/sellers/cpf/" + seller_cpf);
-        
-        setClientName(clientData.data.tradingName);
-        
-        setSellerName(sellerData.data.name);
-        setProduct(productData.data.name);
-
-        let client_status = clientData.data.status === 0;
-        let product_status = productData.data.status === 0;
-        let product_percentage = productData.data.percentage;
-       
-        if (client_status && product_status){
-          setCommission(
-            ((sale_value * (product_percentage + Number(process.env.NEXT_PUBLIC_PNCN)) )  ).toFixed(2)
-          );
-        }
-        else if (client_status && !product_status){
-          setCommission(
-            ((sale_value * (product_percentage + Number(process.env.NEXT_PUBLIC_PVCN)) )  ).toFixed(2)
-          );
-        }
-        else if (!client_status && product_status){
-          setCommission(
-            ((sale_value * (product_percentage +  Number(process.env.NEXT_PUBLIC_PNCV)) )  ).toFixed(2)
-          );
-        }
-        else if (!client_status && !product_status){
-          setCommission(
-            ((sale_value * (product_percentage +  Number(process.env.NEXT_PUBLIC_PVCV)) )  ).toFixed(2)
-          );
-        }
-      };
-      fetchData();
-    }, []);
+  
+    const RateMatrix = [[
+        process.env.NEXT_PUBLIC_PNCN,
+        process.env.NEXT_PUBLIC_PNCV
+      ], [
+        process.env.NEXT_PUBLIC_PVCN,
+        process.env.NEXT_PUBLIC_PVCV
+    ]];
+    
+    let commission_value = (sale_value * (product_data.percentage + Number(RateMatrix[product_data.status][client_data.status])))
+      
     
     var parts = date.split("-");
     if (parts.length != 3) {
@@ -75,19 +43,19 @@ const CommissionTableRow = ({
           {new_date}
         </Table.Cell>
         <Table.Cell>
-          {sellerName}
+          {seller_data.name}
         </Table.Cell>
         <Table.Cell>
-          {seller_cpf}
+          {seller_data.cpf}
         </Table.Cell>
         <Table.Cell>
-          {clientName}
+          {client_data.name}
         </Table.Cell>
         <Table.Cell>
-          {client_cnpj}
+          {client_data.cnpj}
         </Table.Cell>
         <Table.Cell>
-          {product}
+          {product_data.name}
         </Table.Cell>
         <Table.Cell >   
         <div className="flex flex-row flex-1">
@@ -98,7 +66,7 @@ const CommissionTableRow = ({
             </div>
             <div className="justify-end ">
               <span className="ml-2">
-              {commission_value}
+              {commission_value.toFixed(2)}
               </span> 
             </div>
           </div>
