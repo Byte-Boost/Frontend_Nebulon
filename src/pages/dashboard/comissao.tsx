@@ -8,7 +8,9 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
 export default function Commissions() {
+  // Table data
   const [data, setData] = useState([]);
+  // Filter labels - used to display the current filters
   const [filterLabel, setFilterLabel] = useState<{
     client: string | null,
     seller: string | null,
@@ -18,6 +20,7 @@ export default function Commissions() {
     seller: null,
     product: null,
   });
+  // Filters data - what is selected to filter the data
   const [filters, setFilters] = useState<{
     date: number | null,
     clientCNPJ: string | null,
@@ -33,7 +36,7 @@ export default function Commissions() {
     prodClass: null,
     clientClass: null,
   });
-
+  // Functions to change the filters on click
   const changeSellerFilter = (cpf: string | null, label: string | null) => {
     console.log("filtering by seller")
     filters.sellerCPF = cpf;
@@ -52,43 +55,37 @@ export default function Commissions() {
     setFilterLabel({...filterLabel, product: label})
     getData();
   }
-  async function filterAsync(array: Array<any>, filter: any){
-    const filterResults = await Promise.all(array.map(filter));
-    return array.filter((_, index) => filterResults[index]);
-  }
   
+  // Function to get the data from the API
   async function getData() {
+    // Essentially makes "after" equal to "null" or the date of the last month, 3 months, 6 months, or year
     let dateRange = [0, 1, 3, 6, 12]
+    let now = new Date(Date.now());
+    let after = null;
+    if (filters.date != null && filters.date != 0){
+      let start = new Date(now.setMonth(now.getMonth() - dateRange[filters.date]));
+      after = `${start.getFullYear()}-${start.getMonth() + 1}-${start.getDate()}`
+    } 
+    // translate the filters into the correct format for the API
     let prodStatus = filters.prodClass == 0 ? "new" : filters.prodClass == 1 ? "old" : undefined
     let clientStatus = filters.clientClass == 0 ? "new" : filters.clientClass == 1 ? "old" : undefined
-    
+    // fetch! Get the data from the API
     const commissions = await instance.get("/commissions", { params: {
+      after: after,
       client_cnpj: filters.clientCNPJ,
       seller_cpf: filters.sellerCPF,
       product_id: filters.productID,
       product_status: prodStatus,
       client_status: clientStatus,
     }});
-
-    const filteredCommissions: any = await filterAsync(commissions.data, (async (commission: any) =>{
-      // Filter booleans
-      let dateFilterBool: boolean = true;
-      let dateFilter = filters.date || 0;
-      // Filter
-      if ([1,2,3,4].includes(dateFilter)){
-        const now = new Date(Date.now());
-        const start = now.setMonth(now.getMonth() - dateRange[dateFilter]);
-        const end = Date.now();
-        const d = Date.parse(commission.date);
-        dateFilterBool = d.valueOf() >= start.valueOf() && d.valueOf() <= end.valueOf()
-      } 
-
+    // inserts seller_data, client_data, and product_data into the commission object
+    for (const commission of commissions.data){
       commission.seller_data = await instance.get(`/sellers/cpf/${commission.sellerCPF}`).then(res=>res.data);
       commission.client_data = await instance.get(`/clients/cnpj/${commission.clientCNPJ}`).then(res=>res.data);
       commission.product_data = await instance.get(`/products/${commission.productId}`).then(res=>res.data);
-      return (dateFilterBool);
-    }));
-    setData(filteredCommissions);
+    }
+    // set the data to the fetched data
+    setData(commissions.data);
   }
 
   useEffect(() => {
@@ -157,7 +154,7 @@ export default function Commissions() {
                           getData()
                         }}>
                           <option value={0}>Qualquer</option>
-                          <option value={1}>Ultimo mês</option>
+                          <option value={1}>Ultimos 30 dias</option>
                           <option value={2}>Ultimos 3 Meses</option>
                           <option value={3}>Ultimos 6 meses</option>
                           <option value={4}>Ultimo ano</option>
