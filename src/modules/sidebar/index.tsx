@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import SidebarItem from '../sidebar_item';
-
-const Sidebar = ({isAdmin = true}:{isAdmin?:boolean}) => {
+import cookie from '@boiseitguru/cookie-cutter';
+import { jwtDecode } from 'jwt-decode';
+import { JwtPayload } from 'jwt-decode'; 
+interface MyJwtPayload extends JwtPayload {
+  admin: boolean; 
+}
+const Sidebar = ({isAdmin = (jwtDecode(cookie.get('token') || '') as MyJwtPayload).admin}:{isAdmin?:boolean}) => {
   const [isHovered, setIsHovered] = useState(false);
-
   return (
     <div 
       className={`transition-all duration-200 ease-in-out ${isHovered ? 'w-48' : 'w-10'} bg-gradient-to-b from-purple-500 to-[#805C90] h-screen fixed`} 
