@@ -1,7 +1,7 @@
 import '@/app/globals.css'    
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
-import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
+import xlsxToJSON from '@/scripts/dataUtils/xlsxToJSON';
 import { useState } from 'react';
 import instance from '@/scripts/requests/instance';
 import UploadCard from '@/modules/upload_card';
@@ -22,7 +22,7 @@ export default function Products() {
       let i:number = 0;
       while (jsonData.length > i) {
   
-
+        console.log(jsonData)
       instance.post('/products',{
         name: jsonData[i].Nome,
         description: jsonData[i]["Descrição"],

@@ -2,7 +2,7 @@ import '@/app/globals.css'
 import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
-import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
+import xlsxToJSON from '@/scripts/dataUtils/xlsxToJSON';
 import { useState } from 'react';
 import Router from 'next/router'
 import UploadCard from '@/modules/upload_card';

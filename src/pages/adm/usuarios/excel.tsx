@@ -3,7 +3,7 @@ import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
 import UploadCard from '@/modules/upload_card';
 import instance from '@/scripts/requests/instance';
-import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
+import xlsxToJSON from '@/scripts/dataUtils/xlsxToJSON';
 import Head from 'next/head';
 import { useState } from 'react';
 

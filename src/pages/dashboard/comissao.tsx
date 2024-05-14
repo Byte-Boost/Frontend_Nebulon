@@ -1,6 +1,7 @@
 import '@/app/globals.css'
 import CommissionTableRow from '@/modules/commission_table_row';
 import ContentArea from '@/modules/content_area';
+import ExportButton from '@/modules/export_button';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
 import { Table } from 'flowbite-react';
@@ -171,8 +172,9 @@ export default function Commissions() {
                           <option value={0}>Novo</option>
                           <option value={1}>Velho</option>
                         </select>
+                        
                       </div>
-                      
+                      <ExportButton jsonData={data} filename="comissoes"/>
                       {/* This might not need to exist // or need to be modified. there are no 'new' clients who have purchased something. */}
                       {/* <div className="inline-block m-4">
                         <label htmlFor="clientSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de cliente</label>
@@ -185,7 +187,6 @@ export default function Commissions() {
                           <option value={1}>Velho</option>
                         </select>
                       </div> */}
-
 
                     </div>
                   </div>

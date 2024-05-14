@@ -28,15 +28,6 @@ export default function Home() {
               <h1 className='inline-block  self-end'>Olhar Tabela de Vendas</h1>   
               </div> 
             </QuickCard>    
-            {/*
-            <QuickCard  link={''}>
-              <div className='flex justify-center items-center'> 
-              </div> 
-              <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'></h1>    
-              </div>     
-            </QuickCard>
-            */}
         </ContentArea>
       </div>
     </main>

@@ -3,7 +3,7 @@ import ContentArea from '@/modules/content_area';
 import Sidebar from '@/modules/sidebar';
 import UploadCard from '@/modules/upload_card';
 import instance from '@/scripts/requests/instance';
-import xlsxToJSON from '@/scripts/xlsxUtils/xlsxToJSON';
+import xlsxToJSON from '@/scripts/dataUtils/xlsxToJSON';
 import Head from 'next/head';
 import { useState } from 'react';
 
@@ -21,8 +21,9 @@ export default function Products() {
       const jsonData = await xlsxToJSON(file);
       let i = 0
       while (jsonData.length > i) {
-      console.log(i)
-      console.log(new Date(jsonData[i]["Data da venda"]).toISOString().slice(0, 19).replace('T', ' '),)
+      // console.log(i)
+      // console.log(new Date(jsonData[i]["Data da venda"]).toISOString().slice(0, 19).replace('T', ' '),)
+      console.log(jsonData)
       instance.post('/commissions',{
         date: new Date(jsonData[i]["Data da venda"]).toISOString().slice(0, 19).replace('T', ' '),
         value: jsonData[i]["Valor de Venda"],

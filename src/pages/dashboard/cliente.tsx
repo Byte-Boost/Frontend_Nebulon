@@ -1,6 +1,7 @@
 import '@/app/globals.css'
 import ClientTableRow from '@/modules/client_table_row';
 import ContentArea from '@/modules/content_area';
+import ExportButton from '@/modules/export_button';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
 import { Table } from 'flowbite-react';
@@ -58,6 +59,7 @@ export default function Clients() {
                           <option value={0}>Novo</option>
                           <option value={1}>Velho</option>
                         </select>
+                        <ExportButton jsonData={data} filename="clientes"/>
                       </div>
 
                     </div>
@@ -83,7 +85,7 @@ export default function Clients() {
                       )
                     })}
                   </Table.Body>
-                </Table>
+                </Table>   
               </div>
             </div>
           </div>            

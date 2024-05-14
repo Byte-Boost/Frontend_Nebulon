@@ -1,5 +1,6 @@
 import '@/app/globals.css'
 import ContentArea from '@/modules/content_area';
+import ExportButton from '@/modules/export_button';
 import ProductTableRow from '@/modules/product_table_row';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
@@ -56,7 +57,7 @@ export default function Products() {
                           <option value={1}>Velho</option>
                         </select>
                       </div>
-
+                      <ExportButton jsonData={data} filename="produtos"/>
                     </div>
                   </div>
 
@@ -81,6 +82,7 @@ export default function Products() {
                     })}
                   </Table.Body>
                 </Table>
+
               </div>
             </div>
           </div>            
