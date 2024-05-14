@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SidebarItem from '../sidebar_item';
 import cookie from '@boiseitguru/cookie-cutter';
 import { jwtDecode } from 'jwt-decode';
@@ -6,8 +6,18 @@ import { JwtPayload } from 'jwt-decode';
 interface MyJwtPayload extends JwtPayload {
   admin: boolean; 
 }
-const Sidebar = ({isAdmin = (jwtDecode(cookie.get('token') || '') as MyJwtPayload).admin}:{isAdmin?:boolean}) => {
+const Sidebar = ({isAdmin = false }:{isAdmin?:boolean}) => {
+  const [decodedToken, setDecodedToken] = useState<MyJwtPayload | undefined>(undefined);
   const [isHovered, setIsHovered] = useState(false);
+  let a : number = 0;
+  useEffect(() => {
+    const token = cookie.get('token');
+    if (token) {
+      const decoded = jwtDecode<MyJwtPayload>(token);
+      setDecodedToken(decoded);
+    }
+  });
+  isAdmin = decodedToken? decodedToken.admin : false ;
   return (
     <div 
       className={`transition-all duration-200 ease-in-out ${isHovered ? 'w-48' : 'w-10'} bg-gradient-to-b from-purple-500 to-[#805C90] h-screen fixed`} 
