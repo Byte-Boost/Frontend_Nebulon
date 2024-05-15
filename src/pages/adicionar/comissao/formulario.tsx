@@ -4,6 +4,7 @@ import instance from '@/scripts/requests/instance';
 import Head from 'next/head';
 import Router from 'next/router';
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 
 interface Comissao {
   sellerData: string;
@@ -25,8 +26,6 @@ const FormularioCadastroComissao: React.FC = () => {
     clientCNPJ: '',
     productId: ''
   });
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -45,15 +44,26 @@ const FormularioCadastroComissao: React.FC = () => {
       sellerCPF: comissao.sellerCPF,
       clientCNPJ: comissao.clientCNPJ,
       productId: comissao.productId
-    })
+    }) 
     .then(function(response){
-      setSuccessMessage("Commissão cadastrada com sucesso!");
-      setErrorMessage(null);
-      console.log("Commission added.")
+      Swal.fire({
+        title: 'Sucesso',
+        text: "Commissão cadastrada com sucesso!",
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1750,
+        timerProgressBar: true,
+      })
+      console.log("Commission added." )
     })
     .catch(error => {
-      setErrorMessage("Erro ao cadastrar comissão. Tente novamente.");
-      setSuccessMessage(null);
+      Swal.fire({
+        title: 'Oops!',
+        text: `Algo de errado aconteceu :(`,
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 1750,
+      });
       console.log("Error adding new commission.")
     })
 
@@ -77,10 +87,6 @@ const FormularioCadastroComissao: React.FC = () => {
     <Sidebar/>
     <div className="flex justify-center">
     <div className="mt-4">
-      {/* Mensagem de sucesso */}
-      {successMessage && <div className="bg-green-500 text-white px-4 py-2 rounded mb-4"> {successMessage}</div>}
-      {/* Mensagem de erro */}
-      {errorMessage && <div className="bg-red-500 text-white px-4 py-2 rounded mb-4">{errorMessage}</div>}
       <div className='container mx-auto max-w-xl'>
 
       <form onSubmit={handleSubmit} className="bg-white  border-black border-solid border rounded px-8 pt-6 pb-8 mb-4 min-w-96">
