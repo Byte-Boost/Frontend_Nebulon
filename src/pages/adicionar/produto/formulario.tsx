@@ -42,6 +42,11 @@ const FormularioCadastroProduto: React.FC = () => {
         timerProgressBar: true,
       })
       console.log("Product added")
+      setProduct({
+        name: '',
+        description: '',
+        percentage: '',
+      });
     })
     .catch(error => {
       Swal.fire({
@@ -53,13 +58,6 @@ const FormularioCadastroProduto: React.FC = () => {
       });
       console.log("Error adding new product")
     })
-
-    console.log(produto);
-    setProduct({
-      name: '',
-      description: '',
-      percentage: '',
-    });
   };
 
   return (

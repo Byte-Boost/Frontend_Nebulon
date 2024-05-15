@@ -55,6 +55,15 @@ const FormularioCadastroComissao: React.FC = () => {
         timerProgressBar: true,
       })
       console.log("Commission added." )
+      setComissao({
+        sellerData: '',
+        clientData: '',
+        value: '',
+        paymentMethod: '',
+        sellerCPF: '',
+        clientCNPJ: '',
+        productId: ''
+      });
     })
     .catch(error => {
       Swal.fire({
@@ -66,17 +75,6 @@ const FormularioCadastroComissao: React.FC = () => {
       });
       console.log("Error adding new commission.")
     })
-
-    console.log(comissao);
-    setComissao({
-      sellerData: '',
-      clientData: '',
-      value: '',
-      paymentMethod: '',
-      sellerCPF: '',
-      clientCNPJ: '',
-      productId: ''
-    });
   };
 
   return (
