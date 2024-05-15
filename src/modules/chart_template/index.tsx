@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Chart from 'chart.js/auto'; // Importe o pacote Chart.js
 
-let ChartTemplate = ({type, id, width, height, title, dataX, dataY, colors}) => {
+let ChartTemplate = ({type, id, title, dataX, dataY, colors}) => {
 
   let barColors = colors//['rgba(210,65,108,0.7)'];
 
@@ -26,6 +26,8 @@ let ChartTemplate = ({type, id, width, height, title, dataX, dataY, colors}) => 
         ]
       },
       options: {
+        responsive: true,
+        resizeDelay: 1,
         legend: {
           position: 'top',
         },
@@ -38,8 +40,8 @@ let ChartTemplate = ({type, id, width, height, title, dataX, dataY, colors}) => 
   }, []);
 
   return (
-    <div className='grow'>
-      <canvas id={id} style={{ width: width, height: height}}></canvas>
+    <div className='grow flex justify-center p-8'>
+      <canvas id={id}></canvas>
     </div>
   );
 }
