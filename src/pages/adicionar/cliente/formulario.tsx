@@ -48,6 +48,13 @@ const FormularioCadastroCliente: React.FC = () => {
         timerProgressBar: true,
       })
       console.log("Client added")
+      setCliente({
+        cnpj: '',
+        nomeFantasia: '',
+        razaoSocial: '',
+        segmento: '',
+        telefone: ''
+      });
     })
     .catch(error => {
       Swal.fire({
@@ -59,15 +66,6 @@ const FormularioCadastroCliente: React.FC = () => {
       });
       console.log("Error adding new client")
     })
-
-    console.log(cliente);
-    setCliente({
-      cnpj: '',
-      nomeFantasia: '',
-      razaoSocial: '',
-      segmento: '',
-      telefone: ''
-    });
   };
 
   return (
