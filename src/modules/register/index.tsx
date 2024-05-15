@@ -8,14 +8,14 @@ import { formatCPF } from "@/scripts/validation/dataFormatter";
 
 
 interface Seller {
-  nome: string;
+  name: string;
   cpf: string;
   username: string;
   password: string;
 }
 const UserFormCard = () => {
   const [user, setUser] = useState<Seller>({
-    nome: '',
+    name: '',
     cpf: '',
     username: '',
     password: ''
@@ -25,7 +25,7 @@ const UserFormCard = () => {
     e.preventDefault();
 
     instance.post('/account/register',{
-      name: user.nome,
+      name: user.name,
       cpf: user.cpf,
       username: user.username,
       password: user.password
