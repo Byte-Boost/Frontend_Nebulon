@@ -1,5 +1,6 @@
 import '@/app/globals.css'
 import ContentArea from '@/modules/content_area';
+import DashboardContent from '@/modules/dashboard_content';
 import QuickCard from '@/modules/quick_card';
 import Sidebar from '@/modules/sidebar';
 import Head from 'next/head';
@@ -12,6 +13,8 @@ export default function Home() {
       </Head>
       <Sidebar/>
       <div>
+        {/* Falta colocar os graficos e fazer ficar responsivo, se algem poder me ajudar :3*/}
+        {/* <DashboardContent/> */}
         <ContentArea>
             <QuickCard link='/adicionar/comissao'>
               <div className='flex justify-center items-center'> 
