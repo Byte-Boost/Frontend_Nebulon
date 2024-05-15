@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Label, TextInput, Card } from "flowbite-react";
-import Link from "next/link";
-import axios from "axios";
-import { redirect } from "next/navigation";
+import Swal from 'sweetalert2';
 import { useRouter } from "next/router";
 import cookie from "@boiseitguru/cookie-cutter";
 import instance from "@/scripts/requests/instance";
@@ -15,16 +13,24 @@ function LoginFormCard() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response =  await instance.post('http://localhost:3200/account/login', {
+    await instance.post('http://localhost:3200/account/login', {
       username: username,
       password: password,
-    }); 
-    
-    if (response.data.token) {
-      console.log(response.data.token)
+    })
+    .then(function(response){
       cookie.set('token', response.data.token);
-      router.push(`/home?authorization=` + response.data.token)
-    }
+      router.push(`/home`)
+    })
+    .catch(error => {
+      Swal.fire({
+        title: 'Oops!',
+        text: `Algo de errado aconteceu :(`,
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 1750,
+      });
+      console.log("Couldn't log in!")
+    }); 
   };
   return (
     <div className="flex justify-center items-center h-screen">
