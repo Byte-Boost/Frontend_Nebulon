@@ -1,6 +1,7 @@
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
+import { formatCNPJ, formatCPF } from '@/scripts/validation/dataFormatter';
 import Head from 'next/head';
 import Router from 'next/router';
 import React, { useState } from 'react';
@@ -140,22 +141,24 @@ const FormularioCadastroComissao: React.FC = () => {
           id="sellerCPF" 
           name="sellerCPF"
           placeholder="Digite o CPF do vendedor"
-          value={comissao.sellerCPF}
+          value={formatCPF(comissao.sellerCPF)}
           onChange={handleChange}
           required
+          maxLength={14}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
       </div>
       <div className="mb-4">
-        <label htmlFor="clientCNPJ" className="block text-gray-700 text-sm font-bold mb-2">CNPJ/CPF do Cliente: </label>
+        <label htmlFor="clientCNPJ" className="block text-gray-700 text-sm font-bold mb-2">CNPJ do Cliente: </label>
         <input
         type="text"
         id="clientCNPJ"
         name="clientCNPJ"
-        placeholder="Digite o CNPJ/CPF do cliente"
-        value={comissao.clientCNPJ}
+        placeholder="Digite o CNPJ do cliente"
+        value={formatCNPJ(comissao.clientCNPJ)}
         onChange={handleChange}
         required
+        maxLength={18}  
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>

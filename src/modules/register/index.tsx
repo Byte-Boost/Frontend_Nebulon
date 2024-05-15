@@ -3,6 +3,7 @@ import { Button, Label, TextInput, Card } from "flowbite-react";
 import Swal from 'sweetalert2';
 import instance from '@/scripts/requests/instance';
 import '@/app/globals.css'
+import { formatCPF } from "@/scripts/validation/dataFormatter";
 
 
 
@@ -51,7 +52,10 @@ const UserFormCard = () => {
       console.log("Error registering Seller/user")
     })
   };
-
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  };
 
 
   return (
@@ -67,28 +71,28 @@ const UserFormCard = () => {
               <div className="block">
                 <Label htmlFor="name" value="Nome" className="font-bold" />
                 <div className="border-2 rounded-lg shadow-inner">
-                  <TextInput id="name" type="text" onChange={ (e)=> setUser({...user, nome: e.target.value}) } required />
+                  <TextInput id="name" type="text" name="name" value={user.name} onChange={handleChange} required />
                 </div>
               </div>
 
               <div className="block">
                 <Label htmlFor="cpf" value="CPF" className="font-bold" />
                 <div className="border-2 rounded-lg shadow-inner">
-                  <TextInput id="cpf" type="text" onChange={ (e)=> setUser({...user, cpf: e.target.value}) } required />
+                  <TextInput id="cpf" type="text" name="cpf"value={formatCPF(user.cpf)}  onChange={handleChange} required />
                 </div>
               </div>
 
               <div className="block">
                 <Label htmlFor="username" value="Usuário" className="font-bold" />
                 <div className="border-2 rounded-lg shadow-inner">
-                  <TextInput id="username" type="text" onChange={ (e)=> setUser({...user, username: e.target.value}) } required />
+                  <TextInput id="username" type="text" name="username" value={user.username} onChange={handleChange} required />
                 </div>
               </div>
 
               <div className="block">
                 <Label htmlFor="password" value="Senha" className="font-bold" />
                 <div className="border-2 rounded-lg shadow-inner mb-6">
-                  <TextInput id="password" type="password" onChange={ (e)=> setUser({...user, password: e.target.value}) } required />
+                  <TextInput id="password" type="password" name="password" value={user.password} onChange={handleChange} required />
                 </div>
               </div>
  
