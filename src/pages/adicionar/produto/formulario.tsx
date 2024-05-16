@@ -5,6 +5,8 @@ import Head from 'next/head';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
+import Products from './excel';
+import ModalComponent from '@/modules/upload_modal';
 
 interface Produto {
   name: string;
@@ -18,6 +20,17 @@ const FormularioCadastroProduto: React.FC = () => {
     description: '',
     percentage: '',    
   });
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalSize, setModalSize] = useState<string>('md');
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -67,13 +80,12 @@ const FormularioCadastroProduto: React.FC = () => {
     </Head>
     <Sidebar/>
     <div className="flex justify-center">
-    <div className="mt-4">
-      <div className='container mx-auto max-w-xl'>
+    <div className="mt-8">
+      <div className='container mt-8 mx-auto max-w-xl'>
 
       <form onSubmit={handleSubmit} className="bg-white  border-black border-solid border rounded px-8 pt-6 pb-8 mb-4 min-w-96">
-      <h2 className="text-center mb-4 font-bold text-3xl">Cadastro de Produto</h2>
-
-      <div className="mb-4">
+      <h2 className="text-center mt-2 mb-4 font-bold text-3xl">Cadastro de Produto</h2>
+      <div className="mb-8 mt-8">
         <img className="w-min" src="/nebulon_cover.png" alt="Nebulon Logo" />
       </div>  
 
@@ -116,20 +128,20 @@ const FormularioCadastroProduto: React.FC = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
         </div>
-             
-        <div className='grid grid-flow-col'>
-            <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8' onClick={() => Router.back()}>Voltar</button>
-              </div>
+        <div className="grid grid-flow-row">
             <div className="text-right">
-            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8' type="submit">Cadastrar</button>
-              </div>
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8 w-full' type="button" onClick={() => setModalIsOpen(true)}>Cadastro por upload</button>
+            </div>
+            <div className="text-right">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4 w-full' type="submit">Cadastrar</button>
+            </div>
           </div>
        
         </form>
     </div>
     </div>
     </div>
+    <ModalComponent isOpen={modalIsOpen} closeModal={closeModal} />
     </main>
   );
 };

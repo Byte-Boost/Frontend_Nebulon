@@ -1,6 +1,6 @@
 import Router from "next/router";
 import React, { useState } from "react";
-export default function UploadCard({handleChange, onSend, }: {handleChange: any, onSend: any}){
+export default function UploadCard({handleChange, onSend, closeModal}: {handleChange: any, onSend: any, closeModal: any}){
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +44,7 @@ export default function UploadCard({handleChange, onSend, }: {handleChange: any,
             {selectedFile && <p className="mt-4">Arquivo selecionado: {selectedFile.name}</p>}
             <div className='grid grid-flow-col'>
             <div className="text-left">
-              <button className='mt-4' onClick={() => Router.back()}>Voltar</button>
+              <button className='mt-4' onClick={closeModal}>Voltar</button>
               </div>
             <div className="text-right">
               <button className='mt-4' onClick={onSend}>Upload</button>
