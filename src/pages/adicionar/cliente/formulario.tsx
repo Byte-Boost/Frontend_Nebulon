@@ -1,7 +1,7 @@
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
-import { formatCNPJ } from '@/scripts/validation/dataFormatter';
+import { formatCNPJ, formatPhoneNumber } from '@/scripts/validation/dataFormatter';
 import Head from 'next/head';
 import Router from 'next/router';
 import React, { useState } from 'react';
@@ -145,7 +145,7 @@ const FormularioCadastroCliente: React.FC = () => {
             id="telefone"
             name="telefone"
             placeholder="Digite o telefone"
-            value={cliente.telefone}
+            value={formatPhoneNumber(cliente.telefone)}
             onChange={handleChange}
             required
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

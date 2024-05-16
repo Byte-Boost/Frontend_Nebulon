@@ -1,6 +1,5 @@
-import instance from "@/scripts/requests/instance";
+import { formatCNPJ, formatCPF } from "@/scripts/validation/dataFormatter";
 import { Table } from "flowbite-react/components/Table"
-import { useEffect, useState } from "react";
 
 type CommissionTableRowProps = {
   date: string;
@@ -53,13 +52,13 @@ const CommissionTableRow = ({
           {seller_data.name}
         </Table.Cell>
         <Table.Cell onClick={(e:any)=>handleSellerFilter(seller_data.cpf, e.target.innerText)} className="cursor-pointer">
-          {seller_data.cpf}
+          {formatCPF(seller_data.cpf)}
         </Table.Cell>
         <Table.Cell onClick={(e:any)=>handleClientFilter(client_data.cnpj, e.target.innerText)} className="cursor-pointer">
           {client_data.name}
         </Table.Cell>
         <Table.Cell onClick={(e:any)=>handleClientFilter(client_data.cnpj, e.target.innerText)} className="cursor-pointer">
-          {client_data.cnpj}
+          {formatCNPJ(client_data.cnpj)}
         </Table.Cell>
         <Table.Cell onClick={(e:any)=>handleProductFilter(product_data.id, e.target.innerText)} className="cursor-pointer">
           {product_data.name}

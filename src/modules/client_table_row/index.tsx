@@ -1,3 +1,4 @@
+import { formatPhoneNumber } from "@/scripts/validation/dataFormatter";
 import { Table } from "flowbite-react/components/Table"
 
 type ClientTableRowProps = {
@@ -22,7 +23,7 @@ const ClientTableRow = ({
           {segment}
         </Table.Cell>
         <Table.Cell>
-          {contact}
+          {formatPhoneNumber(contact)}
         </Table.Cell>
         <Table.Cell>
           {status === 0 ? "Novo" : "Velho"}

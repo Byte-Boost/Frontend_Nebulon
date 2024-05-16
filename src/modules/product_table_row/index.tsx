@@ -24,7 +24,7 @@ const ProductTableRow = ({
           {description}
         </Table.Cell>
         <Table.Cell>
-          {percentage}
+          {percentage*100}%
         </Table.Cell>
         <Table.Cell>
           {status === 0 ? "Novo" : "Velho"}
