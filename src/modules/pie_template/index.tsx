@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Chart from 'chart.js/auto'; // Importe o pacote Chart.js
 
-let ChartTemplate = ({type, id, title, dataX, dataY, colors}) => {
+let PieTemplate = ({id, dataX, dataY, colors}) => {
 
   let barColors = colors//['rgba(210,65,108,0.7)'];
 
@@ -13,38 +13,30 @@ let ChartTemplate = ({type, id, title, dataX, dataY, colors}) => {
     // Criar o gráfico usando Chart.js
     var ctx = document.getElementById(id).getContext('2d');
     new Chart(ctx, {
-      type: type,
+      type: 'pie',
       data: {
         labels: xValues,
         datasets: [{
           label: 'Valor em R$',
           data: yValues,
-          backgroundColor: barColors,
-          borderColor: 'rgba(210,65,108,1)',
-          borderWidth: 2
+          backgroundColor: barColors
         }
         ]
       },
       options: {
         responsive: true,
-        resizeDelay: 1,
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: title
-        }
+        aspectRatio: 1|1,
+        resizeDelay: 1
       }
     });
   }, []);
 
   return (
-    <div className='grow flex justify-center p-4'>
+    <div className='grow flex justify-center h-full p-4'>
       <canvas id={id}></canvas>
     </div>
   );
 }
 
-export default ChartTemplate;
+export default PieTemplate;
 
