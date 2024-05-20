@@ -231,7 +231,14 @@ export default function Commissions() {
                         />
                       )
                     })}
+                    
                   </Table.Body>
+                  <tfoot>
+                      <tr className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
+                        <th scope="row" colSpan={7} className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">Total Comissão</th>
+                        <td className="font-bold"style={{ marginRight: '5rem', textAlign: 'center' }}>{data.reduce((acc, curr: any) => acc + parseFloat(curr.value), 0).toFixed(2)}</td>
+                        </tr>
+                  </tfoot>
                 </Table>
               </div>
             </div>
