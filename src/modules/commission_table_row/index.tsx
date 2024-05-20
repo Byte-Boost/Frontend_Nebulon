@@ -64,7 +64,7 @@ const CommissionTableRow = ({
           {product_data.name}
         </Table.Cell>
         <Table.Cell >   
-        <div className="flex flex-row flex-1 justify-between">
+          <div className="flex flex-row flex-1 justify-between">
             <div className="justify-start">
               <span className="ml-2">{'R$  '}</span>
             </div>
@@ -73,7 +73,7 @@ const CommissionTableRow = ({
             </div>
           </div>
         </Table.Cell>
-        <Table.Cell >
+        <Table.Cell>
           <div  className="flex flex-row flex-1 justify-between" >
             <div className="justify-start">
               <span className="ml-2">{'R$  '}</span>

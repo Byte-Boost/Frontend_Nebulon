@@ -4,6 +4,7 @@ import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
+import { formatMoney } from '@/scripts/validation/dataFormatter';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -235,9 +236,18 @@ export default function Commissions() {
                   </Table.Body>
                   <tfoot>
                       <tr className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                        <th scope="row" colSpan={7} className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">Total Comissão</th>
-                        <td className="font-bold"style={{ marginRight: '5rem', textAlign: 'center' }}>{data.reduce((acc, curr: any) => acc + parseFloat(curr.value), 0).toFixed(2)}</td>
-                        </tr>
+                        <td scope="row" colSpan={7} className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg text-lg font-bold">Total Comissão</td>
+                        <td className='px-6 py-4'>
+                          <div className="flex flex-row flex-1 justify-between">
+                            <div className="justify-start">
+                              <span className="ml-2">{'R$  '}</span>
+                            </div>
+                            <div className="justify-end">
+                              <span className="ml-2">{formatMoney(data.reduce((acc, curr: any) => acc + parseFloat(curr.value), 0).toFixed(2), false)}</span> 
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
                   </tfoot>
                 </Table>
               </div>
