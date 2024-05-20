@@ -37,16 +37,16 @@ const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
           </SidebarItem>
           
           <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} hasDropdown={true}>
-            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/adicionar/comissao'}/>
-            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/adicionar/produto'}/>
-            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/adicionar/cliente'}/>
+            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/adicionar/comissao/formulario'}/>
+            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/adicionar/produto/formulario'}/>
+            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/adicionar/cliente/formulario'}/>
           </SidebarItem>
           
           {
           isAdmin
           && 
           <SidebarItem title={'ADMINISTRAÇÃO'} isHovered={isHovered} icon={'admin'} hasDropdown={true}>
-            <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios'}/>
+            <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios/formulario'}/>
             {/* <SidebarItem title={'OPÇÕES'} isHovered={isHovered} icon={'options'} link={'/adm/opcoes'}/> */}
           </SidebarItem>
           }

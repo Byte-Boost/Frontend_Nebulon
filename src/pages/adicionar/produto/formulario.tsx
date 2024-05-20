@@ -2,11 +2,9 @@ import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
 import Head from 'next/head';
-import Router from 'next/router';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import Products from './excel';
-import ModalComponent from '@/modules/upload_modal';
+import ProductModal from '@/modules/produtct_modal';
 
 interface Produto {
   name: string;
@@ -24,6 +22,9 @@ const FormularioCadastroProduto: React.FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalSize, setModalSize] = useState<string>('md');
 
+  let jsonData: Array<any> = [];
+  const [file, setFile] = useState()
+
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -36,10 +37,8 @@ const FormularioCadastroProduto: React.FC = () => {
     const { name, value } = e.target;
     setProduct({ ...produto, [name]: value });
   };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-  
+  const postProduct = () => {
+      
     instance.post('/products',{
       name: produto.name,
       description: produto.description,
@@ -71,6 +70,11 @@ const FormularioCadastroProduto: React.FC = () => {
       });
       console.log("Error adding new product")
     })
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    postProduct();
   };
 
   return (
@@ -141,7 +145,7 @@ const FormularioCadastroProduto: React.FC = () => {
     </div>
     </div>
     </div>
-    <ModalComponent isOpen={modalIsOpen} closeModal={closeModal} />
+    <ProductModal isOpen={modalIsOpen} closeModal={closeModal} />
     </main>
   );
 };

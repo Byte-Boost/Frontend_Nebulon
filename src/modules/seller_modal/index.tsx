@@ -11,7 +11,7 @@ interface ModalProps {
   closeModal: () => void;
 }
 
-const ModalComponent: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
+const SellerModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
     let jsonData: Array<any> = [];
     const [openModal, setOpenModal] = useState(true);
     const [modalSize, setModalSize] = useState<string>('md');
@@ -22,29 +22,28 @@ const ModalComponent: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
       setFile(event.target.files[0])
     }
     const onSend = async () =>{
-      if(file) {
+        if(file) {
         const jsonData = await xlsxToJSON(file);
         let i:number = 0;
-        while (jsonData.length > i) {
+        while(jsonData.length > i) {
     
-          console.log(jsonData)
-        instance.post('/products',{
-          name: jsonData[i].Nome,
-          description: jsonData[i]["Descrição"],
-          percentage: jsonData[i]["Alíquota"],
-          status: jsonData[i].Status,
+          instance.post('/account/register',{
+            name: jsonData[i].Nome,
+            username:jsonData[i].Nome.replace(/\s/g, '').toLowerCase(),
+            cpf: jsonData[i]["CPF"].replace(/[^[^\w\s]/gi, ''),
+            password: '12345678',
+          })
+          .then(function(response){
+            console.log("Seller added")
+          })
+          .catch(error =>{
+            console.log("Error adding seller")
+          })
+          i++;
         }
-        )
-        .then(function(response){
-          console.log("Product added")
-        })
-        .catch(error =>{
-          console.log("Product adding seller")
-        })
-        i++;
-      };
-      } 
-    }  
+        }
+    }
+      
   return (
     <Modal size={'lg'} show={isOpen} onClose={closeModal}>
       <div className="flowbite-modal">
@@ -54,4 +53,4 @@ const ModalComponent: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
   );
 };
 
-export default ModalComponent;
+export default SellerModal;

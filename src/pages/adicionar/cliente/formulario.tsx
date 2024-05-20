@@ -1,4 +1,5 @@
 import '@/app/globals.css'
+import ClientModal from '@/modules/client_modal';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
 import { formatCNPJ, formatPhoneNumber } from '@/scripts/validation/dataFormatter';
@@ -23,6 +24,20 @@ const FormularioCadastroCliente: React.FC = () => {
     segmento: '',
     telefone: ''
   });
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalSize, setModalSize] = useState<string>('md');
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -152,19 +167,20 @@ const FormularioCadastroCliente: React.FC = () => {
             />
         </div>
 
-        <div className='grid grid-flow-col'>
-            <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4' onClick={() => Router.back()}>Voltar</button>
-              </div>
+        <div className='grid grid-flow-row'>
+      <div className="text-right">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8 w-full' type="button" onClick={() => setModalIsOpen(true)}>Cadastro por upload</button>
+            </div>
             <div className="text-right">
-            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4' type="submit">Cadastrar</button>
-              </div>
-          </div>
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4 w-full' type="submit">Cadastrar</button>
+            </div>
+      </div>
        
         </form>
     </div>
     </div>
     </div>
+    <ClientModal isOpen={modalIsOpen} closeModal={closeModal} />
     </main>
   );
 };
