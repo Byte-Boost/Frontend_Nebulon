@@ -62,7 +62,7 @@ const SidebarItem =
         }
         {hasDropdown 
         && dropdownOpen && (
-        <ul className={` ${isHovered ? 'ml-2' : 'ml-0'} ${isHovered ? 'block' : 'hidden'}`}>
+        <ul className={` ${isHovered ? 'ml-0' : 'ml-0'} ${isHovered ? 'block' : 'hidden'}`}>
           {children}
         </ul>
       )}

@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import instance from '@/scripts/requests/instance';
 import '@/app/globals.css'
 import { formatCPF } from "@/scripts/validation/dataFormatter";
+import SellerModal from "../seller_modal";
 
 
 
@@ -24,6 +25,8 @@ const UserFormCard = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
+    user.cpf=user.cpf.replace(/\D/g, '');
+    
     instance.post('/account/register',{
       name: user.name,
       cpf: user.cpf,
@@ -52,6 +55,20 @@ const UserFormCard = () => {
       console.log("Error registering Seller/user")
     })
   };
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalSize, setModalSize] = useState<string>('md');
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
@@ -60,8 +77,8 @@ const UserFormCard = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="w-full max-w-lg">
-        <Card className="flex justify-center items-center border-2 border-gray-300 rounded-lg bg-white shadow-lg p-8">
+      <div className="mt-8 w-full max-w-lg">
+        <Card className="mt-8 flex justify-center items-center border-2 border-gray-300 rounded-lg bg-white shadow-lg p-8">
             <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             <h2 className="text-center mb-4 font-bold text-3xl">Cadastro de Vendedores</h2>
             <div className="mb-4">
@@ -96,11 +113,18 @@ const UserFormCard = () => {
                 </div>
               </div>
  
-              <Button type="submit" className="bg-purple-800 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-lg">
-                Registrar
-              </Button>
+              <div className="grid grid-flow-row">
+            <div className="text-right">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8 w-full' type="button" onClick={() => setModalIsOpen(true)}>Cadastro por upload</button>
+            </div>
+            <div className="text-right">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4 w-full' type="submit">Cadastrar</button>
+            </div>
+          </div>
 
           </form>
+          <SellerModal isOpen={modalIsOpen} closeModal={closeModal} />
+
         </Card>
       </div>
     </div>
