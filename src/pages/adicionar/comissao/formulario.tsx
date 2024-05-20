@@ -1,7 +1,7 @@
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
-import { formatCNPJ, formatCPF } from '@/scripts/validation/dataFormatter';
+import { extractFloat, formatCNPJ, formatCPF, formatMoney } from '@/scripts/validation/dataFormatter';
 import Head from 'next/head';
 import Router from 'next/router';
 import React, { useState } from 'react';
@@ -35,7 +35,13 @@ const FormularioCadastroComissao: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    
+    // Formatação dos dados
+    comissao.sellerCPF=comissao.sellerCPF.replace(/\D/g, '');
+    comissao.clientCNPJ=comissao.clientCNPJ.replace(/\D/g, '');
+    comissao.value=extractFloat(comissao.value).toString();
 
+    // Requisição POST
     instance.post('/commissions',{
       sellerData: comissao.sellerData,
       clientData: comissao.clientData,
@@ -102,7 +108,7 @@ const FormularioCadastroComissao: React.FC = () => {
           id="value"
           name="value"
           placeholder="Digite o valor da venda"
-          value={comissao.value}
+          value={formatMoney(comissao.value)}
           onChange={handleChange}
           required
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

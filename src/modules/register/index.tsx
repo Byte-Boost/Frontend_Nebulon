@@ -24,6 +24,8 @@ const UserFormCard = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
+    user.cpf=user.cpf.replace(/\D/g, '');
+    
     instance.post('/account/register',{
       name: user.name,
       cpf: user.cpf,
