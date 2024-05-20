@@ -65,7 +65,7 @@ export default function Clients() {
                     </div>
                   </div>
 
-                <Table className="w-100 rounded-lg bg-purple-500  text-white">
+                <Table className="w-100 rounded-lg bg-purple-500">
                   <Table.Head className='w-full text-left text-md'>
                     <Table.HeadCell>Razão Social</Table.HeadCell>
                     <Table.HeadCell>Segmento</Table.HeadCell>
@@ -73,6 +73,20 @@ export default function Clients() {
                     <Table.HeadCell>Status</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
+                  <ClientTableRow
+                          key={1}
+                          companyName={'Thiago3907'}
+                          segment={'Gaming'}
+                          contact={'gamer'}
+                          status={0}
+                        />
+                        <ClientTableRow
+                          key={2}
+                          companyName={'Thiago3907'}
+                          segment={'Gaming'}
+                          contact={'gamer'}
+                          status={0}
+                        />
                     {data.map((product: { companyName: string, segment:string, contact:string, status:number }, index: number) => {
                       return (
                         <ClientTableRow
