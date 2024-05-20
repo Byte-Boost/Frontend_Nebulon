@@ -1,4 +1,4 @@
-import { formatCNPJ, formatCPF } from "@/scripts/validation/dataFormatter";
+import { formatCNPJ, formatCPF, formatMoney } from "@/scripts/validation/dataFormatter";
 import { Table } from "flowbite-react/components/Table"
 
 type CommissionTableRowProps = {
@@ -64,31 +64,23 @@ const CommissionTableRow = ({
           {product_data.name}
         </Table.Cell>
         <Table.Cell >   
-        <div className="flex flex-row flex-1">
+        <div className="flex flex-row flex-1 justify-between">
             <div className="justify-start">
-              <span className="ml-2">
-                {'R$  '}
-              </span>
+              <span className="ml-2">{'R$  '}</span>
             </div>
-            <div className="justify-end ">
-              <span className="ml-2">
-              {commission_value.toFixed(2)}
-              </span> 
+            <div className="justify-end">
+              <span className="ml-2">{formatMoney(commission_value.toFixed(2), false)}</span> 
             </div>
           </div>
         </Table.Cell>
         <Table.Cell >
-          <div  className="grid grid-flow-col" >
-          <div className="justify-start">
-            <span className="ml-2">
-              {'R$  '}
-            </span>
-          </div>
-          <div className="justify-end">
-            <span className="ml-2">
-              {sale_value.toFixed(2)}
-            </span> 
-          </div>
+          <div  className="flex flex-row flex-1 justify-between" >
+            <div className="justify-start">
+              <span className="ml-2">{'R$  '}</span>
+            </div>
+            <div className="justify-end">
+              <span className="ml-2">{formatMoney(sale_value.toFixed(2), false)}</span> 
+            </div>
           </div>
         </Table.Cell>
       </Table.Row>

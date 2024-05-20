@@ -46,6 +46,8 @@ const FormularioCadastroCliente: React.FC = () => {
   
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    cliente.cnpj=cliente.cnpj.replace(/\D/g, '');
+    cliente.telefone=cliente.telefone.replace(/\D/g, '');
 
     instance.post('/clients',{
       tradingName: cliente.nomeFantasia,
