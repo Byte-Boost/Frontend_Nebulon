@@ -8,6 +8,10 @@ import AdminIcon from "../sidebar_icons/admin_icon";
 import ProductIcon from "../sidebar_icons/products_icon";
 import ClientIcon from "../sidebar_icons/client_icon";
 import CommissionIcon from "../sidebar_icons/commission_icon";
+import { redirect } from "next/navigation";
+import cookie from "@boiseitguru/cookie-cutter";
+import TablesIcon from "../sidebar_icons/tables_icon";
+
 
 
 const SidebarItem = 
@@ -42,6 +46,7 @@ const SidebarItem =
           {icon == 'product' && <ProductIcon/>}
           {icon == 'client' && <ClientIcon/>}
           {icon == 'commission' && <CommissionIcon/>}
+          {icon == 'tables' && <TablesIcon/>}
           <span className={`transition-all duration-200 ease-in-out ${isHovered ? 'ml-2' : 'ml-0'} ${isHovered ? 'block' : 'hidden'} font-semibold`}>{title.toUpperCase()}</span>
         </a>
         }
@@ -57,6 +62,7 @@ const SidebarItem =
           {icon == 'product' && <ProductIcon/>}
           {icon == 'client' && <ClientIcon/>}
           {icon == 'commission' && <CommissionIcon/>}
+          {icon == 'tables' && <TablesIcon/>}
           <span className={`transition-all duration-200 ease-in-out select-none ${isHovered ? 'ml-2' : 'ml-0'} ${isHovered ? 'block' : 'hidden'} font-semibold`}>{title.toUpperCase()}</span>
         </a>
         }

@@ -28,9 +28,9 @@ const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
       <div className="text-white px-2 py-4">
         <ul>
           {/* Add more menu items as needed */}
-          <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'home'} link={'/home'}/>
+          <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'} link={'/home'}/>
           
-          <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'dashboard'}  hasDropdown={true}>
+          <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'tables'}  hasDropdown={true}>
             <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/dashboard/comissao'}/>
             <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/dashboard/produto'}/>
             <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/dashboard/cliente'}/>
@@ -52,7 +52,7 @@ const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
           }
 
           {/* <SidebarItem title={'OPÇÕES'} isHovered={isHovered} icon={'options'} link={'/opcoes'}/> */}
-          <SidebarItem title={'SAIR'} isHovered={isHovered} icon={'logout'} link={'/'} />
+          <SidebarItem title={'SAIR'} isHovered={isHovered} icon={'logout'} link={'/'}  />
         </ul>
       </div>
     </div>
