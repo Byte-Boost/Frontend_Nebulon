@@ -16,8 +16,8 @@ const ProductTableRow = ({
   status,
 }: ProductTableRowProps) => {
     return(      
-        <Table.Row className="odd:bg-[#1f1f1f] even:bg-[#2b2b2b]">
-        <Table.Cell className="whitespace-nowrap font-medium text-white">
+        <Table.Row className="odd:bg-[#f1f1f1] even:bg-[#e4e4e4] font-medium">
+        <Table.Cell className="whitespace-nowrap font-medium text-black">
           {name}
         </Table.Cell>
         <Table.Cell>

@@ -61,15 +61,15 @@ export default function Products() {
                     </div>
                   </div>
 
-                <Table className="w-100 rounded-lg bg-purple-500  text-white">
-                  <Table.Head className=' text-left text-md'>
+                <Table className="w-100 rounded-lg bg-purple-500">
+                  <Table.Head className='text-left text-md text-black'>
                     <Table.HeadCell>Nome</Table.HeadCell>
                     <Table.HeadCell>Descrição</Table.HeadCell>
                     <Table.HeadCell>Porcentagem</Table.HeadCell>
                     <Table.HeadCell>Status</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                    {data.map((product: { name: string , description:string, percentage:number, status:number }, index: number) => {
+                        {data.map((product: { name: string , description:string, percentage:number, status:number }, index: number) => {
                       return (
                         <ProductTableRow
                           key={index}

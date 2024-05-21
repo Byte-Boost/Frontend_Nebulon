@@ -200,8 +200,8 @@ export default function Commissions() {
                     </div>
                   </div>
 
-                <Table className="w-100 rounded-lg bg-purple-500  text-white">
-                  <Table.Head className='w-full text-left text-md'>
+                <Table className="w-100 rounded-lg bg-purple-500 text-[#fbfbfb]">
+                  <Table.Head className='w-full text-left text-md text-black'>
                     <Table.HeadCell>Data da Venda</Table.HeadCell>
                     <Table.HeadCell>Vendendor</Table.HeadCell>
                     <Table.HeadCell>CPF do Vendendor</Table.HeadCell>

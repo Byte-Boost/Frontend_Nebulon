@@ -46,7 +46,7 @@ export default function Clients() {
               <div className=''>
                 
                   <div className='w-full text-left flex justify-between'>
-                    <h1 className='text-6xl font-bold text-gray-900 inline'>clientes</h1>
+                    <h1 className='text-6xl font-bold text-gray-900 inline'>Clientes</h1>
                     <div className="inline-block">
                       
                       <div className="inline-block m-4">
@@ -66,27 +66,13 @@ export default function Clients() {
                   </div>
 
                 <Table className="w-100 rounded-lg bg-purple-500">
-                  <Table.Head className='w-full text-left text-md'>
+                  <Table.Head className='w-full text-black text-md'>
                     <Table.HeadCell>Razão Social</Table.HeadCell>
                     <Table.HeadCell>Segmento</Table.HeadCell>
                     <Table.HeadCell>Contato</Table.HeadCell>
                     <Table.HeadCell>Status</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                  <ClientTableRow
-                          key={1}
-                          companyName={'Thiago3907'}
-                          segment={'Gaming'}
-                          contact={'gamer'}
-                          status={0}
-                        />
-                        <ClientTableRow
-                          key={2}
-                          companyName={'Thiago3907'}
-                          segment={'Gaming'}
-                          contact={'gamer'}
-                          status={0}
-                        />
                     {data.map((product: { companyName: string, segment:string, contact:string, status:number }, index: number) => {
                       return (
                         <ClientTableRow

@@ -15,7 +15,7 @@ const ClientTableRow = ({
   status
 }: ClientTableRowProps) => {
     return(      
-        <Table.Row className="odd:bg-[#ffffff] even:bg-[#ffffff] font-medium">  
+        <Table.Row className="odd:bg-[#f1f1f1] even:bg-[#e4e4e4] font-medium">  
         <Table.Cell className="whitespace-nowrap">
           {companyName}
         </Table.Cell>
