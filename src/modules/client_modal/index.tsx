@@ -4,6 +4,7 @@ import UploadCard from "../upload_card";
 import instance from "@/scripts/requests/instance";
 import xlsxToJSON from "@/scripts/dataUtils/xlsxToJSON";
 import { Modal } from "flowbite-react";
+import Swal from "sweetalert2";
 
 
 interface ModalProps {
@@ -12,10 +13,6 @@ interface ModalProps {
 }
 
 const ClientModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
-    let jsonData: Array<any> = [];
-    const [openModal, setOpenModal] = useState(true);
-    const [modalSize, setModalSize] = useState<string>('md');
-
     const [file, setFile] = useState()
   
     function handleChange(event:any) {
@@ -35,21 +32,37 @@ const ClientModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
             status: jsonData[i]["STATUS"]
           })
           .then(function(response){
+            Swal.fire({
+              title: 'Sucesso',
+              text: `Cliente cadastrado com sucesso!`,
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1750,
+              timerProgressBar: true,
+            })
             console.log("Client added")
+            closeModal()
           })
-          .catch(error =>{
-            console.log("Error adding client")
+          .catch(error => {
+            Swal.fire({
+              title: 'Oops!',
+              text: `Algo de errado aconteceu :(`,
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 1750,
+            });
+            console.log("Error adding new Client")
           })
         i++;
         }
-        }
-        }
+      }
+    }
       
   return (
-    <Modal size={'lg'} show={isOpen} onClose={closeModal}>
-      <div className="flowbite-modal">
+    <Modal size={'xl'} show={isOpen} onClose={closeModal} dismissible>
+      <Modal.Body className="flowbite-modal">
         <UploadCard handleChange={handleChange} onSend={onSend} closeModal={closeModal}/>
-      </div>
+      </Modal.Body>
     </Modal>
   );
 };

@@ -5,7 +5,7 @@ import instance from '@/scripts/requests/instance';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import ProductModal from '@/modules/produtct_modal';
+import ProductModal from '@/modules/product_modal';
 
 interface Produto {
   name: string;

@@ -27,11 +27,10 @@ export default function UploadCard({handleChange, onSend, closeModal}: {handleCh
     setIsHovered(true);
   }
     return (
-        <div className='w-full p-14'>
-        <div className='bg-slate-100 shadow-2xl rounded-sm py-6 px-6'>
+        <div className='p-14'>
           <h1 className='text-3xl mb-4'>Extrair informações do excel</h1>
           Selecionar arquivo
-          <div className={`${isHovered? 'bg-slate-400': 'bg-slate-300'} border-dashed border-2 border-black h-56 flex items-center flex-col justify-center cursor-pointer`}
+          <div className={`${isHovered? 'bg-slate-400': 'bg-slate-300'} border-dashed border-2 border-black flex items-center flex-col justify-center cursor-pointer aspect-video`}
           onDrop={handleDrop}
           onDragExit={() => setIsHovered(false)}
           onDragOver={handleDragOver}
@@ -51,6 +50,5 @@ export default function UploadCard({handleChange, onSend, closeModal}: {handleCh
               </div>
           </div>
         </div>
-      </div>
     );
 }
