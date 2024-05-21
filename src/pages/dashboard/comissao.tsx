@@ -155,7 +155,9 @@ export default function Commissions() {
                       </span>
                         : null
                       }
-
+                      <div className="inline-block">
+                      <ExportButton jsonData={data} filename="comissoes"/>
+                      </div>
 
                       <div className='inline-block m-4'>
                         <label htmlFor="dateSelect" className="block mb-2 text-lg font-medium text-gray-900">Periodo</label>
@@ -183,7 +185,6 @@ export default function Commissions() {
                         </select>
                         
                       </div>
-                      <ExportButton jsonData={data} filename="comissoes"/>
                       {/* This might not need to exist // or need to be modified. there are no 'new' clients who have purchased something. */}
                       {/* <div className="inline-block m-4">
                         <label htmlFor="clientSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de cliente</label>
