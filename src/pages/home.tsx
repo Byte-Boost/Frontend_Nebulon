@@ -12,10 +12,12 @@ export default function Home() {
         <title>Nebulon - Home</title>
       </Head>
       <Sidebar/>
-      <div>
-        {/* Falta colocar os graficos e fazer ficar responsivo, se algem poder me ajudar :3*/}
-        {/* <DashboardContent/> */}
-        <ContentArea>
+      <div className='flex flex-row-reverse w-[calc(100%-2rem)]'>
+        <DashboardContent/>
+      </div>
+
+      {/*
+      <ContentArea>
             <QuickCard link='/adicionar/comissao'>
               <div className='flex justify-center items-center'> 
               </div> 
@@ -32,7 +34,8 @@ export default function Home() {
               </div> 
             </QuickCard>    
         </ContentArea>
-      </div>
+      */}
+
     </main>
   );
 }
