@@ -28,7 +28,7 @@ const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
       <div className="text-white px-2 py-4">
         <ul>
           {/* Add more menu items as needed */}
-          <SidebarItem title={'HOME'} isHovered={isHovered} icon={'home'} link={'/home'}/>
+          <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'home'} link={'/home'}/>
           
           <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'dashboard'}  hasDropdown={true}>
             <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/dashboard/comissao'}/>
