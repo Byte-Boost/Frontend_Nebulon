@@ -10,6 +10,13 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
 export default function Commissions() {
+  const RateMatrix = [[
+    process.env.NEXT_PUBLIC_PNCN,
+    process.env.NEXT_PUBLIC_PNCV
+  ], [
+    process.env.NEXT_PUBLIC_PVCN,
+    process.env.NEXT_PUBLIC_PVCV
+  ]];
   // Table data
   const [data, setData] = useState([]);
   // Filter labels - used to display the current filters
@@ -85,6 +92,7 @@ export default function Commissions() {
       commission.seller_data = await instance.get(`/sellers/cpf/${commission.sellerCPF}`).then(res=>res.data);
       commission.client_data = await instance.get(`/clients/cnpj/${commission.clientCNPJ}`).then(res=>res.data);
       commission.product_data = await instance.get(`/products/${commission.productId}`).then(res=>res.data);
+      commission.comm_value = (commission.value * (commission.product_data.percentage + Number(RateMatrix[commission.product_data.status][commission.client_data.status])))
     }
     // set the data to the fetched data
     setData(commissions.data);
@@ -204,7 +212,7 @@ export default function Commissions() {
                     <Table.HeadCell>Valor da Venda</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                    {data.map((commission: { date: string , value:string, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {
+                    {data.map((commission: { date: string , value:string, comm_value: any, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {
                                            
                       return (
                         <CommissionTableRow
@@ -226,6 +234,7 @@ export default function Commissions() {
                             status: commission.product_data.status,
                           }}
                           sale_value={parseFloat(commission.value)}
+                          comm_value={parseFloat(commission.comm_value)}
                           handleSellerFilter={changeSellerFilter}
                           handleClientFilter={changeClientFilter}
                           handleProductFilter={changeProductFilter}
@@ -235,8 +244,18 @@ export default function Commissions() {
                     
                   </Table.Body>
                   <tfoot>
-                      <tr className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                        <td scope="row" colSpan={7} className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg text-lg font-bold">Total Comissão</td>
+                      <tr className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg font-bold">
+                        <td scope="row" colSpan={6} className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg text-lg">Total:</td>
+                        <td className='px-6 py-4 '>
+                          <div className="flex flex-row flex-1 justify-between">
+                            <div className="justify-start">
+                              <span className="ml-2">{'R$  '}</span>
+                            </div>
+                            <div className="justify-end">
+                              <span className="ml-2">{formatMoney(data.reduce((acc, curr: any) => acc + parseFloat(curr.comm_value), 0).toFixed(2), false)}</span> 
+                            </div>
+                          </div>
+                        </td>
                         <td className='px-6 py-4'>
                           <div className="flex flex-row flex-1 justify-between">
                             <div className="justify-start">

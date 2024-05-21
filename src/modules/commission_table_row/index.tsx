@@ -7,6 +7,7 @@ type CommissionTableRowProps = {
   client_data: {name: string, status: number, cnpj: string},
   product_data: {name: string, status: number, percentage: number, id: number},
   sale_value: number,
+  comm_value: number,
   handleSellerFilter: Function,
   handleClientFilter: Function,
   handleProductFilter: Function,
@@ -19,21 +20,12 @@ const CommissionTableRow = ({
   client_data,
   product_data,
   sale_value,
+  comm_value,
   handleSellerFilter,
   handleClientFilter,
   handleProductFilter
 }: CommissionTableRowProps) => {
-
-    const RateMatrix = [[
-        process.env.NEXT_PUBLIC_PNCN,
-        process.env.NEXT_PUBLIC_PNCV
-      ], [
-        process.env.NEXT_PUBLIC_PVCN,
-        process.env.NEXT_PUBLIC_PVCV
-    ]];
     
-    let commission_value = (sale_value * (product_data.percentage + Number(RateMatrix[product_data.status][client_data.status])))
-      
     
     var parts = date.split("-");
     if (parts.length != 3) {
@@ -69,7 +61,7 @@ const CommissionTableRow = ({
               <span className="ml-2">{'R$  '}</span>
             </div>
             <div className="justify-end">
-              <span className="ml-2">{formatMoney(commission_value.toFixed(2), false)}</span> 
+              <span className="ml-2">{formatMoney(comm_value.toFixed(2), false)}</span> 
             </div>
           </div>
         </Table.Cell>
