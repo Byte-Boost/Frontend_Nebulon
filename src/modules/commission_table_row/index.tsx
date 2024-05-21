@@ -24,12 +24,7 @@ const CommissionTableRow = ({
   handleSellerFilter,
   handleClientFilter,
   handleProductFilter
-}: CommissionTableRowProps) => {
-    
-
-    let commission_value = (sale_value * (product_data.percentage + Number(RateMatrix[product_data.status][client_data.status]))) 
-      
-    
+}: CommissionTableRowProps) => {    
     var parts = date.split("-");
     if (parts.length != 3) {
         return undefined;
@@ -40,7 +35,7 @@ const CommissionTableRow = ({
     let new_date = new Date(year, month, day).toJSON().slice(0,10).split(/-/).reverse().join('/');
     return(
         <Table.Row className="odd:bg-[#f1f1f1] even:bg-[#e4e4e4] font-medium">
-        <Table.Cell className="whitespace-nowrap font-medium text-black">
+        <Table.Cell className="whitespace-nowrap font-medium">
           {new_date}
         </Table.Cell>
         <Table.Cell onClick={(e:any)=>handleSellerFilter(seller_data.cpf, e.target.innerText)} className="cursor-pointer">

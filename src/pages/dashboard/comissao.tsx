@@ -200,8 +200,8 @@ export default function Commissions() {
                     </div>
                   </div>
 
-                <Table className="w-100 rounded-lg bg-purple-500 text-[#fbfbfb]">
-                  <Table.Head className='w-full text-left text-md text-black'>
+                <Table className="w-100 rounded-lg bg-purple-500">
+                  <Table.Head className='w-full text-left text-lg text-[#fbfbfb]'>
                     <Table.HeadCell>Data da Venda</Table.HeadCell>
                     <Table.HeadCell>Vendendor</Table.HeadCell>
                     <Table.HeadCell>CPF do Vendendor</Table.HeadCell>
@@ -211,7 +211,7 @@ export default function Commissions() {
                     <Table.HeadCell>Comissão</Table.HeadCell>
                     <Table.HeadCell>Valor da Venda</Table.HeadCell>
                   </Table.Head>
-                  <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
+                  <Table.Body className="text-black px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     {data.map((commission: { date: string , value:string, comm_value: any, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {
                                            
                       return (
@@ -243,7 +243,7 @@ export default function Commissions() {
                     })}
                     
                   </Table.Body>
-                  <tfoot>
+                  <tfoot className="text-[#fbfbfb]">
                       <tr className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg font-bold">
                         <td scope="row" colSpan={6} className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg text-lg">Total:</td>
                         <td className='px-6 py-4 '>

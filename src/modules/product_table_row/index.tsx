@@ -17,7 +17,7 @@ const ProductTableRow = ({
 }: ProductTableRowProps) => {
     return(      
         <Table.Row className="odd:bg-[#f1f1f1] even:bg-[#e4e4e4] font-medium">
-        <Table.Cell className="whitespace-nowrap font-medium text-black">
+        <Table.Cell className="whitespace-nowrap font-medium">
           {name}
         </Table.Cell>
         <Table.Cell>

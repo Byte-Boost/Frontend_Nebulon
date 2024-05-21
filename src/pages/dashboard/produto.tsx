@@ -61,8 +61,8 @@ export default function Products() {
                     </div>
                   </div>
 
-                <Table className="w-100 rounded-lg bg-purple-500">
-                  <Table.Head className='text-left text-md text-black'>
+                <Table className="w-100 rounded-lg bg-purple-500 text-black">
+                  <Table.Head className='text-left text-lg text-[#fbfbfb]'>
                     <Table.HeadCell>Nome</Table.HeadCell>
                     <Table.HeadCell>Descrição</Table.HeadCell>
                     <Table.HeadCell>Porcentagem</Table.HeadCell>
