@@ -30,7 +30,7 @@ const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
           {/* Add more menu items as needed */}
           <SidebarItem title={'HOME'} isHovered={isHovered} icon={'home'} link={'/home'}/>
           
-          <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'}  hasDropdown={true}>
+          <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'dashboard'}  hasDropdown={true}>
             <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/dashboard/comissao'}/>
             <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/dashboard/produto'}/>
             <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/dashboard/cliente'}/>
