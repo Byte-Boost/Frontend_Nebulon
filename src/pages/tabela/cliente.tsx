@@ -2,6 +2,7 @@ import '@/app/globals.css'
 import ClientTableRow from '@/modules/client_table_row';
 import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
+import LoaderAnim from '@/modules/loader';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
 import { Table } from 'flowbite-react';
@@ -10,6 +11,7 @@ import { useEffect, useState } from 'react';
 
 export default function Clients() {
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState<{
     class: number | null,
     segment: string | null,
@@ -19,13 +21,21 @@ export default function Clients() {
   });
   
   async function getData() {
+    setIsLoading(true)
     let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
     let clients: any = await instance.get("/clients", { params: {
       segment: filters.segment,
       status: status,
-    }});
+    }})
+    .then(response => response.data)
+    .then(data => {
+      setData(data);
+      console.log(data);
+      setIsLoading(false)
+    })
 
-    setData(clients.data);
+    
+  
   }
   useEffect(() => {
     getData()
@@ -64,7 +74,7 @@ export default function Clients() {
 
                     </div>
                   </div>
-
+                  {isLoading ?<div  className='grid place-content-center '> <LoaderAnim />   </div>:
                 <Table className="w-100 rounded-lg bg-purple-500 text-black">
                   <Table.Head className='w-full text-lg text-[#fbfbfb]'>
                     <Table.HeadCell>Razão Social</Table.HeadCell>
@@ -72,7 +82,9 @@ export default function Clients() {
                     <Table.HeadCell>Contato</Table.HeadCell>
                     <Table.HeadCell>Status</Table.HeadCell>
                   </Table.Head>
+                  
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
+                   
                     {data.map((product: { companyName: string, segment:string, contact:string, status:number }, index: number) => {
                       return (
                         <ClientTableRow
@@ -84,11 +96,12 @@ export default function Clients() {
                         />
                       )
                     })}
-                  </Table.Body>
+                  </Table.Body> 
                 </Table>   
+                 }
+                 </div>
               </div>
             </div>
-          </div>            
         </ContentArea>
     </main>
   );

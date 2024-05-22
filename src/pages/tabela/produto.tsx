@@ -1,6 +1,7 @@
 import '@/app/globals.css'
 import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
+import LoaderAnim from '@/modules/loader';
 import ProductTableRow from '@/modules/product_table_row';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
@@ -9,6 +10,7 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
 export default function Products() {
+  const [isLoading, setIsLoading] = useState(true); 
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState<{
     class: number | null,
@@ -17,12 +19,14 @@ export default function Products() {
   });
 
   async function getData() {
+    setIsLoading(true)
     let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
     let products: any = await instance.get("/products", { params: {
       status: status,
     }});
 
     setData(products.data);
+    setIsLoading(false)
   }
   useEffect(() => {
     getData()
@@ -60,7 +64,7 @@ export default function Products() {
                       <ExportButton jsonData={data} filename="produtos"/>
                     </div>
                   </div>
-
+                  {isLoading ? <div className='grid place-content-center '> <LoaderAnim /></div>:
                 <Table className="w-100 rounded-lg bg-purple-500 text-black">
                   <Table.Head className='text-left text-lg text-[#fbfbfb]'>
                     <Table.HeadCell>Nome</Table.HeadCell>
@@ -81,11 +85,10 @@ export default function Products() {
                       )
                     })}
                   </Table.Body>
-                </Table>
-
+                </Table>}
+                </div>
               </div>
             </div>
-          </div>            
         </ContentArea>
     </main>
   );

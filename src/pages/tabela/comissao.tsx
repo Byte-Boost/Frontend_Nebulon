@@ -2,6 +2,7 @@ import '@/app/globals.css'
 import CommissionTableRow from '@/modules/commission_table_row';
 import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
+import LoaderAnim from '@/modules/loader';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
 import { formatMoney } from '@/scripts/validation/dataFormatter';
@@ -10,6 +11,7 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
 export default function Commissions() {
+  const [isLoading, setIsLoading] = useState(true);
   const RateMatrix = [[
     process.env.NEXT_PUBLIC_PNCN,
     process.env.NEXT_PUBLIC_PNCV
@@ -67,6 +69,7 @@ export default function Commissions() {
   
   // Function to get the data from the API
   async function getData() {
+    setIsLoading(true)
     // Essentially makes "after" equal to "null" or the date of the last month, 3 months, 6 months, or year
     let dateRange = [0, 1, 3, 6, 12]
     let now = new Date(Date.now());
@@ -96,6 +99,7 @@ export default function Commissions() {
     }
     // set the data to the fetched data
     setData(commissions.data);
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -115,7 +119,6 @@ export default function Commissions() {
         <div className='w-full p-14'>
             <div className='bg-slate-100 shadow-2xl rounded-sm py-6 px-6'>
               <div className=''>
-                
                   <div className='w-full text-left flex justify-between'>
                     <h1 className='text-6xl font-bold text-gray-900 inline'>Comissões</h1>
                     <div className="inline-block">
@@ -200,7 +203,7 @@ export default function Commissions() {
 
                     </div>
                   </div>
-
+                  {isLoading ? <div className='grid place-content-center '><LoaderAnim /></div>  :
                 <Table className="w-100 rounded-lg bg-purple-500">
                   <Table.Head className='w-full text-left text-lg text-[#fbfbfb]'>
                     <Table.HeadCell>Data da Venda</Table.HeadCell>
@@ -212,6 +215,7 @@ export default function Commissions() {
                     <Table.HeadCell>Comissão</Table.HeadCell>
                     <Table.HeadCell>Valor da Venda</Table.HeadCell>
                   </Table.Head>
+                 
                   <Table.Body className="text-black px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     {data.map((commission: { date: string , value:string, comm_value: any, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {
                                            
@@ -269,8 +273,8 @@ export default function Commissions() {
                         </td>
                       </tr>
                   </tfoot>
-                </Table>
-              </div>
+                </Table>}
+                </div>
             </div>
           </div>            
         </ContentArea>
