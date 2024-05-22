@@ -177,14 +177,14 @@ export default function Commissions() {
                       </div>
 
                       <div className="inline-block m-4">
-                        <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de produto</label>
+                        <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Produto novo</label>
                         <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
                           filters.prodClass = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
                           getData()
                         }}>
                           <option value={undefined}>Qualquer</option>
-                          <option value={0}>Novo</option>
-                          <option value={1}>Velho</option>
+                          <option value={0}>Sim</option>
+                          <option value={1}>Não</option>
                         </select>
                         
                       </div>
