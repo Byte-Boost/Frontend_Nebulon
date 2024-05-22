@@ -102,9 +102,9 @@ export default function Home() {
     <main>
       <Head>
         <title>Nebulon - Adicionar - Formulário</title>
-    </Head>
-    <Sidebar/>
-    <FormCard>
+      </Head>
+      <Sidebar/>
+      <FormCard>
         <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
           <h2 className="text-center mb-4 font-bold text-3xl">Cadastro de Comissões</h2>
           <div className="mb-4">
@@ -145,17 +145,17 @@ export default function Home() {
                 <TextInput id="clientCNPJ" type="text" name="clientCNPJ" value={formatCNPJ(comissao.clientCNPJ)} maxLength={18} onChange={handleChange} required />
               </div>
           </div>
-        <div className='grid grid-flow-row'>
-          <div className="text-right">
-            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8 w-full' type="button" onClick={() => setModalIsOpen(true)}>Cadastro por upload</button>
+          <div className='grid grid-flow-row'>
+            <div className="text-right">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8 w-full' type="button" onClick={() => setModalIsOpen(true)}>Cadastro por upload</button>
+            </div>
+            <div className="text-right">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4 w-full' type="submit">Cadastrar</button>
+            </div>
           </div>
-          <div className="text-right">
-            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4 w-full' type="submit">Cadastrar</button>
-          </div>
-        </div>
-      </form>
-      <CommissionModal isOpen={modalIsOpen} closeModal={closeModal} />
-    </FormCard>
+        </form>
+        <CommissionModal isOpen={modalIsOpen} closeModal={closeModal} />
+      </FormCard>
     </main>
   );
 }

@@ -59,8 +59,8 @@ const ClientModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
     }
       
   return (
-    <Modal size={'xl'} show={isOpen} onClose={closeModal} dismissible>
-      <Modal.Body className="flowbite-modal">
+    <Modal show={isOpen} onClose={closeModal} dismissible className="bg-black bg-opacity-30" size={"lg"}>
+      <Modal.Body>
         <UploadCard handleChange={handleChange} onSend={onSend} closeModal={closeModal}/>
       </Modal.Body>
     </Modal>
