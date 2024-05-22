@@ -42,29 +42,25 @@ export default function Products() {
         </Head>
         <Sidebar/>
         <ContentArea>
-        <div className='w-full p-14'>
+          <div className='w-full p-14'>
             <div className='bg-slate-100 shadow-2xl rounded-sm py-6 px-6'>
-              <div className=''>
-                
-                  <div className='w-full text-left flex justify-between'>
-                    <h1 className='text-6xl font-bold text-gray-900 inline'>Produtos</h1>
-                    <div className="inline-block">
-                      
-                      <div className="inline-block m-4">
-                        <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Produto novo</label>
-                        <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
-                          filters.class = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
-                          getData()
-                        }}>
-                          <option value={undefined}>Qualquer</option>
-                          <option value={0}>Sim</option>
-                          <option value={1}>Não</option>
-                        </select>
-                      </div>
-                      <ExportButton jsonData={data} filename="produtos"/>
-                    </div>
+              <div>
+                <section id="options" className='w-full text-left flex justify-between pb-6'>
+                  <h1 className='text-6xl font-bold text-gray-900 inline'>Produtos</h1>
+                  <div className="inline-block m-4">
+                    <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Produto novo</label>
+                    <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
+                      filters.class = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
+                      getData()
+                    }}>
+                      <option value={undefined}>Qualquer</option>
+                      <option value={0}>Sim</option>
+                      <option value={1}>Não</option>
+                    </select>
                   </div>
-                  {isLoading ? <div className='grid place-content-center '> <LoaderAnim /></div>:
+                </section>
+
+                {isLoading ? <div className='grid place-content-center '> <LoaderAnim /></div>:
                 <Table className="w-100 rounded-lg bg-purple-500 text-black">
                   <Table.Head className='text-left text-lg text-[#fbfbfb]'>
                     <Table.HeadCell>Nome</Table.HeadCell>
@@ -89,6 +85,7 @@ export default function Products() {
                 </div>
               </div>
             </div>
+          <ExportButton jsonData={data} filename="produtos"/>
         </ContentArea>
     </main>
   );

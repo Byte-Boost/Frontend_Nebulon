@@ -31,11 +31,11 @@ const ExportButton = ({jsonData, filename }:{jsonData : any[], filename:string})
         } 
     }
     return(     
-        <div>
-        <img src="/download.png" onClick={() => setModalIsOpen(true)} width={35} className="cursor-pointer"/>
-        <Modal  className="bg-black bg-opacity-30 grid place-content-center" size={'xl'} show={modalIsOpen} onClose={closeModal} dismissible>
-            <Modal.Body className='bg-slate-100 rounded-lg'>
-                
+        <div className="p-2 rounded-md flex cursor-pointer shadow-xl bg-purple-500 text-white fixed right-4 bottom-4">
+            <img src="/download.png" onClick={() => setModalIsOpen(true)} width={35} className="inline invert"/>
+            <span className="text-xl">Exportar</span>
+            <Modal  className="bg-black bg-opacity-30 grid place-content-center" size={'xl'} show={modalIsOpen} onClose={closeModal} dismissible>
+                <Modal.Body className='bg-slate-100 rounded-lg'>
                     <div className="p-10">
                         <h1 className='text-3xl mb-4'>Exportar como</h1>
                         <select className="rounded-lg block w-full p-2.5 min-w-52 "  name="downloadType" id="downloadType" onChange={() => {setDownloadType(parseInt((document.getElementById('downloadType') as HTMLSelectElement).value))}}>
@@ -45,10 +45,9 @@ const ExportButton = ({jsonData, filename }:{jsonData : any[], filename:string})
 
                         <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4  min-w-52' onClick={download}>Baixar</button>
                     </div>
-            </Modal.Body>
-        </Modal>
+                </Modal.Body>
+            </Modal>
         </div>
-        
     );
 }
 export default ExportButton;

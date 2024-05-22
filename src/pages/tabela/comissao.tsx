@@ -120,27 +120,30 @@ export default function Commissions() {
         </Head>
         <Sidebar/>
         <ContentArea>
-        <div className='w-full p-14'>
+          <div className='w-full p-14'>
             <div className='bg-slate-100 shadow-2xl rounded-sm py-6 px-6'>
-              <div className=''>
-                  <div className='w-full text-left flex justify-between'>
-                    <h1 className='text-6xl font-bold text-gray-900 inline'>Comissões</h1>
-                    <div className="inline-block">
-                      { filterLabel.seller ? 
-                        <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-green-800 bg-green-100 rounded dark:bg-green-900 dark:text-green-300">
-                          Seller: {filterLabel.seller}
-                          <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-green-400 bg-transparent rounded-sm hover:bg-green-200 hover:text-green-900 dark:hover:bg-green-800 dark:hover:text-green-300" aria-label="Remove" onClick={(e)=>{changeSellerFilter(null, null)}}>
-                            <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                            </svg>
-                            <span className="sr-only">Remove badge</span>
-                          </button>
-                        </span>
-                        : null
-                      } 
-                      { filterLabel.client ? 
-                        <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-indigo-800 bg-indigo-100 rounded dark:bg-indigo-900 dark:text-indigo-300">
-                        Client: {filterLabel.client}
+              <div>
+                <section id="Options" className='w-full text-left flex justify-between pb-6'>
+                  <div className="text-center">
+                    <h1 className='text-6xl font-bold text-gray-900 '>Comissões</h1>
+                  </div>
+                  
+                  <div className="inline-flex justify-end gap-2 items-end grow">
+                    { filterLabel.seller ? 
+                      <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-green-800 bg-green-100 rounded dark:bg-green-900 dark:text-green-300">
+                        Seller: {filterLabel.seller}
+                        <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-green-400 bg-transparent rounded-sm hover:bg-green-200 hover:text-green-900 dark:hover:bg-green-800 dark:hover:text-green-300" aria-label="Remove" onClick={(e)=>{changeSellerFilter(null, null)}}>
+                          <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span className="sr-only">Remove badge</span>
+                        </button>
+                      </span>
+                      : null
+                    } 
+                    { filterLabel.client ? 
+                      <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-indigo-800 bg-indigo-100 rounded dark:bg-indigo-900 dark:text-indigo-300">
+                      Client: {filterLabel.client}
                         <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-indigo-400 bg-transparent rounded-sm hover:bg-indigo-200 hover:text-indigo-900 dark:hover:bg-indigo-800 dark:hover:text-indigo-300" aria-label="Remove" onClick={(e)=>{changeClientFilter(null, null)}}>
                           <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -148,11 +151,11 @@ export default function Commissions() {
                           <span className="sr-only">Remove badge</span>
                         </button>
                       </span>
-                        : null
-                      }
-                      { filterLabel.product ? 
-                        <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-pink-800 bg-pink-100 rounded dark:bg-pink-900 dark:text-pink-300">
-                        Product: {filterLabel.product}
+                      : null
+                    }
+                    { filterLabel.product ? 
+                      <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-pink-800 bg-pink-100 rounded dark:bg-pink-900 dark:text-pink-300">
+                      Product: {filterLabel.product}
                         <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-pink-400 bg-transparent rounded-sm hover:bg-pink-200 hover:text-pink-900 dark:hover:bg-pink-800 dark:hover:text-pink-300" aria-label="Remove" onClick={(e)=>{changeProductFilter(null, null)}}>
                           <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -160,54 +163,54 @@ export default function Commissions() {
                           <span className="sr-only">Remove badge</span>
                         </button>
                       </span>
-                        : null
-                      }
-                      <div className="inline-block">
-                      <ExportButton jsonData={getExcelData()} filename="comissoes"/>
-                      </div>
-
-                      <div className='inline-block m-4'>
-                        <label htmlFor="dateSelect" className="block mb-2 text-lg font-medium text-gray-900">Periodo</label>
-                        <select className="rounded-lg block w-full p-2.5" name="dateSelect" id="dateSelect" onChange={()=>{
-                          filters.date = parseInt((document.getElementById('dateSelect') as HTMLSelectElement).value)
-                          getData()
-                        }}>
-                          <option value={0}>Qualquer</option>
-                          <option value={1}>Ultimos 30 dias</option>
-                          <option value={2}>Ultimos 3 Meses</option>
-                          <option value={3}>Ultimos 6 meses</option>
-                          <option value={4}>Ultimo ano</option>
-                        </select>
-                      </div>
-
-                      <div className="inline-block m-4">
-                        <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Produto novo</label>
-                        <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
-                          filters.prodClass = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
-                          getData()
-                        }}>
-                          <option value={undefined}>Qualquer</option>
-                          <option value={0}>Sim</option>
-                          <option value={1}>Não</option>
-                        </select>
-                        
-                      </div>
-                      {/* This might not need to exist // or need to be modified. there are no 'new' clients who have purchased something. */}
-                      {/* <div className="inline-block m-4">
-                        <label htmlFor="clientSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de cliente</label>
-                        <select className="rounded-lg block w-full p-2.5" name="clientSelect" id="clientSelect" onChange={()=>{
-                          filters.clientClass = parseInt((document.getElementById('clientSelect') as HTMLSelectElement).value)
-                          getData()
-                        }}>
-                          <option value={undefined}>Qualquer</option>
-                          <option value={0}>Novo</option>
-                          <option value={1}>Velho</option>
-                        </select>
-                      </div> */}
-
-                    </div>
+                      : null
+                    }
                   </div>
-                  {isLoading ? <div className='grid place-content-center '><LoaderAnim /></div>  :
+
+                  <div className="inline-block">
+                    <div className='inline-block m-4'>
+                      <label htmlFor="dateSelect" className="block mb-2 text-lg font-medium text-gray-900">Periodo</label>
+                      <select className="rounded-lg block w-full p-2.5" name="dateSelect" id="dateSelect" onChange={()=>{
+                        filters.date = parseInt((document.getElementById('dateSelect') as HTMLSelectElement).value)
+                        getData()
+                      }}>
+                        <option value={0}>Qualquer</option>
+                        <option value={1}>Ultimos 30 dias</option>
+                        <option value={2}>Ultimos 3 Meses</option>
+                        <option value={3}>Ultimos 6 meses</option>
+                        <option value={4}>Ultimo ano</option>
+                      </select>
+                    </div>
+
+                    <div className="inline-block m-4">
+                      <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Produto novo</label>
+                      <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
+                        filters.prodClass = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
+                        getData()
+                      }}>
+                        <option value={undefined}>Qualquer</option>
+                        <option value={0}>Sim</option>
+                        <option value={1}>Não</option>
+                      </select>
+                      
+                    </div>
+                    {/* This might not need to exist // or need to be modified. there are no 'new' clients who have purchased something. */}
+                    {/* <div className="inline-block m-4">
+                      <label htmlFor="clientSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de cliente</label>
+                      <select className="rounded-lg block w-full p-2.5" name="clientSelect" id="clientSelect" onChange={()=>{
+                        filters.clientClass = parseInt((document.getElementById('clientSelect') as HTMLSelectElement).value)
+                        getData()
+                      }}>
+                        <option value={undefined}>Qualquer</option>
+                        <option value={0}>Novo</option>
+                        <option value={1}>Velho</option>
+                      </select>
+                    </div> */}
+
+                  </div>
+                </section>
+
+                {isLoading ? <div className='grid place-content-center '><LoaderAnim /></div>  :
                 <Table className="w-100 rounded-lg bg-purple-500">
                   <Table.Head className='w-full text-left text-lg text-[#fbfbfb]'>
                     <Table.HeadCell>Data da Venda</Table.HeadCell>
@@ -219,10 +222,10 @@ export default function Commissions() {
                     <Table.HeadCell>Comissão</Table.HeadCell>
                     <Table.HeadCell>Valor da Venda</Table.HeadCell>
                   </Table.Head>
-                 
+                  
                   <Table.Body className="text-black px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     {data.map((commission: { date: string , value:string, comm_value: any, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {
-                                           
+                                            
                       return (
                         <CommissionTableRow
                           key={index}
@@ -278,9 +281,10 @@ export default function Commissions() {
                       </tr>
                   </tfoot>
                 </Table>}
-                </div>
+              </div>
             </div>
           </div>            
+          <ExportButton jsonData={getExcelData()} filename="comissoes"/>
         </ContentArea>
     </main>
   );
