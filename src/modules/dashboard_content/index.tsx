@@ -8,22 +8,12 @@ import instance from "@/scripts/requests/instance";
 import { formatMoney } from "@/scripts/validation/dataFormatter";
 
 const DashboardContent = () => {
-  let months = {
-    1: "Janeiro",
-    2: "Fevereiro",
-    3: "Março",
-    4: "Abril",
-    5: "Maio",
-    6: "Junho",
-    7: "Julho",
-    8: "Agosto",
-    9: "Setembro",
-    10: "Outubro",
-    11: "Novembro",
-    12: "Dezembro",
-  }
-  let currentMonth = new Date().getMonth() + 1 as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-  
+  let currentMonthIndex= Number(new Date().getMonth());
+  let MonthName = (date: Date)=>{
+    let str = date.toLocaleString('pt-BR', { month: 'long' })
+    return str.charAt(0).toUpperCase() + str.slice(1)
+  };
+
   // Overall Stats
   const [data, setData] = useState([])
   const [dataY, setDataY] = useState([])
@@ -135,8 +125,8 @@ const DashboardContent = () => {
         <div className='row-span-2 flex justify-center p-2'>
           <Card className='grow flex flex-col p-4'>
             <DashboardNumberCard title={`Total de Vendas (${(new Date()).getFullYear()})`}number={`${formatMoney(totalSellsValue.toString() + "00")}`} percentage="5,4%"/>
-            <DashboardNumberCard title={`Comissão ${months[currentMonth]}`} number={`${formatMoney(totalComissionValueCurrentMonth.toString() + "00")}`} percentage="5,4%"/>
-            <DashboardNumberCard title={`Vendas Realizadas | ${currentMonth + '/' + (new Date()).getFullYear()}`} number={`${quantitySellsCurrentMonth}`} percentage="5,4%"/>
+            <DashboardNumberCard title={`Comissão ${MonthName(new Date())}`} number={`${formatMoney(totalComissionValueCurrentMonth.toString() + "00")}`} percentage="5,4%"/>
+            <DashboardNumberCard title={`Vendas Realizadas | ${(currentMonthIndex+1) + '/' + (new Date()).getFullYear()}`} number={`${quantitySellsCurrentMonth}`} percentage="5,4%"/>
           </Card>
         </div>
 
