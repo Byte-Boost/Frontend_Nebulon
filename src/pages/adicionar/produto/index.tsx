@@ -6,6 +6,8 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import ProductModal from '@/modules/product_modal';
+import FormCard from '@/modules/form_card';
+import { Label, TextInput } from 'flowbite-react';
 
 interface Produto {
   name: string;
@@ -84,56 +86,35 @@ export default function Home() {
         <title>Nebulon - Criar Produto</title>
     </Head>
     <Sidebar/>
-    <div className="flex justify-center">
-    <div className="mt-8">
-      <div className='container mt-8 mx-auto max-w-xl'>
+    <FormCard>
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+          <h2 className="text-center mb-4 font-bold text-3xl">Cadastro de Produtos</h2>
+          <div className="mb-4">
+            <img className="w-min" src="/nebulon_cover.png" alt="Nebulon Logo" />
+          </div>
 
-      <form onSubmit={handleSubmit} className="bg-white  border-black border-solid border rounded px-8 pt-6 pb-8 mb-4 min-w-96">
-      <h2 className="text-center mt-2 mb-4 font-bold text-3xl">Cadastro de Produto</h2>
-      <div className="mb-8 mt-8">
-        <img className="w-min" src="/nebulon_cover.png" alt="Nebulon Logo" />
-      </div>  
+          <div>
+              <Label htmlFor="name" value="Nome do Produto:" className="font-bold" />
+              <div className="border-2 rounded-lg shadow-inner">
+                <TextInput id="name" type="text" name="name" value={produto.name} onChange={handleChange} required />
+              </div>
+          </div>
 
-        <div className="mb-4">
-          <label htmlFor="nameProduct" className="block text-gray-700 text-sm font-bold mb-2">Nome do Produto: </label>
-          <input
-            type="text"
-            id="nameProduct" 
-            name="name"
-            placeholder="Digite o nome do Produto"
-            value={produto.name}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="nameDescription" className="block text-gray-700 text-sm font-bold mb-2">Descrição do Produto: </label>
-          <input
-            type="text"
-            id="nameDescription"
-            name="description"
-            placeholder="Descrição do Produto"
-            value={produto.description}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="valuePercentage" className="block text-gray-700 text-sm font-bold mb-2">Porcentagem: </label>
-          <input
-            type="text"
-            id="valuePercentage"
-            name="percentage"
-            placeholder="Insira a porcentagem"
-            value={produto.percentage}
-            onChange={handleChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-        </div>
-        <div className="grid grid-flow-row">
+          <div>
+              <Label htmlFor="description" value="Descrição do Produto:" className="font-bold" />
+              <div className="border-2 rounded-lg shadow-inner">
+                <TextInput id="description" type="text" name="description" value={produto.description} onChange={handleChange} required />
+              </div>
+          </div>
+
+          <div>
+              <Label htmlFor="valuePercentage" value="Porcentagem:" className="font-bold" />
+              <div className="border-2 rounded-lg shadow-inner">
+                <TextInput id="valuePercentage" type="text" name="percentage" value={produto.percentage} onChange={handleChange} required />
+              </div>
+          </div>
+          
+          <div className="grid grid-flow-row">
             <div className="text-right">
               <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8 w-full' type="button" onClick={() => setModalIsOpen(true)}>Cadastro por upload</button>
             </div>
@@ -141,12 +122,9 @@ export default function Home() {
               <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4 w-full' type="submit">Cadastrar</button>
             </div>
           </div>
-        
         </form>
-    </div>
-    </div>
-    </div>
-    <ProductModal isOpen={modalIsOpen} closeModal={closeModal} />
+      <ProductModal isOpen={modalIsOpen} closeModal={closeModal} />
+    </FormCard>
     </main>
   );
 };
