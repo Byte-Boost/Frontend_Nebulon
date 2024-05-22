@@ -59,7 +59,7 @@ const ClientModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
     }
       
   return (
-    <Modal show={isOpen} onClose={closeModal} dismissible className="bg-black bg-opacity-30" size={"lg"}>
+    <Modal show={isOpen} onClose={closeModal} dismissible className="bg-black bg-opacity-30 grid place-content-center" size={"lg"}>
       <Modal.Body>
         <UploadCard handleChange={handleChange} onSend={onSend} closeModal={closeModal}/>
       </Modal.Body>
