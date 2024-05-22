@@ -101,7 +101,11 @@ export default function Commissions() {
     setData(commissions.data);
     setIsLoading(false)
   }
-
+  function getExcelData(){
+    const newArray = data.map(({seller_data, client_data, product_data, createdAt, updatedAt, comm_value, ...rest}: 
+      {[key: string]: any}) => rest)
+    return newArray
+  }
   useEffect(() => {
     getData()
     setInterval(() =>{
@@ -159,7 +163,7 @@ export default function Commissions() {
                         : null
                       }
                       <div className="inline-block">
-                      <ExportButton jsonData={data} filename="comissoes"/>
+                      <ExportButton jsonData={getExcelData()} filename="comissoes"/>
                       </div>
 
                       <div className='inline-block m-4'>
