@@ -1,7 +1,7 @@
 import '@/app/globals.css'
 import Head from 'next/head';
 import React, { useState } from "react";
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Button, Label, TextInput } from "flowbite-react";
 import Swal from 'sweetalert2';
 import { useRouter } from "next/router";
 import cookie from "@boiseitguru/cookie-cutter";

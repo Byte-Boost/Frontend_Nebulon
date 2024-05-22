@@ -1,6 +1,4 @@
-import instance from "@/scripts/requests/instance";
 import { Table } from "flowbite-react/components/Table"
-import { useEffect, useState } from "react";
 
 type ProductTableRowProps = {
   name: string;

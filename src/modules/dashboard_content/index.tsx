@@ -1,6 +1,5 @@
 import { Card } from "flowbite-react";
 import ChartTemplate from "../chart_template";
-import NewSidebarItem from "../new_sidebar_item";
 import DashboardNumberCard from "../dashboard_number_card";
 import PieTemplate from "../pie_template";
 import { useEffect, useState } from "react";

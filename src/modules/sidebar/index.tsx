@@ -7,7 +7,6 @@ interface MyJwtPayload extends JwtPayload {
   admin: boolean; 
 }
 const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
-  const [decodedToken, setDecodedToken] = useState<MyJwtPayload | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isAdmin, setIsAdmin] = useState(isAdminProp);
 
@@ -15,7 +14,6 @@ const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
     const token = cookie.get('token');
     if (token) {
       const decoded = jwtDecode<MyJwtPayload>(token);
-      setDecodedToken(decoded);
       setIsAdmin(decoded.admin);
     }
   },[]);

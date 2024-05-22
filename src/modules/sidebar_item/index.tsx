@@ -8,8 +8,6 @@ import AdminIcon from "../sidebar_icons/admin_icon";
 import ProductIcon from "../sidebar_icons/products_icon";
 import ClientIcon from "../sidebar_icons/client_icon";
 import CommissionIcon from "../sidebar_icons/commission_icon";
-import { redirect } from "next/navigation";
-import cookie from "@boiseitguru/cookie-cutter";
 import TablesIcon from "../sidebar_icons/tables_icon";
 
 

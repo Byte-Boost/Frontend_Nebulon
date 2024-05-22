@@ -22,37 +22,6 @@
 
 }
 
-/* QuickCard */
-
-.quick-card{
-  background: linear-gradient( #C8A3FF, #825EB7);
-  border-radius: 0.25rem;
-  border-width: 0.1rem;
-  overflow: auto;
-}
-
-/* GraphCard */
-
-.graph-card{
-  background-color: white;
-  border-radius: 1rem;
-  border-width: 0.1rem;
-  border-color: rgb(214, 214, 214);
-  overflow: auto;
-}
-
-.graph-card--content{
-  margin-left: 2rem;
-  margin-right: 2rem;
-}
-
-.graph-card--title{
-  text-align: center;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  height: 1.5rem;
-}
-
 /* Product page*/
 
 .content-container{
