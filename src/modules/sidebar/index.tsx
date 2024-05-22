@@ -31,9 +31,9 @@ const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
           <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'} link={'/home'}/>
           
           <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'tables'}  hasDropdown={true}>
-            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/dashboard/comissao'}/>
-            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/dashboard/produto'}/>
-            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/dashboard/cliente'}/>
+            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/tabela/comissao'}/>
+            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/tabela/produto'}/>
+            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/tabela/cliente'}/>
           </SidebarItem>
           
           <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} hasDropdown={true}>
