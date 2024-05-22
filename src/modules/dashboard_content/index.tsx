@@ -43,50 +43,44 @@ const DashboardContent = () => {
     seller: null,
     product: null,
   });
-  async function getCurrentMonthInfo(){
+
+  async function getDataForGraph(){
+    
+  }
+  async function getOverallData(){
     let now = new Date(Date.now());
     let start = new Date(now.setMonth(now.getMonth()));
-    console.log(start)
     
-    let start_month = `${start.getFullYear()}-${start.getMonth() + 1}-${1}` 
-    let end_month = `${start.getFullYear()}-${start.getMonth() + 1}-${31}` ;
-    
-    console.log(start_month)
-    console.log(end_month)
-    
-    const commissions = await instance.get("/commissions" ,{params :{
-     after: start_month,
-     before: end_month
-    }});
+    let current_year_start = `${start.getFullYear()}-${0+ 1}-${1}`;
+    let current_year_end = `${start.getFullYear()}-${11+ 1}-${31}`;
 
+    let current_month_start = `${start.getFullYear()}-${start.getMonth() + 1}-${1}`
+    let current_month_end = `${start.getFullYear()}-${start.getMonth() + 1}-${31}` ;
+    
+    const commissions = await instance.get("/commissions/stats" ,{params :{
+      comm_value_after: current_month_start,
+      comm_value_before: current_month_end,
+
+      sale_value_after: current_year_start,
+      sale_value_before: current_year_end,
+      
+      sale_qty_after: current_month_start,
+      sale_qty_before: current_month_end
+    }});
     console.log(commissions.data)
-     
-    setQuantitySellsCurrentMonth(commissions.data.length);
-    setTotalComissionValueCurrentMonth(commissions.data.reduce((acc: number, item: any) => acc + item.value, 0))
+
+    // setDataX(commissions.data.map((item: any) => item.id));
+    // setDataY(commissions.data.map((item: any) => item.value));
+    
+    setTotalSellsValue(commissions.data.saleValue);
+    setQuantitySellsCurrentMonth(commissions.data.saleQty);
+    setTotalComissionValueCurrentMonth(commissions.data.commValue);
     console.log(totalComissionValueCurrentMonth)
   }
-
+  
   async function getData() {
-    getCurrentMonthInfo();
-
-    let now = new Date(Date.now());
-    let start = new Date(now.setMonth(now.getMonth()));
-    
-    let start_month = `${start.getFullYear()}-${0+ 1}-${1}` 
-    let end_month = `${start.getFullYear()}-${11+ 1}-${31}` ;
-
-    const commissions = await instance.get("/commissions" ,{params :{
-      after: start_month,
-      before: end_month
-    }});
-    
-    console.log(commissions.data)
-
-    setDataX(commissions.data.map((item: any) => item.id));
-    setDataY(commissions.data.map((item: any) => item.value));
-    
-    setTotalSellsValue(commissions.data.reduce((acc: number, item: any) => acc + item.value, 0));
-    console.log(totalSellsValue)
+    getDataForGraph();
+    getOverallData();
   }
 
 
