@@ -5,12 +5,34 @@ import DashboardNumberCard from "../dashboard_number_card";
 import PieTemplate from "../pie_template";
 import { useEffect, useState } from "react";
 import instance from "@/scripts/requests/instance";
+import { formatMoney } from "@/scripts/validation/dataFormatter";
 
 const DashboardContent = () => {
-
+  let months = {
+    1: "Janeiro",
+    2: "Fevereiro",
+    3: "Março",
+    4: "Abril",
+    5: "Maio",
+    6: "Junho",
+    7: "Julho",
+    8: "Agosto",
+    9: "Setembro",
+    10: "Outubro",
+    11: "Novembro",
+    12: "Dezembro",
+  }
+  let currentMonth = new Date().getMonth() + 1 as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+  
+  // Overall Stats
   const [data, setData] = useState([])
   const [dataY, setDataY] = useState([])
   const [dataX, setDataX] = useState<string[]>([]);
+ 
+  // Current Month Stats
+  const [quantitySellsCurrentMonth, setQuantitySellsCurrentMonth] = useState<number>(0);
+  const [totalSellsValue, setTotalSellsValue] = useState<number>(0);
+  const [totalComissionValueCurrentMonth, setTotalComissionValueCurrentMonth] = useState<number>(0);
 
   const [filterLabel, setFilterLabel] = useState<{
     client: string | null,
@@ -21,24 +43,64 @@ const DashboardContent = () => {
     seller: null,
     product: null,
   });
+  async function getCurrentMonthInfo(){
+    let now = new Date(Date.now());
+    let start = new Date(now.setMonth(now.getMonth()));
+    console.log(start)
+    
+    let start_month = `${start.getFullYear()}-${start.getMonth() + 1}-${1}` 
+    let end_month = `${start.getFullYear()}-${start.getMonth() + 1}-${31}` ;
+    
+    console.log(start_month)
+    console.log(end_month)
+    
+    const commissions = await instance.get("/commissions" ,{params :{
+     after: start_month,
+     before: end_month
+    }});
+
+    console.log(commissions.data)
+     
+    setQuantitySellsCurrentMonth(commissions.data.length);
+    setTotalComissionValueCurrentMonth(commissions.data.reduce((acc: number, item: any) => acc + item.value, 0))
+    console.log(totalComissionValueCurrentMonth)
+  }
 
   async function getData() {
-    const commissions = await instance.get("/commissions");
+    getCurrentMonthInfo();
+
+    let now = new Date(Date.now());
+    let start = new Date(now.setMonth(now.getMonth()));
+    
+    let start_month = `${start.getFullYear()}-${0+ 1}-${1}` 
+    let end_month = `${start.getFullYear()}-${11+ 1}-${31}` ;
+
+    const commissions = await instance.get("/commissions" ,{params :{
+      after: start_month,
+      before: end_month
+    }});
+    
     console.log(commissions.data)
-    setData(commissions.data);
+
     setDataX(commissions.data.map((item: any) => item.id));
     setDataY(commissions.data.map((item: any) => item.value));
+    
+    setTotalSellsValue(commissions.data.reduce((acc: number, item: any) => acc + item.value, 0));
+    console.log(totalSellsValue)
   }
 
 
-  /*TODO - Implement the logic to filter the data 
+  /*
+    TODO 
+      - Implement the logic to filter the data 
       - Filter by date
       - Admin sees different data
+      - holy moly this is gonna be a massive request.  
   */
 
-  console.log(data)
-  console.log(dataX)
-  console.log(dataY)
+  // console.log(data)
+  // console.log(dataX)
+  // console.log(dataY)
   useEffect(() => {
     getData();
     setInterval(() => {
@@ -78,9 +140,9 @@ const DashboardContent = () => {
 
         <div className='row-span-2 flex justify-center p-2'>
           <Card className='grow flex flex-col p-4'>
-            <DashboardNumberCard title="Total de Vendas" number="R$ 40.560" percentage="5,4%"/>
-            <DashboardNumberCard title="Comissão Fevereiro" number="R$ 24.560" percentage="5,4%"/>
-            <DashboardNumberCard title="Vendas Realizadas" number="541" percentage="5,4%"/>
+            <DashboardNumberCard title={`Total de Vendas (${(new Date()).getFullYear()})`}number={`${formatMoney(totalSellsValue.toString() + "00")}`} percentage="5,4%"/>
+            <DashboardNumberCard title={`Comissão ${months[currentMonth]}`} number={`${formatMoney(totalComissionValueCurrentMonth.toString() + "00")}`} percentage="5,4%"/>
+            <DashboardNumberCard title={`Vendas Realizadas | ${currentMonth + '/' + (new Date()).getFullYear()}`} number={`${quantitySellsCurrentMonth}`} percentage="5,4%"/>
           </Card>
         </div>
 
