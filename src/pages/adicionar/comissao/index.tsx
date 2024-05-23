@@ -31,16 +31,10 @@ export default function Home() {
   });
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalSize, setModalSize] = useState<string>('md');
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
 
   const closeModal = () => {
     setModalIsOpen(false);
   };
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;

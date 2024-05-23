@@ -5,7 +5,7 @@ import ExportButton from '@/modules/export_button';
 import LoaderAnim from '@/modules/loader';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
-import { formatMoney } from '@/scripts/validation/dataFormatter';
+import { formatCNPJ, formatCPF, formatMoney } from '@/scripts/validation/dataFormatter';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -102,8 +102,32 @@ export default function Commissions() {
     setIsLoading(false)
   }
   function getExcelData(){
-    const newArray = data.map(({seller_data, client_data, product_data, createdAt, updatedAt, comm_value, ...rest}: 
-      {[key: string]: any}) => rest)
+    const newArray = data.map((row: {
+      date: Date,
+      seller_data: { id: number, name: string },
+      sellerCPF: string,
+      productId: number,
+      product_data: { name: string },
+      client_data: { id: number, tradingName: string, segment: string },
+      clientCNPJ: string,
+      value: string,
+      paymentMethod: string
+    }) => {
+      return {
+        "Data da venda": new Date(row.date),
+        "ID Vendedor": row.seller_data.id,
+        "Vendedor": row.seller_data.name,
+        "CPF Vendedor": formatCPF(row.sellerCPF),
+        "ID Produto": row.productId,
+        "Produto": row.product_data.name,
+        "ID Cliente": row.client_data.id,
+        "Cliente": row.client_data.tradingName,
+        "CNPJ/CPF Cliente": formatCNPJ(row.clientCNPJ),
+        "Segmento do Cliente": row.client_data.segment,
+        "Valor de Venda": row.value,
+        "Forma de Pagamento": row.paymentMethod,
+      }
+    })
     return newArray
   }
   useEffect(() => {

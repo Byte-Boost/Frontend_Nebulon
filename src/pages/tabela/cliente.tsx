@@ -37,6 +37,28 @@ export default function Clients() {
     
   
   }
+  function getExcelData(){
+    const newArray = data.map((row: {
+      id: number,
+      tradingName: string,
+      companyName: string,
+      cnpj: string,
+      segment: string,
+      contact: string,
+      status: number,
+    }) => {
+      return {
+        "ID": row.id,
+        "Nome Fantasia": row.tradingName,
+        "Razão Social": row.companyName,
+        "CNPJ": row.cnpj,
+        "SEGMENTO": row.segment,
+        "CONTATO": row.contact,
+        "STATUS": row.status,
+      }
+    })
+    return newArray
+  }
   useEffect(() => {
     getData()
     setInterval(() =>{
@@ -51,7 +73,7 @@ export default function Clients() {
         </Head>
         <Sidebar/>
         <ContentArea>
-        <div className='w-full p-14'>
+          <div className='w-full p-14'>
             <div className='bg-slate-100 shadow-2xl rounded-sm py-6 px-6'>
               <div>
                 <section className='w-full text-left flex justify-between pb-6'>
@@ -78,7 +100,7 @@ export default function Clients() {
                     <Table.HeadCell>Status</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                   
+                    
                     {data.map((product: { companyName: string, segment:string, contact:string, status:number }, index: number) => {
                       return (
                         <ClientTableRow
@@ -92,11 +114,11 @@ export default function Clients() {
                     })}
                   </Table.Body> 
                 </Table>   
-                 }
-                 </div>
-              </div>
+                  }
+                  </div>
             </div>
-            <ExportButton jsonData={data} filename="clientes"/>
+          </div>
+          <ExportButton jsonData={getExcelData()} filename="clientes"/>
         </ContentArea>
     </main>
   );

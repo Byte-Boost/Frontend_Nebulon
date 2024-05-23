@@ -28,6 +28,26 @@ export default function Products() {
     setData(products.data);
     setIsLoading(false)
   }
+  function getExcelData(){
+    const newArray = data.map((row: {
+      id: number,
+      name: string,
+      description: string,
+      status: number,
+    }) => {
+      // Aliquota Should be `=IF(INDIRECT("RC[-1]",0)= 0, ${0.025}, ${0.015}))`, but formulas aren't working
+      // 0.025 and 0.015 are magic numbers, and should be in ENV
+      return {
+        "ID": row.id,
+        "Nome": row.name,
+        "Descrição": row.description,
+        "Status": row.status,
+        "Alíquota": `${0.015}`,
+      }
+    })
+    return newArray
+  }
+
   useEffect(() => {
     getData()
     setInterval(() =>{
@@ -85,7 +105,7 @@ export default function Products() {
                 </div>
               </div>
             </div>
-          <ExportButton jsonData={data} filename="produtos"/>
+          <ExportButton jsonData={getExcelData()} filename="produtos"/>
         </ContentArea>
     </main>
   );

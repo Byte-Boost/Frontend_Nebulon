@@ -31,8 +31,8 @@ const ExportButton = ({jsonData, filename }:{jsonData : any[], filename:string})
         } 
     }
     return(     
-        <div className="p-2 rounded-md flex cursor-pointer shadow-xl bg-purple-500 text-white fixed right-4 bottom-4">
-            <img src="/download.png" onClick={() => setModalIsOpen(true)} width={35} className="inline invert"/>
+        <div className="p-2 rounded-md flex cursor-pointer shadow-xl bg-purple-500 text-white fixed right-4 bottom-4" onClick={() => setModalIsOpen(true)}>
+            <img src="/download.png" width={35} className="inline invert"/>
             <span className="text-xl">Exportar</span>
             <Modal  className="bg-black bg-opacity-30 grid place-content-center" size={'xl'} show={modalIsOpen} onClose={closeModal} dismissible>
                 <Modal.Body className='bg-slate-100 rounded-lg'>
