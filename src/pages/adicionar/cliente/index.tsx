@@ -3,6 +3,7 @@ import ClientModal from '@/modules/client_modal';
 import FormCard from '@/modules/form_card';
 import Sidebar from '@/modules/sidebar';
 import instance from '@/scripts/requests/instance';
+import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { formatCNPJ, formatPhoneNumber } from '@/scripts/validation/dataFormatter';
 import { Label, TextInput } from 'flowbite-react';
 import Head from 'next/head';
@@ -45,15 +46,7 @@ export default function Home() {
       contact: cliente.telefone
     })
     .then(function(response){
-      Swal.fire({
-        title: 'Sucesso',
-        text: `Cliente cadastrado com sucesso!`,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1750,
-        timerProgressBar: true,
-      })
-      console.log("Client added")
+      successAlert("Cliente cadastrado com sucesso!", "Client added successfully");
       setCliente({
         cnpj: '',
         nomeFantasia: '',
@@ -63,14 +56,7 @@ export default function Home() {
       });
     })
     .catch(error => {
-      Swal.fire({
-        title: 'Oops!',
-        text: `Algo de errado aconteceu :(`,
-        icon: 'error',
-        showConfirmButton: false,
-        timer: 1750,
-      });
-      console.log("Error adding new client")
+      failureAlert("Error adding new client")
     })
   };
 

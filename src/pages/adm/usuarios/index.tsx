@@ -8,6 +8,7 @@ import instance from '@/scripts/requests/instance';
 import { formatCPF } from "@/scripts/validation/dataFormatter";
 import SellerModal from '@/modules/seller_modal';
 import FormCard from '@/modules/form_card';
+import { failureAlert, successAlert } from '@/scripts/utils/shared';
 
 interface Seller {
   name: string;
@@ -37,25 +38,16 @@ export default function Home() {
       password: user.password
     })
     .then(function(response){
-      Swal.fire({
-        title: 'Sucesso',
-        text: `Vendedor foi deletado com sucesso.`,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1750,
-        timerProgressBar: true,
+      successAlert("Vendedor cadastrado com sucesso!", "Seller/user registered successfully");
+      setUser({
+        name: '',
+        cpf: '',
+        username: '',
+        password: ''
       })
-      console.log("Seller/user registered successfully")
     })
     .catch(error => {
-      Swal.fire({
-        title: 'Oops!',
-        text: `Algo de errado aconteceu :(`,
-        icon: 'error',
-        showConfirmButton: false,
-        timer: 1750,
-      });
-      console.log("Error registering Seller/user")
+      failureAlert("Error registering Seller/user");
     })
   };
   const closeModal = () => {

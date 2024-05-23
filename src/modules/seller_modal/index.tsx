@@ -4,7 +4,7 @@ import UploadCard from "../upload_card";
 import instance from "@/scripts/requests/instance";
 import xlsxToJSON from "@/scripts/dataUtils/xlsxToJSON";
 import { Modal } from "flowbite-react";
-import Swal from "sweetalert2";
+import { failureAlert, successAlert } from "@/scripts/utils/shared";
 
 
 interface ModalProps {
@@ -13,48 +13,31 @@ interface ModalProps {
 }
 
 const SellerModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
-    const [file, setFile] = useState()
-  
-    function handleChange(event:any) {
-      setFile(event.target.files[0])
-    }
-    const onSend = async () =>{
-      if(file) {
+  const [file, setFile] = useState()
+
+  function handleChange(event:any) {
+    setFile(event.target.files[0])
+  }
+  const onSend = async () =>{
+    if(file) {
       const jsonData = await xlsxToJSON(file);
-      let i:number = 0;
-      while(jsonData.length > i) {
-        instance.post('/account/register',{
-          name: jsonData[i].Nome,
-          username:jsonData[i].Nome.replace(/\s/g, '').toLowerCase(),
-          cpf: jsonData[i]["CPF"].replace(/[^[^\w\s]/gi, ''),
-          password: '12345678',
-        })
-        .then(function(response){
-          Swal.fire({
-            title: 'Sucesso',
-            text: `Vendedor cadastrado com sucesso!`,
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1750,
-            timerProgressBar: true,
-          })
-          console.log("Seller added")
-          closeModal()
-        })
-        .catch(error => {
-          Swal.fire({
-            title: 'Oops!',
-            text: `Algo de errado aconteceu :(`,
-            icon: 'error',
-            showConfirmButton: false,
-            timer: 1750,
-          });
-          console.log("Error adding new seller")
-        });
-        i++;
-        }
+      let i = 0;
+      try{
+        while(jsonData.length > i) {
+          await instance.post('/account/register',{
+            name: jsonData[i].Nome,
+            username:jsonData[i].Nome.replace(/\s/g, '').toLowerCase(),
+            cpf: jsonData[i]["CPF"].replace(/[^[^\w\s]/gi, ''),
+            password: '12345678',
+          }).catch(()=>{throw new Error("Error adding new Seller")})
+          i++;
+        };
+        successAlert("Vendedor cadastrado com sucesso!", "Seller added", closeModal);
+      } catch (err: any){
+        failureAlert(err.message)
       }
     }
+  }
       
   return (
     <Modal show={isOpen} onClose={closeModal} dismissible className="bg-black bg-opacity-30" size={"lg"}>

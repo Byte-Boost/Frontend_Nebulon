@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import cookie from "@boiseitguru/cookie-cutter";
 import instance from "@/scripts/requests/instance";
 import FormCard from '@/modules/form_card';
+import { failureAlert } from '@/scripts/utils/shared';
 
 export default function Login() {
   const router = useRouter();
@@ -29,14 +30,7 @@ export default function Login() {
       router.push(`/home`)
     })
     .catch(error => {
-      Swal.fire({
-        title: 'Oops!',
-        text: `Algo de errado aconteceu :(`,
-        icon: 'error',
-        showConfirmButton: false,
-        timer: 1750,
-      });
-      console.log("Couldn't log in!")
+      failureAlert("Couldn't log in!")
     }); 
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {

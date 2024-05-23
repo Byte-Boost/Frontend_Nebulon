@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import ProductModal from '@/modules/product_modal';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
+import { failureAlert, successAlert } from '@/scripts/utils/shared';
 
 interface Produto {
   name: string;
@@ -48,15 +49,7 @@ export default function Home() {
       percentage: produto.percentage,      
     })
     .then(function(response){
-      Swal.fire({
-        title: 'Sucesso',
-        text: `Produto cadastrado com sucesso!`,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1750,
-        timerProgressBar: true,
-      })
-      console.log("Product added")
+      successAlert("Produto cadastrado com sucesso!", "Product added");
       setProduct({
         name: '',
         description: '',
@@ -64,14 +57,7 @@ export default function Home() {
       });
     })
     .catch(error => {
-      Swal.fire({
-        title: 'Oops!',
-        text: `Algo de errado aconteceu :(`,
-        icon: 'error',
-        showConfirmButton: false,
-        timer: 1750,
-      });
-      console.log("Error adding new product")
+      failureAlert("Error adding new product");
     })
   }
 

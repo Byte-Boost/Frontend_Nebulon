@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import CommissionModal from '@/modules/commissions_modal';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
+import { failureAlert, successAlert } from '@/scripts/utils/shared';
 
 interface Comissao {
   sellerData: string;
@@ -61,15 +62,7 @@ export default function Home() {
       productId: comissao.productId
     }) 
     .then(function(response){
-      Swal.fire({
-        title: 'Sucesso',
-        text: "Commissão cadastrada com sucesso!",
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1750,
-        timerProgressBar: true,
-      })
-      console.log("Commission added." )
+      successAlert("Comissão cadastrada com sucesso!", "Commission added successfully");
       setComissao({
         sellerData: '',
         clientData: '',
@@ -81,14 +74,7 @@ export default function Home() {
       });
     })
     .catch(error => {
-      Swal.fire({
-        title: 'Oops!',
-        text: `Algo de errado aconteceu :(`,
-        icon: 'error',
-        showConfirmButton: false,
-        timer: 1750,
-      });
-      console.log("Error adding new commission.")
+      failureAlert("Error adding new commission");
     })
   };
 

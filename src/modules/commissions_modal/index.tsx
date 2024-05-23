@@ -5,6 +5,7 @@ import instance from "@/scripts/requests/instance";
 import xlsxToJSON from "@/scripts/dataUtils/xlsxToJSON";
 import { Modal } from "flowbite-react";
 import Swal from "sweetalert2";
+import { failureAlert, successAlert } from "@/scripts/utils/shared";
 
 
 interface ModalProps {
@@ -13,51 +14,33 @@ interface ModalProps {
 }
 
 const CommissionModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
-    const [file, setFile] = useState()
-  
-    function handleChange(event:any) {
-      setFile(event.target.files[0])
-    }
-    const onSend = async () =>{
-        if(file) {
-          const jsonData = await xlsxToJSON(file);
-          let i = 0
-          while (jsonData.length > i) {
-          instance.post('/commissions',{
+  const [file, setFile] = useState()
+
+  function handleChange(event:any) {
+    setFile(event.target.files[0])
+  }
+  const onSend = async () =>{
+    if(file) {
+      const jsonData = await xlsxToJSON(file);
+      let i = 0;
+      try{
+        while(jsonData.length > i) {
+          await instance.post('/commissions',{
             date: new Date(jsonData[i]["Data da venda"]).toISOString().slice(0, 19).replace('T', ' '),
             value: jsonData[i]["Valor de Venda"],
             paymentMethod: jsonData[i]["Forma de Pagamento"],
             sellerCPF: jsonData[i]["CPF Vendedor"].replace(/[^\w\s]/gi, ''),
             clientCNPJ: jsonData[i]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, ''),
             productId: jsonData[i]["ID Produto"]
-          })
-          .then(function(response){
-            Swal.fire({
-              title: 'Sucesso',
-              text: `Comissão cadastrada com sucesso!`,
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1750,
-              timerProgressBar: true,
-            })
-            console.log("Commission added")
-            closeModal()
-          })
-          .catch(error => {
-            Swal.fire({
-              title: 'Oops!',
-              text: `Algo de errado aconteceu :(`,
-              icon: 'error',
-              showConfirmButton: false,
-              timer: 1750,
-            });
-            console.log("Error adding new Commission")
-          })
-
+          }).catch(()=>{throw new Error("Error adding new Commission")})
           i++;
-          }}
-          else{console.log("No file selected")}
-        }; 
+        }
+        successAlert("Comissão cadastrada com sucesso!", "Commission added", closeModal);
+      } catch (err: any){
+        failureAlert(err.message)
+      }
+    }
+  }; 
           
   return (
     <Modal show={isOpen} onClose={closeModal} dismissible className="bg-black bg-opacity-30 grid place-content-center" size={"lg"}>
