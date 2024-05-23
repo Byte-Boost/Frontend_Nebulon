@@ -66,70 +66,94 @@ export default function Commissions() {
     setFilterLabel({...filterLabel, product: label})
     getData();
   }
-
-  // Sorts data 
-  const [sorts, setSorts] = useState<{
-    date: string | null,
-    value: string | null;
-  }>({
-    date: null,
-    value: null,
-
-  })
   // Sort labels
   const [sortLabel, setSortLabel] = useState<{
-    dateSort : string | null,
-    valueSort : string | null,
+    sharedSort : string | null,
   }>({
-    dateSort: null,
-    valueSort: null,
+    sharedSort: null,
   })
 
+  type SortLabelType = {
+    sharedSort: string | null;
+  };
+  
+  const [sortTarget, setSortTarget] = useState<string | null>(null)
+
   // Functions to change the sorting on click
+
+  // *TODO This function works and gives you an arrow but i am too lazy to implement it right now, will stick with the big ternary for now
+  const setSortArrowDirection = (sort : keyof SortLabelType, target : any, equal : any) =>{
+    if (sort == null){
+      return null
+    }
+    else if (sort != null){
+      if(sortLabel[sort] && sortTarget === target){
+      if(equal){
+        return '↑'
+      }
+      else{
+        return '↓'
+      }
+    }
+    }
+   return null
+ }
+
   const changeDateSorting = (killSwitch? : boolean) => {
     if (killSwitch) {
-      setSortLabel({...sortLabel, dateSort: null});
-      sorts.date = null 
-      getData();
+      setSortLabel({ ...sortLabel, sharedSort: null });
       return;
     }
+    const sortedData = [...data].sort((a : {date : string}, b: {date : string}) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
   
-    if (sorts.date == 'desc'){
-      console.log("filtering by date asc")
-      sorts.date = 'asc';
-      setSortLabel({...sortLabel, dateSort: ' Mais Antigo'})
-    }
-    else{
-      console.log("filtering by date desc")
-      sorts.date = 'desc';
-      setSortLabel({...sortLabel, dateSort: ' Mais Recente'})
-    }
-    getData();
+      // If dateSort label is 'asc', sort in ascending order, otherwise sort in descending order
+      return sortLabel.sharedSort === 'Mais Recente' ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
+    });
+  
+    setData(sortedData);
+    setSortLabel({ ...sortLabel, sharedSort: sortLabel.sharedSort === 'Mais Recente' ? 'Mais Velha' : 'Mais Recente' });
+    setSortTarget('date')
   }
   const changeValueSorting = (killSwitch? : boolean) => {
+    // This killswitch is not necessary because it's using the sharedSort but i will keep it here for consistency and..uh lazy reasons
     if (killSwitch) {
-      setSortLabel({...sortLabel, valueSort: null});
-      sorts.value = null
-      getData();
+      setSortLabel({...sortLabel, sharedSort: null});
       return;
     }
-    if (sorts.value == 'asc'){
-      console.log("filtering by value desc")
-      sorts.value = 'desc';
-      setSortLabel({...sortLabel, valueSort: 'Maior Valor'})
-      getData();
+    const sortedData = [...data].sort((a : {value : any}, b: {value : any}) => {
+      // If sharedSort label is 'Maior Valor', sort in ascending order, otherwise sort in descending order
+      return sortLabel.sharedSort === 'Maior Valor' ? a.value - b.value : b.value - a.value;
+    });
+    setData(sortedData);
+    setSortTarget('value')
+    setSortLabel({ ...sortLabel, sharedSort: sortLabel.sharedSort === 'Maior Valor' ? 'Menor Valor' : 'Maior Valor' });
+  }
+  const changeAlphabeticalSorting = (killSwitch? : boolean, target? : string[] ) => {
+    // This killswitch is not necessary because it's using the sharedSort but i will keep it here for consistency and..uh lazy reasons
+    if (killSwitch) {
+      setSortLabel({...sortLabel, sharedSort: null});
+      return;
+    }
+    if(target != null ){
+    const sortedData = [...data].sort((a : any , b : any) => {
+
+      // If sharedSort label is 'Menor Valor', sort in ascending order, otherwise sort in descending order
+      return sortLabel.sharedSort === 'Alfabética Inversa' ? a[target[0]][target[1]].localeCompare(b[target[0]][target[1]]) : b[target[0]][target[1]].localeCompare(a[target[0]][target[1]]);
+    });
+    setData(sortedData);
+    setSortTarget(target[0])
+    setSortLabel({ ...sortLabel, sharedSort: sortLabel.sharedSort === 'Alfabética Inversa' ? 'Alfabética' : 'Alfabética Inversa' });
     }
     else{
-    console.log("filtering by value asc")
-    sorts.value = 'asc';
-    setSortLabel({...sortLabel, valueSort: 'Menor Valor'})
-    getData();
+      throw new Error("Target is null")
     }
   }
-  
 
   // Function to get the data from the API
   async function getData() {
+    setSortLabel({dateSort: null, sharedSort: null})
     setIsLoading(true)
     // Essentially makes "after" equal to "null" or the date of the last month, 3 months, 6 months, or year
     let dateRange = [0, 1, 3, 6, 12]
@@ -150,8 +174,6 @@ export default function Commissions() {
       product_id: filters.productID,
       product_status: prodStatus,
       client_status: clientStatus,
-      date_sort: sorts.date,
-      price_sort: sorts.value,
     }});
     // inserts seller_data, client_data, and product_data into the commission object
     for (const commission of commissions.data){
@@ -195,9 +217,6 @@ export default function Commissions() {
   }
   useEffect(() => {
     getData()
-    setInterval(() =>{
-    getData()
-    },60000)
   }, [])
 
   return (
@@ -253,22 +272,10 @@ export default function Commissions() {
                         : null
                       }
                       {/* Labels for sort */}
-                      { sortLabel.dateSort ? 
+                      { sortLabel.sharedSort ? 
                         <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-purple-900 bg-purple-200 dark:text-purple-200 dark:bg-purple-900 rounded">
-                        Ordem: {sortLabel.dateSort}
+                        Ordem: {sortLabel.sharedSort}
                         <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-purple-400 bg-transparent rounded-sm hover:bg-pink-200 hover:text-purple-950 dark:hover:bg-purple-800 dark:hover:text-pink-300" aria-label="Remove" onClick={(e)=>{changeDateSorting(true)}}>
-                          <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                          </svg>
-                          <span className="sr-only">Remove badge</span>
-                        </button>
-                      </span>
-                        : null
-                      }
-                       { sortLabel.valueSort ? 
-                        <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-cyan-900 bg-cyan-200 rounded dark:bg-cyan-900 dark:text-cyan-200">
-                        Ordem: {sortLabel.valueSort}
-                        <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-cyan-400 bg-transparent rounded-sm hover:bg-cyan-300 hover:text-cyan-900 dark:hover:bg-cyan-800 dark:hover:text-cyan-300" aria-label="Remove" onClick={(e)=>{changeValueSorting(true)}}>
                           <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
@@ -323,14 +330,14 @@ export default function Commissions() {
                 {isLoading ? <div className='grid place-content-center '><LoaderAnim /></div>  :
                 <Table className="w-100 rounded-lg bg-purple-500">
                   <Table.Head className='w-full text-left text-lg text-[#fbfbfb]'>
-                    <Table.HeadCell onClick={(e:any) => changeDateSorting()} className='cursor-pointer'>Data da Venda {sorts.date? sorts.date =='asc'? '\u2193': '\u2191' :'\u2193' }</Table.HeadCell>
-                    <Table.HeadCell>Vendendor</Table.HeadCell>
+                    <Table.HeadCell onClick={(e:any) => changeDateSorting()} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Data da Venda {sortLabel.sharedSort && sortTarget==='date'? sortLabel.sharedSort =='Mais Velha'? '\u2193': '\u2191' : null }</Table.HeadCell>
+                    <Table.HeadCell onClick={(e:any) => changeAlphabeticalSorting(false,['seller_data','name'])} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Vendendor {sortLabel.sharedSort && sortTarget === 'seller_data' ? sortLabel.sharedSort =='Alfabética Inversa'? '\u2193': '\u2191' : null }</Table.HeadCell>
                     <Table.HeadCell>CPF do Vendendor</Table.HeadCell>
-                    <Table.HeadCell>Cliente</Table.HeadCell>
+                    <Table.HeadCell onClick={(e:any) => changeAlphabeticalSorting(false,['client_data','tradingName'])} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Cliente {sortLabel.sharedSort && sortTarget === 'client_data'? sortLabel.sharedSort =='Alfabética Inversa' ? '\u2193': '\u2191' : null }</Table.HeadCell>
                     <Table.HeadCell>CNPJ/CPF do Cliente</Table.HeadCell>
-                    <Table.HeadCell>Produto</Table.HeadCell>
-                    <Table.HeadCell>Comissão</Table.HeadCell>
-                    <Table.HeadCell onClick={(e:any) => changeValueSorting()} className='cursor-pointer'>Valor da Venda {sorts.value? sorts.value =='asc'? '\u2193': '\u2191' : null }</Table.HeadCell>
+                    <Table.HeadCell onClick={(e:any) => changeAlphabeticalSorting(false,['product_data','name'])} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Produto {sortLabel.sharedSort && sortTarget === 'product_data'? sortLabel.sharedSort =='Alfabética Inversa'? '\u2193': '\u2191' : null }</Table.HeadCell>
+                    <Table.HeadCell>Comissão</Table.HeadCell> 
+                    <Table.HeadCell onClick={(e:any) => changeValueSorting()} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Valor da Venda {sortLabel.sharedSort? sortLabel.sharedSort =='Menor Valor'? '\u2193': '\u2191' : null }</Table.HeadCell>
                   </Table.Head>
 
                   <Table.Body className="text-black px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
