@@ -11,6 +11,8 @@ type CommissionTableRowProps = {
   handleSellerFilter: Function,
   handleClientFilter: Function,
   handleProductFilter: Function,
+  handleDateSorting : Function,
+  handleValueSorting : Function,
   
 };
 
@@ -23,7 +25,9 @@ const CommissionTableRow = ({
   comm_value,
   handleSellerFilter,
   handleClientFilter,
-  handleProductFilter
+  handleProductFilter,
+  handleDateSorting,
+  handleValueSorting,
 }: CommissionTableRowProps) => {    
     var parts = date.split("-");
     if (parts.length != 3) {
@@ -35,7 +39,7 @@ const CommissionTableRow = ({
     let new_date = new Date(year, month, day).toJSON().slice(0,10).split(/-/).reverse().join('/');
     return(
         <Table.Row className="odd:bg-[#f1f1f1] even:bg-[#e4e4e4] font-medium">
-        <Table.Cell className="whitespace-nowrap font-medium">
+         <Table.Cell className="whitespace-nowrap font-medium cursor-pointer" onClick={(e:any)=>handleDateSorting()}>
           {new_date}
         </Table.Cell>
         <Table.Cell onClick={(e:any)=>handleSellerFilter(seller_data.cpf, e.target.innerText)} className="cursor-pointer">
@@ -63,7 +67,7 @@ const CommissionTableRow = ({
             </div>
           </div>
         </Table.Cell>
-        <Table.Cell>
+        <Table.Cell onClick={(e:any)=>handleValueSorting()} className="cursor-pointer">
           <div  className="flex flex-row flex-1 justify-between" >
             <div className="justify-start">
               <span className="ml-2">{'R$  '}</span>
