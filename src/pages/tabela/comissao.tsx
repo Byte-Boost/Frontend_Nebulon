@@ -153,7 +153,7 @@ export default function Commissions() {
 
   // Function to get the data from the API
   async function getData() {
-    setSortLabel({dateSort: null, sharedSort: null})
+    setSortLabel({sharedSort: null})
     setIsLoading(true)
     // Essentially makes "after" equal to "null" or the date of the last month, 3 months, 6 months, or year
     let dateRange = [0, 1, 3, 6, 12]
@@ -337,7 +337,7 @@ export default function Commissions() {
                     <Table.HeadCell>CNPJ/CPF do Cliente</Table.HeadCell>
                     <Table.HeadCell onClick={(e:any) => changeAlphabeticalSorting(false,['product_data','name'])} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Produto {sortLabel.sharedSort && sortTarget === 'product_data'? sortLabel.sharedSort =='Alfabética Inversa'? '\u2193': '\u2191' : null }</Table.HeadCell>
                     <Table.HeadCell>Comissão</Table.HeadCell> 
-                    <Table.HeadCell onClick={(e:any) => changeValueSorting()} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Valor da Venda {sortLabel.sharedSort? sortLabel.sharedSort =='Menor Valor'? '\u2193': '\u2191' : null }</Table.HeadCell>
+                    <Table.HeadCell onClick={(e:any) => changeValueSorting()} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Valor da Venda {sortLabel.sharedSort && sortTarget === 'value'? sortLabel.sharedSort =='Menor Valor'? '\u2193': '\u2191' : null }</Table.HeadCell>
                   </Table.Head>
 
                   <Table.Body className="text-black px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
