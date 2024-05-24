@@ -29,22 +29,22 @@ const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
           <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'} link={'/home'}/>
           
           <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'tables'}  hasDropdown={true}>
-            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/tabela/comissao'}/>
-            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/tabela/produto'}/>
-            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/tabela/cliente'}/>
+            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/tabela/comissao'} className='stroke-[#58ff60]' classNameText='text-[#58ff60]'/>
+            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/tabela/produto'} className='fill-[#ff6600]' classNameText='text-[#ff6600]'/>
+            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/tabela/cliente'} className='stroke-[#6fc3fc]' classNameText='text-[#6fc3fc]'/>
           </SidebarItem>
           
           <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} hasDropdown={true}>
-            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/adicionar/comissao'}/>
-            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/adicionar/produto'}/>
-            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/adicionar/cliente'}/>
+            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/adicionar/comissao'} className='stroke-[#58ff60]' classNameText='text-[#58ff60]'/>
+            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/adicionar/produto'} className='fill-[#ff6600]' classNameText='text-[#ff6600]'/>
+            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/adicionar/cliente'} className='stroke-[#6fc3fc]' classNameText='text-[#6fc3fc]'/>
           </SidebarItem>
           
           {
           isAdmin
           && 
           <SidebarItem title={'ADMINISTRAÇÃO'} isHovered={isHovered} icon={'admin'} hasDropdown={true}>
-            <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios'}/>
+            <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios'} className='stroke-[#52355b]' classNameText='text-[#52355b]'/>
             {/* <SidebarItem title={'OPÇÕES'} isHovered={isHovered} icon={'options'} link={'/adm/opcoes'}/> */}
           </SidebarItem>
           }
