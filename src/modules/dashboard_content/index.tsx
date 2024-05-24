@@ -82,13 +82,11 @@ const DashboardContent = () => {
       sale_qty_after: current_month_start,
       sale_qty_before: current_month_end
     }});
-    console.log(commissions_stats.data)
 
     
     setTotalSellsValue(commissions_stats.data.saleValue);
     setQuantitySellsCurrentMonth(commissions_stats.data.saleQty);
     setTotalComissionValueCurrentMonth(commissions_stats.data.commValue);
-    console.log(totalComissionValueCurrentMonth)
   }
   
   async function getData() {
@@ -104,9 +102,6 @@ const DashboardContent = () => {
 
     setDataX([...filteredKeys,...dataX]);
     setDataY([...filteredValues,...dataY] as never[]);
-    console.log(dataX);
-    console.log(dataY)
-    console.log(totalSellsPerMonth);
   }, [totalSellsPerMonth]);
 
   /*
@@ -114,87 +109,84 @@ const DashboardContent = () => {
       - Get Info for the piechart
       - Filters for Linechart
       - Filters for Piechart
-      - new graph or table?
+      - Scoreboard table
       - add button to change month in the values on the right
   */
 
-  // console.log(data)
+  useEffect(() => {getData()}, []);
 
+  return (
+    <div className='grid grid-cols-6 grid-rows-2 h-screen w-[calc(100%-3rem)]'>
+      <div id="lineGraph" className='col-span-3 flex justify-center p-2'>
+        <Card className='grow flex justify-center'>
+          <ChartTemplate type='line' id='last12m' title='last12m' dataX={dataX} dataY={dataY} colors={['rgb(147 ,51 ,234)']} />
+        </Card>
+      </div>
 
-  useEffect(() => {
-    getDataForGraph();
-    getData();
-  }, []);
-
-    return (
-      <div className='grid grid-cols-6 grid-rows-2 h-screen w-[calc(100%-3rem)]'>
-        <div className='col-span-3 flex justify-center p-2'>
-
+      <div id="scoreBoard" className='col-span-2 flex justify-center p-2'>
+        <div className='grow flex flex-col p-4 border-2 rounded-lg justify-around'>
           <Card className='grow flex justify-center'>
-            <ChartTemplate type='line' id='last12m' title='last12m' dataX={dataX} dataY={dataY} colors={['rgb(147 ,51 ,234)']} />
           </Card>
-        </div>
-        <div className='col-span-2 flex justify-center p-2'>
-          <div className='grow flex flex-col p-4 border-2 rounded-lg justify-around'>
-
-            <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Opção 1</button>
-            </div>
-
-            <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Opção 2</button>
-            </div>
-
-            <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Voltar</button>
-            </div>
-
-            <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Voltar</button>
-            </div>
-
-          </div>
-        </div>
-
-        <div className='row-span-2 flex justify-center p-2'>
-          <Card className='grow flex flex-col p-4'>
-            <DashboardNumberCard title={`Total de Vendas (${(new Date()).getFullYear()})`}number={`${formatMoney(totalSellsValue.toString() + "00")}`} percentage="5,4%"/>
-            <DashboardNumberCard title={`Comissão ${MonthName(new Date())}`} number={`${formatMoney(totalComissionValueCurrentMonth.toString() + "00")}`} percentage="5,4%"/>
-            <DashboardNumberCard title={`Vendas Realizadas | ${(currentMonthIndex+1) + '/' + (new Date()).getFullYear()}`} number={`${quantitySellsCurrentMonth}`} percentage="5,4%"/>
-          </Card>
-        </div>
-
-        <div className='col-span-2 flex justify-center p-2'>
-          <div className='grow border-2 rounded-lg'>
-            <PieTemplate id='test2' dataX={[1,2,3,4]} dataY={[10,20,30,15]} colors={['#41D2A7','#2f2f2f', '#805C90', 'red']}/>
-          </div>
-        </div>
-        <div className='flex justify-center p-2'>
-          <div className='grow flex flex-col p-4 border-2 rounded-lg justify-around'>
-
-              <div className="text-left">
-                <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Opção 1</button>
-              </div>
-
-              <div className="text-left">
-                <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Opção 2</button>
-              </div>
-
-              <div className="text-left">
-                <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Voltar</button>
-              </div>
-
-              <div className="text-left">
-                <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Voltar</button>
-              </div>
-
-            </div>
-        </div>
-
-        <div className='col-span-2 flex justify-center p-2'>
-          <Card className='grow'>Table</Card>
         </div>
       </div>
-    );
-  }
+
+      <div id="infoBar" className='row-span-2 flex justify-center p-2'>
+        <Card className='grow flex flex-col p-4'>
+          <DashboardNumberCard title={`Total de Vendas (${(new Date()).getFullYear()})`}number={`${formatMoney(totalSellsValue.toString() + "00")}`} percentage="5,4%"/>
+          <DashboardNumberCard title={`Comissão ${MonthName(new Date())}`} number={`${formatMoney(totalComissionValueCurrentMonth.toString() + "00")}`} percentage="5,4%"/>
+          <DashboardNumberCard title={`Vendas Realizadas | ${(currentMonthIndex+1) + '/' + (new Date()).getFullYear()}`} number={`${quantitySellsCurrentMonth}`} percentage="5,4%"/>
+        </Card>
+      </div>
+
+      <div id="pieChart" className='col-span-2 flex justify-center p-2'>
+        <div className='grow border-2 rounded-lg'>
+          <PieTemplate id='test2' dataX={[1,2,3,4]} dataY={[10,20,30,15]} colors={['#41D2A7','#2f2f2f', '#805C90', 'red']}/>
+        </div>
+      </div>
+      
+      <div id="pieChartOpt" className='flex justify-center p-2'>
+        <div className='grow flex flex-col p-4 border-2 rounded-lg justify-around'>
+
+            <div className="text-left">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Vendedores</button>
+            </div>
+
+            <div className="text-left">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Produtos</button>
+            </div>
+
+            <div className="text-left">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Clientes</button>
+            </div>
+
+            <div className="text-left">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Comissões</button>
+            </div>
+
+          </div>
+      </div>
+
+      <div id="timeOpt" className='col-span-2 flex justify-center p-2'>
+        <div className='grow flex flex-col p-4 border-2 rounded-lg justify-around'>
+          <div className="text-left">
+            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Ultimo mês</button>
+          </div>
+
+          <div className="text-left">
+            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Ultimos 3 meses</button>
+          </div>
+
+          <div className="text-left">
+            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Ultimos 6 meses</button>
+          </div>
+
+          <div className="text-left">
+            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Ultimos 12 meses</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+}
   export default DashboardContent;
