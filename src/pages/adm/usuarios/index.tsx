@@ -61,7 +61,7 @@ export default function Home() {
   return (
     <main>
         <Head>
-        <title>Nebulon - Register seller</title>
+        <title>Nebulon - Adicionar Vendendor</title>
         </Head>
         <Sidebar/>
         <FormCard>

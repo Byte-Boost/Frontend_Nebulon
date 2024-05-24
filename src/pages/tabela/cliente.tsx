@@ -69,7 +69,7 @@ export default function Clients() {
   return (
     <main> 
         <Head>
-        <title>Nebulon - Dashboard - Tabela de Clientes</title>
+        <title>Nebulon - Tabela de Clientes</title>
         </Head>
         <Sidebar/>
         <ContentArea>

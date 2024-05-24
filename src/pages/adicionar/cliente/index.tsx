@@ -63,7 +63,7 @@ export default function Home() {
   return (
     <main>
       <Head>
-        <title>Nebulon - Criar Cliente</title>
+        <title>Nebulon - Adicionar Cliente</title>
       </Head>
       <Sidebar/>
       <FormCard>

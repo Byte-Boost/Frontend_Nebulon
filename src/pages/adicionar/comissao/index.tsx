@@ -81,7 +81,7 @@ export default function Home() {
   return (
     <main>
       <Head>
-        <title>Nebulon - Adicionar - Formulário</title>
+        <title>Nebulon - Adicionar Comissão</title>
       </Head>
       <Sidebar/>
       <FormCard>

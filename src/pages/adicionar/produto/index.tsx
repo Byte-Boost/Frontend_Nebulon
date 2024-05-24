@@ -69,7 +69,7 @@ export default function Home() {
   return (
     <main>
       <Head>
-        <title>Nebulon - Criar Produto</title>
+        <title>Nebulon - Adicionar Produto</title>
     </Head>
     <Sidebar/>
     <FormCard>

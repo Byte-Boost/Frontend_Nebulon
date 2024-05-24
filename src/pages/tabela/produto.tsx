@@ -58,7 +58,7 @@ export default function Products() {
   return (
     <main> 
         <Head>
-        <title>Nebulon - Dashboard - Tabela de Produtos</title>
+        <title>Nebulon - Tabela de Produtos</title>
         </Head>
         <Sidebar/>
         <ContentArea>

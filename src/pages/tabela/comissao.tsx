@@ -222,7 +222,7 @@ export default function Commissions() {
   return (
     <main> 
         <Head>
-        <title>Nebulon - Dashboard - Tabela de Comissões</title>
+        <title>Nebulon - Tabela de Comissões</title>
         </Head>
         <Sidebar/>
         <ContentArea>
