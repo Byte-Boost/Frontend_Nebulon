@@ -1,37 +1,124 @@
 import '@/app/globals.css'
-import ContentArea from '@/modules/content_area';
-import QuickCard from '@/modules/quick_card';
+import ClientModal from '@/modules/client_modal';
+import FormCard from '@/modules/form_card';
 import Sidebar from '@/modules/sidebar';
+import instance from '@/scripts/requests/instance';
+import { failureAlert, successAlert } from '@/scripts/utils/shared';
+import { formatCNPJ, formatPhoneNumber } from '@/scripts/validation/dataFormatter';
+import { Label, TextInput } from 'flowbite-react';
 import Head from 'next/head';
+import React, { useState } from 'react';
+import Swal from 'sweetalert2';
+
+interface Cliente {
+  cnpj: string;
+  nomeFantasia: string;
+  razaoSocial: string;
+  segmento: string;
+  telefone: string;
+}
 export default function Home() {
+  const [cliente, setCliente] = useState<Cliente>({
+    cnpj: '',
+    nomeFantasia: '',
+    razaoSocial: '',
+    segmento: '',
+    telefone: ''
+  });
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setCliente({ ...cliente, [name]: value });
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    cliente.cnpj=cliente.cnpj.replace(/\D/g, '');
+    cliente.telefone=cliente.telefone.replace(/\D/g, '');
 
+    instance.post('/clients',{
+      tradingName: cliente.nomeFantasia,
+      companyName: cliente.razaoSocial,
+      cnpj: cliente.cnpj,
+      segment: cliente.segmento,
+      contact: cliente.telefone
+    })
+    .then(function(response){
+      successAlert("Cliente cadastrado com sucesso!", "Client added successfully");
+      setCliente({
+        cnpj: '',
+        nomeFantasia: '',
+        razaoSocial: '',
+        segmento: '',
+        telefone: ''
+      });
+    })
+    .catch(error => {
+      failureAlert("Error adding new client")
+    })
+  };
 
-
-  
   return (
     <main>
       <Head>
-        <title>Nebulon - Cliente</title>
+        <title>Nebulon - Adicionar Cliente</title>
       </Head>
       <Sidebar/>
-      <div>
-        <ContentArea>
-            <QuickCard link='/adicionar/cliente/formulario'>
-              <div className='flex '>
-              </div> 
-              <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>Utilizando Formulario</h1>
-              </div>     
-            </QuickCard>
-            <QuickCard  link={'/adicionar/cliente/excel'}>
-              <div className='flex '> 
-              </div> 
-              <div className='bg-[#E6E6E6]'>
-              <h1 className='inline-block  self-end'>Utilizando Excel</h1> 
-              </div> 
-            </QuickCard>    
-        </ContentArea>
-      </div>
+      <FormCard>
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+          <h2 className="text-center mb-4 font-bold text-3xl">Cadastro de Clientes</h2>
+          <div className="mb-4">
+            <img className="w-min" src="/nebulon_cover.png" alt="Nebulon Logo" />
+          </div>
+
+          <div>
+              <Label htmlFor="cnpj" value="CNPJ:" className="font-bold" />
+              <div className="border-2 rounded-lg shadow-inner">
+                <TextInput id="cnpj" type="text" name="cnpj" value={formatCNPJ(cliente.cnpj)} maxLength={18} onChange={handleChange} required />
+              </div>
+          </div>
+
+          <div>
+              <Label htmlFor="nomeFantasia" value="Nome Fantasia:" className="font-bold" />
+              <div className="border-2 rounded-lg shadow-inner">
+                <TextInput id="nomeFantasia" type="text" name="nomeFantasia" value={cliente.nomeFantasia} onChange={handleChange} required />
+              </div>
+          </div>
+
+          <div>
+              <Label htmlFor="razaoSocial" value="Razão Social:" className="font-bold" />
+              <div className="border-2 rounded-lg shadow-inner">
+                <TextInput id="razaoSocial" type="text" name="razaoSocial" value={cliente.razaoSocial} onChange={handleChange} required />
+              </div>
+          </div>
+
+          <div>
+              <Label htmlFor="segmento" value="Segmento:" className="font-bold" />
+              <div className="border-2 rounded-lg shadow-inner">
+                <TextInput id="segmento" type="text" name="segmento" value={cliente.segmento} onChange={handleChange} required />
+              </div>
+          </div>
+
+          <div>
+              <Label htmlFor="telefone" value="Telefone:" className="font-bold" />
+              <div className="border-2 rounded-lg shadow-inner">
+                <TextInput id="telefone" type="text" name="telefone" value={formatPhoneNumber(cliente.telefone)} maxLength={15} onChange={handleChange} required />
+              </div>
+          </div>
+          
+          <div className='grid grid-flow-row'>
+            <div className="text-right">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8 w-full' type="button" onClick={() => setModalIsOpen(true)}>Cadastro por upload</button>
+            </div>
+            <div className="text-right">
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4 w-full' type="submit">Cadastrar</button>
+            </div>
+          </div>
+        </form>
+        <ClientModal isOpen={modalIsOpen} closeModal={closeModal} />
+      </FormCard>
     </main>
   );
 }

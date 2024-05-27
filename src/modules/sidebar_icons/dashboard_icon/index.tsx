@@ -27,4 +27,6 @@ const  DashboardIcon = ({className}:  DashboardIconProps) => {
         </svg>
     );
 }
+
+
 export default DashboardIcon;

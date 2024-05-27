@@ -1,31 +1,41 @@
 import React, { useEffect } from 'react';
-import Chart from 'chart.js/auto'; // Importe o pacote Chart.js
+import Chart, { ChartTypeRegistry } from 'chart.js/auto'; // Importe o pacote Chart.js
 
-let ChartTemplate = ({type, id, width, height, title, dataX, dataY, colors}) => {
+interface chartProps{
+  type: keyof ChartTypeRegistry,
+  id: string,
+  title: string,
+  dataX?: Array<any>,
+  dataY?: Array<any>,
+  colors?: Array<string>,
+  className?: string,
+  borderColors? : Array<string>
+}
 
-  let barColors = colors//['rgba(210,65,108,0.7)'];
-
-  let xValues = dataX
-  let yValues = dataY
+let ChartTemplate = ({type, id, title, dataX , dataY , colors = ['rgba(210,65,108,0.7)'] ,borderColors = ['rgba(210,65,108,0.7)'], className} : chartProps ) => {
+  const chartRef = React.useRef<Chart<keyof ChartTypeRegistry, any[] | undefined, any> | null>(null); // Update the type of chartRef
 
   useEffect(() => {
+    if (chartRef.current) {
+      chartRef.current.destroy();
+    }
 
-    // Criar o gráfico usando Chart.js
     var ctx = document.getElementById(id).getContext('2d');
-    new Chart(ctx, {
+    chartRef.current = new Chart(ctx, {
       type: type,
       data: {
-        labels: xValues,
+        labels: dataX,
         datasets: [{
           label: 'Valor em R$',
-          data: yValues,
-          backgroundColor: barColors,
-          borderColor: 'rgba(210,65,108,1)',
+          data: dataY,
+          backgroundColor: colors,
+          borderColor: borderColors,
           borderWidth: 2
-        }
-        ]
+        }]
       },
       options: {
+        responsive: true,
+        resizeDelay: 1,
         legend: {
           position: 'top',
         },
@@ -35,14 +45,19 @@ let ChartTemplate = ({type, id, width, height, title, dataX, dataY, colors}) => 
         }
       }
     });
-  }, []);
+
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
+    };
+  }, [dataX, dataY]); // Add dataX and dataY as dependencies
 
   return (
-    <div className='grow'>
-      <canvas id={id} style={{ width: width, height: height}}></canvas>
+    <div className={`grow flex justify-center p-4 ` + className}>
+      <canvas id={id}></canvas>
     </div>
   );
 }
 
 export default ChartTemplate;
-

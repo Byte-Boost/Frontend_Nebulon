@@ -1,70 +1,34 @@
-import instance from "@/scripts/requests/instance";
+import { formatCNPJ, formatCPF, formatMoney } from "@/scripts/validation/dataFormatter";
 import { Table } from "flowbite-react/components/Table"
-import { useEffect, useState } from "react";
 
 type CommissionTableRowProps = {
   date: string;
-  seller_id: number;
-  client_id: number;
-  product_id: number;
-  sale_value: number;
+  seller_data: {name: string, cpf: string},
+  client_data: {name: string, status: number, cnpj: string},
+  product_data: {name: string, status: number, percentage: number, id: number},
+  sale_value: number,
+  comm_value: number,
+  handleSellerFilter: Function,
+  handleClientFilter: Function,
+  handleProductFilter: Function,
+  handleDateSorting : Function,
+  handleValueSorting : Function,
+  
 };
 
 const CommissionTableRow = ({
   date,
-  seller_id,
-  client_id,
-  product_id,
+  seller_data,
+  client_data,
+  product_data,
   sale_value,
-}: CommissionTableRowProps) => {
-
-    let [clientName, setClientName] = useState("");	
-    let [sellerName, setSellerName] = useState("");
-    let [product, setProduct] = useState("");
-    let [client_cnpj, setClientCnpj] = useState("");
-    let [seller_cpf, setSellerCpf] = useState("");
-    let [commission_value, setCommission] = useState("");
-    useEffect(() => {
-      const fetchData = async () => {
-        let clientData = await instance.get("/clients/" + client_id);
-        let productData = await instance.get("/products/" + product_id);
-        let sellerData = await instance.get("/sellers/" + seller_id);
-        console.log(productData.data);
-        setClientName(clientData.data.tradingName);
-        setClientCnpj(clientData.data.cnpj);
-        
-        setSellerName(sellerData.data.name);
-        setSellerCpf(sellerData.data.cpf);
-        setProduct(productData.data.name);
-
-        let client_status = clientData.data.status === 0;
-        let product_status = productData.data.status === 0;
-        let product_percentage = productData.data.percentage;
-       
-        if (client_status && product_status){
-          setCommission(
-            ((sale_value * (product_percentage + Number(process.env.NEXT_PUBLIC_PNCN)) )  ).toFixed(2)
-          );
-        }
-        else if (client_status && !product_status){
-          setCommission(
-            ((sale_value * (product_percentage + Number(process.env.NEXT_PUBLIC_PVCN)) )  ).toFixed(2)
-          );
-        }
-        else if (!client_status && product_status){
-          setCommission(
-            ((sale_value * (product_percentage +  Number(process.env.NEXT_PUBLIC_PNCV)) )  ).toFixed(2)
-          );
-        }
-        else if (!client_status && !product_status){
-          setCommission(
-            ((sale_value * (product_percentage +  Number(process.env.NEXT_PUBLIC_PVCV)) )  ).toFixed(2)
-          );
-        }
-      };
-      fetchData();
-    }, []);
-    
+  comm_value,
+  handleSellerFilter,
+  handleClientFilter,
+  handleProductFilter,
+  handleDateSorting,
+  handleValueSorting,
+}: CommissionTableRowProps) => {    
     var parts = date.split("-");
     if (parts.length != 3) {
         return undefined;
@@ -74,50 +38,42 @@ const CommissionTableRow = ({
     var day = parseInt(parts[2]);
     let new_date = new Date(year, month, day).toJSON().slice(0,10).split(/-/).reverse().join('/');
     return(
-        <Table.Row className="odd:bg-[#1f1f1f] even:bg-[#2b2b2b]">
-        <Table.Cell className="whitespace-nowrap font-medium text-white">
+        <Table.Row className="odd:bg-[#f1f1f1] even:bg-[#e4e4e4] font-medium">
+         <Table.Cell className="whitespace-nowrap font-medium cursor-pointer" onClick={(e:any)=>handleDateSorting()}>
           {new_date}
         </Table.Cell>
-        <Table.Cell>
-          {sellerName}
+        <Table.Cell onClick={(e:any)=>handleSellerFilter(seller_data.cpf, e.target.innerText)} className="cursor-pointer">
+          {seller_data.name}
         </Table.Cell>
-        <Table.Cell>
-          {seller_cpf}
+        <Table.Cell onClick={(e:any)=>handleSellerFilter(seller_data.cpf, e.target.innerText)} className="cursor-pointer">
+          {formatCPF(seller_data.cpf)}
         </Table.Cell>
-        <Table.Cell>
-          {clientName}
+        <Table.Cell onClick={(e:any)=>handleClientFilter(client_data.cnpj, e.target.innerText)} className="cursor-pointer">
+          {client_data.name}
         </Table.Cell>
-        <Table.Cell>
-          {client_cnpj}
+        <Table.Cell onClick={(e:any)=>handleClientFilter(client_data.cnpj, e.target.innerText)} className="cursor-pointer">
+          {formatCNPJ(client_data.cnpj)}
         </Table.Cell>
-        <Table.Cell>
-          {product}
-        </Table.Cell>
-        <Table.Cell >
-          <div  className="grid grid-flow-col" >
-          <div className="justify-start">
-            <span className="ml-2">
-              {'R$  '}
-            </span>
-          </div>
-          <div className="justify-end">
-            <span className="ml-2">
-              {sale_value.toFixed(2)}
-            </span> 
-          </div>
-          </div>
+        <Table.Cell onClick={(e:any)=>handleProductFilter(product_data.id, e.target.innerText)} className="cursor-pointer">
+          {product_data.name}
         </Table.Cell>
         <Table.Cell >   
-        <div className="flex flex-row flex-1">
+          <div className="flex flex-row flex-1 justify-between">
             <div className="justify-start">
-              <span className="ml-2">
-                {'R$  '}
-              </span>
+              <span className="ml-2">{'R$  '}</span>
             </div>
-            <div className="justify-end ">
-              <span className="ml-2">
-              {commission_value}
-              </span> 
+            <div className="justify-end">
+              <span className="ml-2">{formatMoney(comm_value.toFixed(2), false)}</span> 
+            </div>
+          </div>
+        </Table.Cell>
+        <Table.Cell onClick={(e:any)=>handleValueSorting()} className="cursor-pointer">
+          <div  className="flex flex-row flex-1 justify-between" >
+            <div className="justify-start">
+              <span className="ml-2">{'R$  '}</span>
+            </div>
+            <div className="justify-end">
+              <span className="ml-2">{formatMoney(sale_value.toFixed(2), false)}</span> 
             </div>
           </div>
         </Table.Cell>
