@@ -7,11 +7,12 @@ interface chartProps{
   title: string,
   dataX?: Array<any>,
   dataY?: Array<any>,
-  colors?: Array<string>;
-
+  colors?: Array<string>,
+  className?: string,
+  borderColors? : Array<string>
 }
 
-let ChartTemplate = ({type, id, title, dataX , dataY , colors = ['rgba(210,65,108,0.7)']} : chartProps ) => {
+let ChartTemplate = ({type, id, title, dataX , dataY , colors = ['rgba(210,65,108,0.7)'] ,borderColors = ['rgba(210,65,108,0.7)'], className} : chartProps ) => {
   const chartRef = React.useRef<Chart<keyof ChartTypeRegistry, any[] | undefined, any> | null>(null); // Update the type of chartRef
 
   useEffect(() => {
@@ -28,7 +29,7 @@ let ChartTemplate = ({type, id, title, dataX , dataY , colors = ['rgba(210,65,10
           label: 'Valor em R$',
           data: dataY,
           backgroundColor: colors,
-          borderColor: colors,
+          borderColor: borderColors,
           borderWidth: 2
         }]
       },
@@ -53,7 +54,7 @@ let ChartTemplate = ({type, id, title, dataX , dataY , colors = ['rgba(210,65,10
   }, [dataX, dataY]); // Add dataX and dataY as dependencies
 
   return (
-    <div className='grow flex justify-center p-4'>
+    <div className={`grow flex justify-center p-4 ` + className}>
       <canvas id={id}></canvas>
     </div>
   );

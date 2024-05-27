@@ -24,6 +24,7 @@ const DashboardContent = () => {
   const [totalComissionValueCurrentMonth, setTotalComissionValueCurrentMonth] = useState<number>(0);
   const [totalSellsPerMonth, setTotalSellsPerMonth] = useState({});
 
+
   const [filterLabel, setFilterLabel] = useState<{
     client: string | null,
     seller: string | null,
@@ -61,8 +62,8 @@ const DashboardContent = () => {
   
     setTotalSellsPerMonth(newTotalSellsPerMonth);
   }
-  
   async function getOverallData(){
+
     let now = new Date(Date.now());
     let start = new Date(now.setMonth(now.getMonth()));
 
@@ -102,6 +103,7 @@ const DashboardContent = () => {
 
     setDataX([...filteredKeys,...dataX]);
     setDataY([...filteredValues,...dataY] as never[]);
+ 
   }, [totalSellsPerMonth]);
 
   /*
@@ -114,12 +116,12 @@ const DashboardContent = () => {
   */
 
   useEffect(() => {getData()}, []);
-
+  useEffect(() => {console.log(dataX)}, [dataX]);
   return (
     <div className='grid grid-cols-6 grid-rows-2 h-screen w-[calc(100%-3rem)]'>
       <div id="lineGraph" className='col-span-3 flex justify-center p-2'>
         <Card className='grow flex justify-center'>
-          <ChartTemplate type='line' id='last12m' title='last12m' dataX={dataX} dataY={dataY} colors={['rgb(147 ,51 ,234)']} />
+          <ChartTemplate type='line' id='last12m' title='last12m' dataX={dataX} dataY={dataY} colors={['rgb(147 ,51 ,234)']} borderColors={['rgb(147,51,234']} />
         </Card>
       </div>
 
@@ -140,7 +142,21 @@ const DashboardContent = () => {
 
       <div id="pieChart" className='col-span-2 flex justify-center p-2'>
         <div className='grow border-2 rounded-lg'>
-          <PieTemplate id='test2' dataX={[1,2,3,4]} dataY={[10,20,30,15]} colors={['#41D2A7','#2f2f2f', '#805C90', 'red']}/>
+          <ChartTemplate className="max-h-96" title="test2" type="pie" id='test2' dataX={dataX} dataY={dataY} colors={[
+            '#1f77b4', // January - Blue
+            '#ff7f0e', // February - Orange
+            '#2ca02c', // March - Green
+            '#d62728', // April - Red
+            '#9467bd', // May - Purple
+            '#8c564b', // June - Brown
+            '#e377c2', // July - Pink
+            '#7f7f7f', // August - Gray
+            '#bcbd22', // September - Olive
+            '#17becf', // October - Cyan
+            '#9edae5', // November - Light Blue
+            '#98df8a'  // December - Light Green
+          ]}
+          borderColors={['white']}/>
         </div>
       </div>
       
@@ -148,19 +164,24 @@ const DashboardContent = () => {
         <div className='grow flex flex-col p-4 border-2 rounded-lg justify-around'>
 
             <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Vendedores</button>
+              <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+                Vendedores</button>
             </div>
 
             <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Produtos</button>
+              <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+                Produtos</button>
             </div>
 
             <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Clientes</button>
+              <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+                Clientes</button>
             </div>
 
             <div className="text-left">
-              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Comissões</button>
+              <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+                Meses
+              </button>
             </div>
 
           </div>
@@ -169,19 +190,27 @@ const DashboardContent = () => {
       <div id="timeOpt" className='col-span-2 flex justify-center p-2'>
         <div className='grow flex flex-col p-4 border-2 rounded-lg justify-around'>
           <div className="text-left">
-            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Ultimo mês</button>
+            <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+              Ultimo mês
+              </button>
           </div>
 
           <div className="text-left">
-            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Ultimos 3 meses</button>
+            <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+              Ultimos 3 meses
+              </button>
           </div>
 
           <div className="text-left">
-            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Ultimos 6 meses</button>
+            <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+              Ultimos 6 meses
+              </button>
           </div>
 
           <div className="text-left">
-            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>Ultimos 12 meses</button>
+            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+              Ultimos 12 meses
+              </button>
           </div>
         </div>
       </div>
