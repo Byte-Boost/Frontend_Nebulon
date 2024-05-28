@@ -1,7 +1,6 @@
 import { Card } from "flowbite-react";
 import ChartTemplate from "../chart_template";
 import DashboardNumberCard from "../dashboard_number_card";
-import PieTemplate from "../pie_template";
 import { useEffect, useState } from "react";
 import instance from "@/scripts/http-requests/instance";
 import { formatMoney } from "@/scripts/utils/dataFormatter";
@@ -13,8 +12,9 @@ const DashboardContent = () => {
     return str.charAt(0).toUpperCase() + str.slice(1)
   };
 
+
+  const [fetchDataFromLastMonths, setFetchDataFromLastMonths] = useState<number>(13); 
   // Overall Stats
-  const [data, setData] = useState([])
   const [dataY, setDataY] = useState([])
   const [dataX, setDataX] = useState<string[]>([]);
  
@@ -23,6 +23,7 @@ const DashboardContent = () => {
   const [totalSellsValue, setTotalSellsValue] = useState<number>(0);
   const [totalComissionValueCurrentMonth, setTotalComissionValueCurrentMonth] = useState<number>(0);
   const [totalSellsPerMonth, setTotalSellsPerMonth] = useState({});
+  
 
 
   const [filterLabel, setFilterLabel] = useState<{
@@ -39,11 +40,15 @@ const DashboardContent = () => {
     let now = new Date(Date.now());
     let promises = [];
   
-    for(let i = 0; i < 11; i++){
+    for(let i = 0; i < fetchDataFromLastMonths; i++){
+
       let newDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      let month_start = `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${1}`
-      let month_end = `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${31}` ;
-  
+      let month_start = `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${1}`;
+      
+      // Get the last day of the current month
+      let lastDayOfMonth = new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0).getDate();
+      let month_end = `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${lastDayOfMonth}`;
+
       promises.push(
         instance.get("/commissions/stats", {params :{
           sale_value_after: month_start,
@@ -51,10 +56,11 @@ const DashboardContent = () => {
         }})
       );
     }
-  
+    // Fetch all the data from the API
     const results = await Promise.all(promises);
+    // Create a new object with the total sells per month
     let newTotalSellsPerMonth : {[key: string]: number} = {...totalSellsPerMonth};
-  
+    // Reverse the array to get the months in ascending order
     results.reverse().forEach((commissions_12m, i) => {
       let newDate = new Date(now.getFullYear(), now.getMonth() - (results.length - 1 - i), 1);
       newTotalSellsPerMonth[MonthName(newDate)+'/'+newDate.getFullYear()] = commissions_12m.data.saleValue;
@@ -67,12 +73,18 @@ const DashboardContent = () => {
     let now = new Date(Date.now());
     let start = new Date(now.setMonth(now.getMonth()));
 
-    let current_year_start = `${start.getFullYear()}-${0+ 1}-${1}`;
-    let current_year_end = `${start.getFullYear()}-${11+ 1}-${31}`;
+    // Gets the first and last day of the current year
+    let current_year_start = `${start.getFullYear()}-${1}-${1}`;
+    let current_year_end = `${start.getFullYear()}-${12}-${31}`;
 
-    let current_month_start = `${start.getFullYear()}-${start.getMonth() + 1}-${1}`
-    let current_month_end = `${start.getFullYear()}-${start.getMonth() + 1}-${31}` ;
+    // Gets the first and last day of the current month
+    let current_month_start = `${start.getFullYear()}-${start.getMonth() + 1}-${1}`;
 
+    // Get the last day of the current month
+    let lastDayOfMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate();
+    let current_month_end = `${start.getFullYear()}-${start.getMonth() + 1}-${lastDayOfMonth}`;
+    
+    // Fetches the data from the API
     const commissions_stats = await instance.get("/commissions/stats" ,{params :{
       comm_value_after: current_month_start,
       comm_value_before: current_month_end,
@@ -85,6 +97,7 @@ const DashboardContent = () => {
     }});
 
     
+    // Sets the data to the states
     setTotalSellsValue(commissions_stats.data.saleValue);
     setQuantitySellsCurrentMonth(commissions_stats.data.saleQty);
     setTotalComissionValueCurrentMonth(commissions_stats.data.commValue);
@@ -95,33 +108,58 @@ const DashboardContent = () => {
     getOverallData();
   }
   useEffect(() => {
+    // Get the keys and values from totalSellsPerMonth
     const newKeys = Object.keys(totalSellsPerMonth);
     const newValues = Object.values(totalSellsPerMonth);
-  
+
+    // Filter out the keys that are already included in dataX
     const filteredKeys = newKeys.filter((key) => !dataX.includes(key));
+
+    // Get the corresponding values for the filtered keys
     const filteredValues = newValues.slice(0, filteredKeys.length);
 
+    // Update dataX and dataY with the new keys and values
     setDataX([...filteredKeys,...dataX]);
     setDataY([...filteredValues,...dataY] as never[]);
  
   }, [totalSellsPerMonth]);
 
-  /*
-    TODO.  
-      - Get Info for the piechart
-      - Filters for Linechart
-      - Filters for Piechart
-      - Scoreboard table
-      - add button to change month in the values on the right
-  */
 
   useEffect(() => {getData()}, []);
   useEffect(() => {console.log(dataX)}, [dataX]);
   return (
     <div className='grid grid-cols-6 grid-rows-2 h-screen w-[calc(100%-3rem)]'>
       <div id="lineGraph" className='col-span-3 flex justify-center p-2'>
-        <Card className='grow flex justify-center'>
-          <ChartTemplate type='line' id='last12m' title='last12m' dataX={dataX} dataY={dataY} colors={['rgb(147 ,51 ,234)']} borderColors={['rgb(147,51,234']} />
+        <Card className='grow border-2 rounded-lg flex justify-center'>
+          <ChartTemplate 
+          type='line' 
+          id='lineGraph' 
+          title='lineGraph' 
+          dataX={dataX} 
+          dataY={dataY} 
+          colors={['rgb(147 ,51 ,234)']} 
+          borderColors={['rgb(147,51,234']} 
+          legendOptions={
+            {
+              hasLegend:true,
+              position:'top',
+              labelColor:'black',
+              size:14
+            }}
+          scalesOptions={
+            {
+              xScales:true,
+              xScalesTitle:'',
+            }} 
+          itemsLabel="Valor em R$"
+          interactionOptions={
+            {
+              mode:'nearest',
+              intersect:false,
+              axis:'x'
+            }
+          }
+          />
         </Card>
       </div>
 
@@ -141,8 +179,14 @@ const DashboardContent = () => {
       </div>
 
       <div id="pieChart" className='col-span-2 flex justify-center p-2'>
-        <div className='grow border-2 rounded-lg'>
-          <ChartTemplate className="max-h-96" title="test2" type="pie" id='test2' dataX={dataX} dataY={dataY} colors={[
+        <div className='grow border-2 rounded-lg '>
+          <ChartTemplate  
+          title="pieChart" 
+          type="pie" 
+          id='pieChart' 
+          dataX={[...dataX].reverse().slice(0,6)} 
+          dataY={[...dataY].reverse().slice(0,6)} 
+          colors={[    // Colors for each month (if theres is twelve months)
             '#1f77b4', // January - Blue
             '#ff7f0e', // February - Orange
             '#2ca02c', // March - Green
@@ -156,7 +200,16 @@ const DashboardContent = () => {
             '#9edae5', // November - Light Blue
             '#98df8a'  // December - Light Green
           ]}
-          borderColors={['white']}/>
+          borderColors={['white']}
+          legendOptions={
+            {
+              hasLegend:true,
+              position:'right',
+              labelColor:'black',
+              size:13
+            }}
+          itemsLabel="Valor em R$"
+          />
         </div>
       </div>
       
