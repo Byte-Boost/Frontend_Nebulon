@@ -9,6 +9,7 @@ import CommissionModal from '@/modules/commissions_modal';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
+import { getCutFromCommission } from '@/scripts/requests/InstanceSamples';
 
 interface Comissao {
   sellerData: string;
@@ -51,10 +52,7 @@ export default function Home() {
     comissao.sellerCPF=comissao.sellerCPF.replace(/\D/g, '');
     comissao.clientCNPJ=comissao.clientCNPJ.replace(/\D/g, '');
     comissao.value=extractFloat(comissao.value).toString();
-    let cli = await instance.get(`/clients/cnpj/${comissao.clientCNPJ}`);
-    let prod = await instance.get(`/products/${comissao.productId}`);
-    let comm_perc = Number(process.env.NEXT_PUBLIC_BASE_COMMISSION_VALUE) + Number(cli.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_CLIENT_BONUS : 0) + Number(prod.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_PROD_BONUS : 0);
-    comissao.commissionCut = (Number(comissao.value) * comm_perc).toString();
+    comissao.commissionCut= await getCutFromCommission(comissao);
 
     // Requisição POST
     instance.post('/commissions',{

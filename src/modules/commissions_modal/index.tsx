@@ -6,6 +6,7 @@ import xlsxToJSON from "@/scripts/dataUtils/xlsxToJSON";
 import { Modal } from "flowbite-react";
 import Swal from "sweetalert2";
 import { failureAlert, successAlert } from "@/scripts/utils/shared";
+import { getCutFromCommission } from "@/scripts/requests/InstanceSamples";
 
 
 interface ModalProps {
@@ -25,13 +26,19 @@ const CommissionModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
       let i = 0;
       try{
         while(jsonData.length > i) {
+          let clienteCnpj = jsonData[i]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, '');
+          let productId = jsonData[i]["ID Produto"]
+          let value = jsonData[i]["Valor de Venda"]
+          let cut = await getCutFromCommission({clienteCnpj, productId, value});
+
           await instance.post('/commissions',{
             date: new Date(jsonData[i]["Data da venda"]).toISOString().slice(0, 19).replace('T', ' '),
-            value: jsonData[i]["Valor de Venda"],
+            value: value,
+            commissionCut: cut,
             paymentMethod: jsonData[i]["Forma de Pagamento"],
             sellerCPF: jsonData[i]["CPF Vendedor"].replace(/[^\w\s]/gi, ''),
-            clientCNPJ: jsonData[i]["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, ''),
-            productId: jsonData[i]["ID Produto"]
+            clientCNPJ: clienteCnpj,
+            productId: productId,
           }).catch(()=>{throw new Error("Error adding new Commission")})
           i++;
         }

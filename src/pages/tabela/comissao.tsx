@@ -4,7 +4,7 @@ import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
 import LoaderAnim from '@/modules/loader';
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/requests/instance';
+import { filters, getCommissionsWithFilter } from '@/scripts/requests/InstanceSamples';
 import { formatCNPJ, formatCPF, formatMoney } from '@/scripts/validation/dataFormatter';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
@@ -25,14 +25,7 @@ export default function Commissions() {
     product: null,
   });
   // Filters data - what is selected to filter the data
-  const [filters, setFilters] = useState<{
-    date: number | null,
-    clientCNPJ: string | null,
-    sellerCPF: string | null,
-    productID: number | null,
-    prodClass: number | null,
-    clientClass: number | null,
-  }>({
+  const [filters, setFilters] = useState<filters>({
     date: null,
     clientCNPJ: null,
     sellerCPF: null,
@@ -60,20 +53,15 @@ export default function Commissions() {
     getData();
   }
   // Sort labels
-  const [sortLabel, setSortLabel] = useState<{
-    sharedSort : string | null,
-  }>({
-    sharedSort: null,
-  })
-
   type SortLabelType = {
     sharedSort: string | null;
   };
-  
+  const [sortLabel, setSortLabel] = useState<SortLabelType>({
+    sharedSort: null,
+  })
   const [sortTarget, setSortTarget] = useState<string | null>(null)
 
   // Functions to change the sorting on click
-
   // *TODO This function works and gives you an arrow but i am too lazy to implement it right now, will stick with the big ternary for now
   const setSortArrowDirection = (sort : keyof SortLabelType, target : any, equal : any) =>{
     if (sort == null){
@@ -148,32 +136,7 @@ export default function Commissions() {
   async function getData() {
     setSortLabel({sharedSort: null})
     setIsLoading(true)
-    // Essentially makes "after" equal to "null" or the date of the last month, 3 months, 6 months, or year
-    let dateRange = [0, 1, 3, 6, 12]
-    let now = new Date(Date.now());
-    let after = null;
-    if (filters.date != null && filters.date != 0){
-      let start = new Date(now.setMonth(now.getMonth() - dateRange[filters.date]));
-      after = `${start.getFullYear()}-${start.getMonth() + 1}-${start.getDate()}`
-    } 
-    // translate the filters into the correct format for the API
-    let prodStatus = filters.prodClass == 0 ? "new" : filters.prodClass == 1 ? "old" : undefined
-    let clientStatus = filters.clientClass == 0 ? "new" : filters.clientClass == 1 ? "old" : undefined
-    // fetch! Get the data from the API
-    const commissions = await instance.get("/commissions", { params: {
-      after: after,
-      client_cnpj: filters.clientCNPJ,
-      seller_cpf: filters.sellerCPF,
-      product_id: filters.productID,
-      product_status: prodStatus,
-      client_status: clientStatus,
-    }});
-    // inserts seller_data, client_data, and product_data into the commission object
-    for (const commission of commissions.data){
-      commission.seller_data = await instance.get(`/sellers/cpf/${commission.sellerCPF}`).then(res=>res.data);
-      commission.client_data = await instance.get(`/clients/cnpj/${commission.clientCNPJ}`).then(res=>res.data);
-      commission.product_data = await instance.get(`/products/${commission.productId}`).then(res=>res.data);
-    }
+    let commissions = await getCommissionsWithFilter(filters, true)
     // set the data to the fetched data
     setData(commissions.data);
     setIsLoading(false)

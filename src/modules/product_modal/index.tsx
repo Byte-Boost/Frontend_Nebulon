@@ -27,7 +27,6 @@ const ProductModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
           await instance.post('/products',{
             name: jsonData[i].Nome,
             description: jsonData[i]["Descrição"],
-            percentage: jsonData[i]["Alíquota"],
             status: jsonData[i].Status,
           }).catch(()=>{throw new Error("Error adding new Product")})
           i++;
