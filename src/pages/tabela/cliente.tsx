@@ -1,10 +1,12 @@
 import '@/app/globals.css'
+import { clientExcelTableRow, clientFilters } from '@/models/models';
 import ClientTableRow from '@/modules/client_table_row';
 import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
 import LoaderAnim from '@/modules/loader';
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/requests/instance';
+import { getClientsWithFilter } from '@/scripts/http-requests/InstanceSamples';
+import instance from '@/scripts/http-requests/instance';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -12,41 +14,18 @@ import { useEffect, useState } from 'react';
 export default function Clients() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filters, setFilters] = useState<{
-    class: number | null,
-    segment: string | null,
-  }>({
+  const [filters, setFilters] = useState<clientFilters>({
     class: null,
     segment: null,
   });
   
   async function getData() {
     setIsLoading(true)
-    let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
-    let clients: any = await instance.get("/clients", { params: {
-      segment: filters.segment,
-      status: status,
-    }})
-    .then(response => response.data)
-    .then(data => {
-      setData(data);
-      console.log(data);
-      setIsLoading(false)
-    })
-
-    
-  
+    setData(await getClientsWithFilter(filters));
+    setIsLoading(false)
   }
   function getExcelData(){
-    const newArray = data.map((row: {
-      id: number,
-      tradingName: string,
-      companyName: string,
-      cnpj: string,
-      segment: string,
-      contact: string,
-      status: number,
-    }) => {
+    const excelRows = data.map((row: clientExcelTableRow) => {
       return {
         "ID": row.id,
         "Nome Fantasia": row.tradingName,
@@ -57,7 +36,7 @@ export default function Clients() {
         "STATUS": row.status,
       }
     })
-    return newArray
+    return excelRows
   }
   useEffect(() => {
     getData()

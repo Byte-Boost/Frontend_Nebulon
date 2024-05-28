@@ -1,14 +1,8 @@
+import { clientFilters, commissionFilters, productFilters } from "@/models/models";
 import instance from "./instance";
-export type filters = {
-    date: number | null,
-    clientCNPJ: string | null,
-    sellerCPF: string | null,
-    productID: number | null,
-    prodClass: number | null,
-    clientClass: number | null,
-}
 
-export async function getCommissionsWithFilter(filters: filters, compoundData: boolean = false){
+
+export async function getCommissionsWithFilter(filters: commissionFilters, compoundData: boolean = false){
     // Essentially makes "after" equal to "null" or the date of the last month, 3 months, 6 months, or year
     let dateRange = [0, 1, 3, 6, 12]
     let now = new Date(Date.now());
@@ -47,4 +41,21 @@ export async function getCutFromCommission(comissao: any){
     let prod = await instance.get(`/products/${comissao.productId}`);
     let comm_perc = Number(process.env.NEXT_PUBLIC_BASE_COMMISSION_VALUE) + Number(cli.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_CLIENT_BONUS : 0) + Number(prod.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_PROD_BONUS : 0);
     return (Number(comissao.value) * comm_perc).toString();
+}
+
+export async function getProductsWithFilter(filters: productFilters){
+  let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
+  let products: any = await instance.get("/products", { params: {
+    status: status,
+  }});
+  return products;
+}
+
+export async function getClientsWithFilter(filters: clientFilters){
+  let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
+  let clients: any = await instance.get("/clients", { params: {
+    segment: filters.segment,
+    status: status,
+  }});
+  return clients;
 }

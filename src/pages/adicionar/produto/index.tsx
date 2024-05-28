@@ -1,7 +1,7 @@
 
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/requests/instance';
+import instance from '@/scripts/http-requests/instance';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';

@@ -1,7 +1,7 @@
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/requests/instance';
-import { extractFloat, formatCNPJ, formatCPF, formatMoney } from '@/scripts/validation/dataFormatter';
+import instance from '@/scripts/http-requests/instance';
+import { extractFloat, formatCNPJ, formatCPF, formatMoney } from '@/scripts/utils/dataFormatter';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
@@ -9,7 +9,7 @@ import CommissionModal from '@/modules/commissions_modal';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
-import { getCutFromCommission } from '@/scripts/requests/InstanceSamples';
+import { getCutFromCommission } from '@/scripts/http-requests/InstanceSamples';
 
 interface Comissao {
   sellerData: string;

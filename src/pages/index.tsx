@@ -5,7 +5,7 @@ import { Button, Label, TextInput } from "flowbite-react";
 import Swal from 'sweetalert2';
 import { useRouter } from "next/router";
 import cookie from "@boiseitguru/cookie-cutter";
-import instance from "@/scripts/requests/instance";
+import instance from "@/scripts/http-requests/instance";
 import FormCard from '@/modules/form_card';
 import { failureAlert } from '@/scripts/utils/shared';
 

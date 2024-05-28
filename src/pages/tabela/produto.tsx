@@ -1,10 +1,11 @@
 import '@/app/globals.css'
+import { productExcelTableRow, productFilters } from '@/models/models';
 import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
 import LoaderAnim from '@/modules/loader';
 import ProductTableRow from '@/modules/product_table_row';
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/requests/instance';
+import { getProductsWithFilter } from '@/scripts/http-requests/InstanceSamples';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -12,29 +13,18 @@ import { useEffect, useState } from 'react';
 export default function Products() {
   const [isLoading, setIsLoading] = useState(true); 
   const [data, setData] = useState([]);
-  const [filters, setFilters] = useState<{
-    class: number | null,
-  }>({
+  const [filters, setFilters] = useState<productFilters>({
     class: null,
   });
 
   async function getData() {
-    setIsLoading(true)
-    let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
-    let products: any = await instance.get("/products", { params: {
-      status: status,
-    }});
-
-    setData(products.data);
+    setIsLoading(true)    
+    setData(await getProductsWithFilter(filters));
     setIsLoading(false)
   }
-  function getExcelData(){
-    const newArray = data.map((row: {
-      id: number,
-      name: string,
-      description: string,
-      status: number,
-    }) => {
+
+  function dataToExcel(){
+    const excelRows = data.map((row: productExcelTableRow) => {
       return {
         "ID": row.id,
         "Nome": row.name,
@@ -42,7 +32,7 @@ export default function Products() {
         "Status": row.status,
       }
     })
-    return newArray
+    return excelRows
   }
 
   useEffect(() => {
@@ -100,7 +90,7 @@ export default function Products() {
                 </div>
               </div>
             </div>
-          <ExportButton jsonData={getExcelData()} filename="produtos"/>
+          <ExportButton jsonData={dataToExcel()} filename="produtos"/>
         </ContentArea>
     </main>
   );

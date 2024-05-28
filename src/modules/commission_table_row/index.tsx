@@ -1,4 +1,4 @@
-import { formatCNPJ, formatCPF, formatMoney } from "@/scripts/validation/dataFormatter";
+import { formatCNPJ, formatCPF, formatMoney } from "@/scripts/utils/dataFormatter";
 import { Table } from "flowbite-react/components/Table"
 
 type CommissionTableRowProps = {

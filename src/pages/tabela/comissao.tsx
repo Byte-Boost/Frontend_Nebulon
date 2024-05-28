@@ -1,11 +1,12 @@
 import '@/app/globals.css'
+import { commissionExcelTableRow, commissionFilterLabels, commissionFilters } from '@/models/models';
 import CommissionTableRow from '@/modules/commission_table_row';
 import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
 import LoaderAnim from '@/modules/loader';
 import Sidebar from '@/modules/sidebar';
-import { filters, getCommissionsWithFilter } from '@/scripts/requests/InstanceSamples';
-import { formatCNPJ, formatCPF, formatMoney } from '@/scripts/validation/dataFormatter';
+import { getCommissionsWithFilter } from '@/scripts/http-requests/InstanceSamples';
+import { formatCNPJ, formatCPF, formatMoney } from '@/scripts/utils/dataFormatter';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -15,17 +16,13 @@ export default function Commissions() {
   // Table data
   const [data, setData] = useState([]);
   // Filter labels - used to display the current filters
-  const [filterLabel, setFilterLabel] = useState<{
-    client: string | null,
-    seller: string | null,
-    product: string | null,
-  }>({
+  const [filterLabel, setFilterLabel] = useState<commissionFilterLabels>({
     client: null,
     seller: null,
     product: null,
   });
   // Filters data - what is selected to filter the data
-  const [filters, setFilters] = useState<filters>({
+  const [filters, setFilters] = useState<commissionFilters>({
     date: null,
     clientCNPJ: null,
     sellerCPF: null,
@@ -142,17 +139,7 @@ export default function Commissions() {
     setIsLoading(false)
   }
   function getExcelData(){
-    const newArray = data.map((row: {
-      date: Date,
-      seller_data: { id: number, name: string },
-      sellerCPF: string,
-      productId: number,
-      product_data: { name: string },
-      client_data: { id: number, tradingName: string, segment: string },
-      clientCNPJ: string,
-      value: string,
-      paymentMethod: string
-    }) => {
+    const excelRows = data.map((row: commissionExcelTableRow) => {
       return {
         "Data da venda": new Date(row.date),
         "ID Vendedor": row.seller_data.id,
@@ -168,7 +155,7 @@ export default function Commissions() {
         "Forma de Pagamento": row.paymentMethod,
       }
     })
-    return newArray
+    return excelRows
   }
   useEffect(() => {
     getData()

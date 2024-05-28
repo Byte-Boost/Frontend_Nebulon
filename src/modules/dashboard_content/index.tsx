@@ -3,8 +3,8 @@ import ChartTemplate from "../chart_template";
 import DashboardNumberCard from "../dashboard_number_card";
 import PieTemplate from "../pie_template";
 import { useEffect, useState } from "react";
-import instance from "@/scripts/requests/instance";
-import { formatMoney } from "@/scripts/validation/dataFormatter";
+import instance from "@/scripts/http-requests/instance";
+import { formatMoney } from "@/scripts/utils/dataFormatter";
 
 const DashboardContent = () => {
   let currentMonthIndex= Number(new Date().getMonth());

@@ -1,4 +1,4 @@
-import { formatPhoneNumber } from "@/scripts/validation/dataFormatter";
+import { formatPhoneNumber } from "@/scripts/utils/dataFormatter";
 import { Table } from "flowbite-react/components/Table"
 
 type ClientTableRowProps = {

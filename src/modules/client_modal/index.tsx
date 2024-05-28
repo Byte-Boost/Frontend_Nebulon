@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 import UploadCard from "../upload_card";
-import instance from "@/scripts/requests/instance";
-import xlsxToJSON from "@/scripts/dataUtils/xlsxToJSON";
+import instance from "@/scripts/http-requests/instance";
+import xlsxToJSON from "@/scripts/file-format-scripts/xlsxToJSON";
 import { Modal } from "flowbite-react";
 import { failureAlert, successAlert } from "@/scripts/utils/shared";
 

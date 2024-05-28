@@ -2,9 +2,9 @@ import '@/app/globals.css'
 import ClientModal from '@/modules/client_modal';
 import FormCard from '@/modules/form_card';
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/requests/instance';
+import instance from '@/scripts/http-requests/instance';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
-import { formatCNPJ, formatPhoneNumber } from '@/scripts/validation/dataFormatter';
+import { formatCNPJ, formatPhoneNumber } from '@/scripts/utils/dataFormatter';
 import { Label, TextInput } from 'flowbite-react';
 import Head from 'next/head';
 import React, { useState } from 'react';
