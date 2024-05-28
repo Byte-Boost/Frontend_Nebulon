@@ -12,13 +12,6 @@ import { useEffect, useState } from 'react';
 
 export default function Commissions() {
   const [isLoading, setIsLoading] = useState(true);
-  const RateMatrix = [[
-    process.env.NEXT_PUBLIC_PNCN,
-    process.env.NEXT_PUBLIC_PNCV
-  ], [
-    process.env.NEXT_PUBLIC_PVCN,
-    process.env.NEXT_PUBLIC_PVCV
-  ]];
   // Table data
   const [data, setData] = useState([]);
   // Filter labels - used to display the current filters
@@ -180,7 +173,6 @@ export default function Commissions() {
       commission.seller_data = await instance.get(`/sellers/cpf/${commission.sellerCPF}`).then(res=>res.data);
       commission.client_data = await instance.get(`/clients/cnpj/${commission.clientCNPJ}`).then(res=>res.data);
       commission.product_data = await instance.get(`/products/${commission.productId}`).then(res=>res.data);
-      commission.comm_value = (commission.value * (commission.product_data.percentage + Number(RateMatrix[commission.product_data.status][commission.client_data.status])))
     }
     // set the data to the fetched data
     setData(commissions.data);
@@ -341,7 +333,7 @@ export default function Commissions() {
                   </Table.Head>
 
                   <Table.Body className="text-black px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                    {data.map((commission: { date: string , value:string, comm_value: any, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {                      
+                    {data.map((commission: { date: string , value:string, commissionCut: any, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {                      
                       return (
                         <CommissionTableRow
                           key={index}
@@ -362,7 +354,7 @@ export default function Commissions() {
                             status: commission.product_data.status,
                           }}
                           sale_value={parseFloat(commission.value)}
-                          comm_value={parseFloat(commission.comm_value)}
+                          comm_value={commission.commissionCut}
                           handleSellerFilter={changeSellerFilter}
                           handleClientFilter={changeClientFilter}
                           handleProductFilter={changeProductFilter}

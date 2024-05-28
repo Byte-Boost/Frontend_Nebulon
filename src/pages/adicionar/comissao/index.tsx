@@ -14,6 +14,7 @@ interface Comissao {
   sellerData: string;
   clientData: string;
   value: string;
+  commissionCut: string;
   paymentMethod: string;
   sellerCPF: string;
   clientCNPJ: string;
@@ -25,6 +26,7 @@ export default function Home() {
     sellerData: '',
     clientData: '',
     value: '',
+    commissionCut: '',
     paymentMethod: '',
     sellerCPF: '',
     clientCNPJ: '',
@@ -42,13 +44,17 @@ export default function Home() {
     setComissao({ ...comissao, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     // Formatação dos dados
     comissao.sellerCPF=comissao.sellerCPF.replace(/\D/g, '');
     comissao.clientCNPJ=comissao.clientCNPJ.replace(/\D/g, '');
     comissao.value=extractFloat(comissao.value).toString();
+    let cli = await instance.get(`/clients/cnpj/${comissao.clientCNPJ}`);
+    let prod = await instance.get(`/products/${comissao.productId}`);
+    let comm_perc = Number(process.env.NEXT_PUBLIC_BASE_COMMISSION_VALUE) + Number(cli.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_CLIENT_BONUS : 0) + Number(prod.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_PROD_BONUS : 0);
+    comissao.commissionCut = (Number(comissao.value) * comm_perc).toString();
 
     // Requisição POST
     instance.post('/commissions',{
@@ -56,6 +62,7 @@ export default function Home() {
       clientData: comissao.clientData,
       date: Date.now(),
       value: comissao.value,
+      commissionCut: comissao.commissionCut,
       paymentMethod: comissao.paymentMethod,
       sellerCPF: comissao.sellerCPF,
       clientCNPJ: comissao.clientCNPJ,
@@ -67,6 +74,7 @@ export default function Home() {
         sellerData: '',
         clientData: '',
         value: '',
+        commissionCut: '',
         paymentMethod: '',
         sellerCPF: '',
         clientCNPJ: '',

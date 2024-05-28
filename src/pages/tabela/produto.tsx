@@ -35,14 +35,11 @@ export default function Products() {
       description: string,
       status: number,
     }) => {
-      // Aliquota Should be `=IF(INDIRECT("RC[-1]",0)= 0, ${0.025}, ${0.015}))`, but formulas aren't working
-      // 0.025 and 0.015 are magic numbers, and should be in ENV
       return {
         "ID": row.id,
         "Nome": row.name,
         "Descrição": row.description,
         "Status": row.status,
-        "Alíquota": `${0.015}`,
       }
     })
     return newArray
@@ -85,17 +82,15 @@ export default function Products() {
                   <Table.Head className='text-left text-lg text-[#fbfbfb]'>
                     <Table.HeadCell>Nome</Table.HeadCell>
                     <Table.HeadCell>Descrição</Table.HeadCell>
-                    <Table.HeadCell>Porcentagem</Table.HeadCell>
                     <Table.HeadCell>Novo</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                        {data.map((product: { name: string , description:string, percentage:number, status:number }, index: number) => {
+                        {data.map((product: { name: string , description:string, status:number }, index: number) => {
                       return (
                         <ProductTableRow
                           key={index}
                           name={product.name}
                           description={product.description}
-                          percentage={product.percentage}
                           status={product.status}
                         />
                       )

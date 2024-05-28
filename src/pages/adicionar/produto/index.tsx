@@ -13,25 +13,15 @@ import { failureAlert, successAlert } from '@/scripts/utils/shared';
 interface Produto {
   name: string;
   description: string;
-  percentage: string;
 }
 
 export default function Home() {
   const [produto, setProduct] = useState<Produto>({
     name: '',
     description: '',
-    percentage: '',    
   });
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalSize, setModalSize] = useState<string>('md');
-
-  let jsonData: Array<any> = [];
-  const [file, setFile] = useState()
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -46,14 +36,12 @@ export default function Home() {
     instance.post('/products',{
       name: produto.name,
       description: produto.description,
-      percentage: produto.percentage,      
     })
     .then(function(response){
       successAlert("Produto cadastrado com sucesso!", "Product added");
       setProduct({
         name: '',
         description: '',
-        percentage: '',
       });
     })
     .catch(error => {
@@ -90,13 +78,6 @@ export default function Home() {
               <Label htmlFor="description" value="Descrição do Produto:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
                 <TextInput id="description" type="text" name="description" value={produto.description} onChange={handleChange} required />
-              </div>
-          </div>
-
-          <div>
-              <Label htmlFor="valuePercentage" value="Porcentagem:" className="font-bold" />
-              <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="valuePercentage" type="text" name="percentage" value={produto.percentage} onChange={handleChange} required />
               </div>
           </div>
           
