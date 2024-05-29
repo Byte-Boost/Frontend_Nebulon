@@ -134,7 +134,7 @@ const DashboardContent = () => {
           <ChartTemplate 
           type='line' 
           id='lineGraph' 
-          title='lineGraph' 
+          title='Total de Vendas' 
           dataX={dataX} 
           dataY={dataY} 
           colors={['rgb(147 ,51 ,234)']} 
@@ -170,22 +170,20 @@ const DashboardContent = () => {
         </div>
       </div>
 
-      <div id="infoBar" className='row-span-2 flex justify-center p-2'>
-        <Card className='grow flex flex-col p-4'>
-          <DashboardNumberCard title={`Total de Vendas (${(new Date()).getFullYear()})`}number={`${formatMoney(totalSellsValue.toString() + "00")}`} percentage="5,4%"/>
-          <DashboardNumberCard title={`Comissão ${MonthName(new Date())}`} number={`${formatMoney(totalComissionValueCurrentMonth.toString() + "00")}`} percentage="5,4%"/>
-          <DashboardNumberCard title={`Vendas Realizadas | ${(currentMonthIndex+1) + '/' + (new Date()).getFullYear()}`} number={`${quantitySellsCurrentMonth}`} percentage="5,4%"/>
-        </Card>
+      <div id="infoBar" className='row-span-2 flex  flex-col justify-center p-2'>
+          <DashboardNumberCard title={`Total de Vendas (${(new Date()).getFullYear()})`}number={`${formatMoney(totalSellsValue.toString() + "00")}`} percentage=""/>
+          <DashboardNumberCard title={`Total de Vendas: ${MonthName(new Date())}`} number={`${formatMoney(totalComissionValueCurrentMonth.toString() + "00")}`} percentage=""/>
+          <DashboardNumberCard title={`Número de Vendas: ${MonthName(new Date())}`} number={`${quantitySellsCurrentMonth}`} percentage=""/>
       </div>
 
       <div id="pieChart" className='col-span-2 flex justify-center p-2'>
         <div className='grow border-2 rounded-lg '>
           <ChartTemplate  
-          title="pieChart" 
+          title="Vendas por categoria" 
           type="pie" 
           id='pieChart' 
-          dataX={[...dataX].reverse().slice(0,6)} 
-          dataY={[...dataY].reverse().slice(0,6)} 
+          dataX={['1ª compra, produto novo.','1ª compra, produto na base.', 'Cliente, produto novo', 'Cliente, produto na base']} 
+          dataY={[...dataY].reverse().slice(0,4)} 
           colors={[    // Colors for each month (if theres is twelve months)
             '#1f77b4', // January - Blue
             '#ff7f0e', // February - Orange
@@ -223,17 +221,19 @@ const DashboardContent = () => {
 
             <div className="text-left">
               <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                Produtos</button>
+                Produtos
+                </button>
             </div>
 
             <div className="text-left">
               <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                Clientes</button>
+                Clientes
+                </button>
             </div>
 
             <div className="text-left">
               <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                Meses
+                Categoria
               </button>
             </div>
 

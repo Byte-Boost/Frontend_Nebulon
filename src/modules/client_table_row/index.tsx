@@ -26,7 +26,7 @@ const ClientTableRow = ({
           {formatPhoneNumber(contact)}
         </Table.Cell>
         <Table.Cell>
-          {status === 0 ? "Novo" : "Velho"}
+          {status === 0 ? "Sim" : "Não"}
         </Table.Cell>
       </Table.Row>
     )

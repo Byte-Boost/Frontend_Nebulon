@@ -58,14 +58,14 @@ export default function Clients() {
                 <section className='w-full text-left flex justify-between pb-6'>
                   <h1 className='text-6xl font-bold text-gray-900 inline'>Clientes</h1>
                   <div className="inline-block m-4">
-                    <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de cliente</label>
+                    <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Cliente Novo</label>
                     <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
                       filters.class = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
                       getData()
                     }}>
                       <option value={undefined}>Qualquer</option>
-                      <option value={0}>Novo</option>
-                      <option value={1}>Velho</option>
+                      <option value={0}>Sim</option>
+                      <option value={1}>Não</option>
                     </select>
                   </div>
                 </section>
@@ -76,7 +76,7 @@ export default function Clients() {
                     <Table.HeadCell>Razão Social</Table.HeadCell>
                     <Table.HeadCell>Segmento</Table.HeadCell>
                     <Table.HeadCell>Contato</Table.HeadCell>
-                    <Table.HeadCell>Status</Table.HeadCell>
+                    <Table.HeadCell>Novo</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     

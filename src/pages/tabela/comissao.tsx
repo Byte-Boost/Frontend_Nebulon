@@ -267,7 +267,7 @@ export default function Commissions() {
 
                 {isLoading ? <div className='grid place-content-center '><LoaderAnim /></div>  :
                 <Table className="w-100 rounded-lg bg-purple-500">
-                  <Table.Head className='w-full text-left text-lg text-[#fbfbfb]'>
+                  <Table.Head className='w-full text-left text-md text-[#fbfbfb]'>
                     <Table.HeadCell onClick={(e:any) => changeDateSorting()} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Data da Venda {sortLabel.sharedSort && sortTarget==='date'? sortLabel.sharedSort =='Mais Velha'? '\u2193': '\u2191' : null }</Table.HeadCell>
                     <Table.HeadCell onClick={(e:any) => changeAlphabeticalSorting(false,['seller_data','name'])} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Vendendor {sortLabel.sharedSort && sortTarget === 'seller_data' ? sortLabel.sharedSort =='Alfabética Inversa'? '\u2193': '\u2191' : null }</Table.HeadCell>
                     <Table.HeadCell>CPF do Vendendor</Table.HeadCell>
@@ -320,7 +320,7 @@ export default function Commissions() {
                               <span className="ml-2">{'R$  '}</span>
                             </div>
                             <div className="justify-end">
-                              <span className="ml-2">{formatMoney(data.reduce((acc, curr: any) => acc + parseFloat(curr.comm_value), 0).toFixed(2), false)}</span> 
+                              <span className="ml-2">{formatMoney(data.reduce((acc, curr: any) => acc + parseFloat(curr.commissionCut), 0).toFixed(2), false)}</span> 
                             </div>
                           </div>
                         </td>
