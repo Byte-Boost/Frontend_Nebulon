@@ -3,19 +3,14 @@ import Head from 'next/head';
 import Sidebar from '@/modules/sidebar';
 import React, { useState } from "react";
 import { Label, TextInput } from "flowbite-react";
-import Swal from 'sweetalert2';
 import instance from '@/scripts/http-requests/instance';
 import { formatCPF } from "@/scripts/utils/dataFormatter";
 import SellerModal from '@/modules/seller_modal';
 import FormCard from '@/modules/form_card';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
+import { Seller } from '@/models/models';
 
-interface Seller {
-  name: string;
-  cpf: string;
-  username: string;
-  password: string;
-}
+
 
 export default function Home() {
   const [modalIsOpen, setModalIsOpen] = useState(false);

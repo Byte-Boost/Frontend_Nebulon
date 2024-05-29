@@ -1,5 +1,5 @@
 import '@/app/globals.css'
-import { commissionExcelTableRow, commissionFilterLabels, commissionFilters } from '@/models/models';
+import { SortLabelType, commissionExcelTableRow, commissionFilterLabels, commissionFilters } from '@/models/models';
 import CommissionTableRow from '@/modules/commission_table_row';
 import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
@@ -15,13 +15,12 @@ export default function Commissions() {
   const [isLoading, setIsLoading] = useState(true);
   // Table data
   const [data, setData] = useState([]);
-  // Filter labels - used to display the current filters
+  // Filters data - what is selected to filter the data
   const [filterLabel, setFilterLabel] = useState<commissionFilterLabels>({
     client: null,
     seller: null,
     product: null,
   });
-  // Filters data - what is selected to filter the data
   const [filters, setFilters] = useState<commissionFilters>({
     date: null,
     clientCNPJ: null,
@@ -50,9 +49,6 @@ export default function Commissions() {
     getData();
   }
   // Sort labels
-  type SortLabelType = {
-    sharedSort: string | null;
-  };
   const [sortLabel, setSortLabel] = useState<SortLabelType>({
     sharedSort: null,
   })

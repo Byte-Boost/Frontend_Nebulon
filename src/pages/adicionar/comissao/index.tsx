@@ -1,38 +1,26 @@
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/http-requests/instance';
-import { extractFloat, formatCNPJ, formatCPF, formatMoney } from '@/scripts/utils/dataFormatter';
+import { formatCNPJ, formatCPF, formatMoney } from '@/scripts/utils/dataFormatter';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import Swal from 'sweetalert2';
 import CommissionModal from '@/modules/commissions_modal';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
+import { postCommission } from '@/scripts/http-requests/InstanceSamples';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
-import { getCutFromCommission } from '@/scripts/http-requests/InstanceSamples';
+import { Comissao } from '@/models/models';
 
-interface Comissao {
-  sellerData: string;
-  clientData: string;
-  value: string;
-  commissionCut: string;
-  paymentMethod: string;
-  sellerCPF: string;
-  clientCNPJ: string;
-  productId: string;
-}
 
 export default function Home() {
-  const [comissao, setComissao] = useState<Comissao>({
-    sellerData: '',
-    clientData: '',
+  let emptyComm = {
     value: '',
-    commissionCut: '',
     paymentMethod: '',
     sellerCPF: '',
     clientCNPJ: '',
     productId: ''
-  });
+  }
+  
+  const [comissao, setComissao] = useState<Comissao>(emptyComm);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -48,36 +36,10 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Formatação dos dados
-    comissao.sellerCPF=comissao.sellerCPF.replace(/\D/g, '');
-    comissao.clientCNPJ=comissao.clientCNPJ.replace(/\D/g, '');
-    comissao.value=extractFloat(comissao.value).toString();
-    comissao.commissionCut= await getCutFromCommission(comissao);
-
-    // Requisição POST
-    instance.post('/commissions',{
-      sellerData: comissao.sellerData,
-      clientData: comissao.clientData,
-      date: Date.now(),
-      value: comissao.value,
-      commissionCut: comissao.commissionCut,
-      paymentMethod: comissao.paymentMethod,
-      sellerCPF: comissao.sellerCPF,
-      clientCNPJ: comissao.clientCNPJ,
-      productId: comissao.productId
-    }) 
+    postCommission(comissao)
     .then(function(response){
       successAlert("Comissão cadastrada com sucesso!", "Commission added successfully");
-      setComissao({
-        sellerData: '',
-        clientData: '',
-        value: '',
-        commissionCut: '',
-        paymentMethod: '',
-        sellerCPF: '',
-        clientCNPJ: '',
-        productId: ''
-      });
+      setComissao(emptyComm);
     })
     .catch(error => {
       failureAlert("Error adding new commission");

@@ -1,4 +1,11 @@
 // Commissions
+export type  Comissao = {
+    value: string;
+    paymentMethod: string;
+    sellerCPF: string;
+    clientCNPJ: string;
+    productId: string;
+}
 export type commissionExcelTableRow = {
     date: Date,
     seller_data: { id: number, name: string },
@@ -23,8 +30,14 @@ export type commissionFilters = {
     prodClass: number | null,
     clientClass: number | null,
 }
-
+export type SortLabelType = {
+    sharedSort: string | null;
+};
 // Products
+export type Produto = {
+    name: string;
+    description: string;
+}
 export type productExcelTableRow = {
     id: number,
     name: string,
@@ -48,4 +61,12 @@ export type clientExcelTableRow = {
 export type clientFilters = {
     class: number | null,
     segment: string | null,
+}
+
+// Sellers
+export type Seller = {
+    name: string;
+    cpf: string;
+    username: string;
+    password: string;
 }

@@ -19,7 +19,8 @@ export default function Products() {
 
   async function getData() {
     setIsLoading(true)    
-    setData(await getProductsWithFilter(filters));
+    let products = await getProductsWithFilter(filters)
+    setData(products.data);
     setIsLoading(false)
   }
 

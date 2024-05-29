@@ -2,13 +2,12 @@ import '@/app/globals.css'
 import ClientModal from '@/modules/client_modal';
 import FormCard from '@/modules/form_card';
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/http-requests/instance';
-import { failureAlert, successAlert } from '@/scripts/utils/shared';
+import { postClient } from '@/scripts/http-requests/InstanceSamples';
 import { formatCNPJ, formatPhoneNumber } from '@/scripts/utils/dataFormatter';
+import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { Label, TextInput } from 'flowbite-react';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import Swal from 'sweetalert2';
 
 interface Cliente {
   cnpj: string;
@@ -18,13 +17,14 @@ interface Cliente {
   telefone: string;
 }
 export default function Home() {
-  const [cliente, setCliente] = useState<Cliente>({
+  let emptyCli = {
     cnpj: '',
     nomeFantasia: '',
     razaoSocial: '',
     segmento: '',
     telefone: ''
-  });
+  }
+  const [cliente, setCliente] = useState<Cliente>(emptyCli);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const closeModal = () => {
     setModalIsOpen(false);
@@ -35,25 +35,11 @@ export default function Home() {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    cliente.cnpj=cliente.cnpj.replace(/\D/g, '');
-    cliente.telefone=cliente.telefone.replace(/\D/g, '');
-
-    instance.post('/clients',{
-      tradingName: cliente.nomeFantasia,
-      companyName: cliente.razaoSocial,
-      cnpj: cliente.cnpj,
-      segment: cliente.segmento,
-      contact: cliente.telefone
-    })
+    
+    postClient(cliente)
     .then(function(response){
       successAlert("Cliente cadastrado com sucesso!", "Client added successfully");
-      setCliente({
-        cnpj: '',
-        nomeFantasia: '',
-        razaoSocial: '',
-        segmento: '',
-        telefone: ''
-      });
+      setCliente(emptyCli);
     })
     .catch(error => {
       failureAlert("Error adding new client")

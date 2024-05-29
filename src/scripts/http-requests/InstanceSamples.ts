@@ -1,5 +1,6 @@
 import { clientFilters, commissionFilters, productFilters } from "@/models/models";
 import instance from "./instance";
+import { extractFloat } from "../utils/dataFormatter";
 
 
 export async function getCommissionsWithFilter(filters: commissionFilters, compoundData: boolean = false){
@@ -35,12 +36,33 @@ export async function getCommissionsWithFilter(filters: commissionFilters, compo
 
     return commissions
 }
-
 export async function getCutFromCommission(comissao: any){
     let cli = await instance.get(`/clients/cnpj/${comissao.clientCNPJ}`);
     let prod = await instance.get(`/products/${comissao.productId}`);
     let comm_perc = Number(process.env.NEXT_PUBLIC_BASE_COMMISSION_VALUE) + Number(cli.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_CLIENT_BONUS : 0) + Number(prod.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_PROD_BONUS : 0);
     return (Number(comissao.value) * comm_perc).toString();
+}
+export async function postCommission(comissao: any){
+  // Formatação dos dados
+  comissao.sellerCPF=comissao.sellerCPF.replace(/\D/g, '');
+  comissao.clientCNPJ=comissao.clientCNPJ.replace(/\D/g, '');
+  comissao.value=extractFloat(comissao.value).toString();
+  comissao.commissionCut= await getCutFromCommission(comissao);
+
+  // Requisição POST
+  let res = await instance.post('/commissions',{
+    sellerData: comissao.sellerData,
+    clientData: comissao.clientData,
+    date: Date.now(),
+    value: comissao.value,
+    commissionCut: comissao.commissionCut,
+    paymentMethod: comissao.paymentMethod,
+    sellerCPF: comissao.sellerCPF,
+    clientCNPJ: comissao.clientCNPJ,
+    productId: comissao.productId
+  }) 
+
+  return res;
 }
 
 export async function getProductsWithFilter(filters: productFilters){
@@ -50,6 +72,13 @@ export async function getProductsWithFilter(filters: productFilters){
   }});
   return products;
 }
+export async function postProduct(produto: any){
+  let res = await instance.post('/products',{
+    name: produto.name,
+    description: produto.description,
+  })
+  return res;
+}
 
 export async function getClientsWithFilter(filters: clientFilters){
   let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
@@ -58,4 +87,16 @@ export async function getClientsWithFilter(filters: clientFilters){
     status: status,
   }});
   return clients;
+}
+export async function postClient(cliente: any){
+  cliente.cnpj=cliente.cnpj.replace(/\D/g, '');
+  cliente.telefone=cliente.telefone.replace(/\D/g, '');
+  let res = await instance.post('/clients',{
+    tradingName: cliente.nomeFantasia,
+    companyName: cliente.razaoSocial,
+    cnpj: cliente.cnpj,
+    segment: cliente.segmento,
+    contact: cliente.telefone
+  })
+  return res;
 }

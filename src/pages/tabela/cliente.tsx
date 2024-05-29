@@ -6,7 +6,6 @@ import ExportButton from '@/modules/export_button';
 import LoaderAnim from '@/modules/loader';
 import Sidebar from '@/modules/sidebar';
 import { getClientsWithFilter } from '@/scripts/http-requests/InstanceSamples';
-import instance from '@/scripts/http-requests/instance';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -21,7 +20,8 @@ export default function Clients() {
   
   async function getData() {
     setIsLoading(true)
-    setData(await getClientsWithFilter(filters));
+    let clients = await getClientsWithFilter(filters)
+    setData(clients.data);
     setIsLoading(false)
   }
   function getExcelData(){
