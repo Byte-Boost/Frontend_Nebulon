@@ -1,8 +1,8 @@
-import { clientFilters, commissionFilters, productFilters } from "@/models/models";
+import { clientFilters, commissionFilters, createCommissionDto, createProductDto, createSellerDto, productFilters } from "@/models/models";
 import instance from "./instance";
 import { extractFloat } from "../utils/dataFormatter";
 
-
+// Commissions
 export async function getCommissionsWithFilter(filters: commissionFilters, compoundData: boolean = false){
     // Essentially makes "after" equal to "null" or the date of the last month, 3 months, 6 months, or year
     let dateRange = [0, 1, 3, 6, 12]
@@ -43,7 +43,7 @@ export async function getCutFromCommission(comissao: any){
     let comm_perc = Number(process.env.NEXT_PUBLIC_BASE_COMMISSION_VALUE) + Number(cli.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_CLIENT_BONUS : 0) + Number(prod.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_PROD_BONUS : 0);
     return (Number(comissao.value) * comm_perc).toString();
 }
-export async function postCommission(comissao: any){
+export async function postCommission(comissao: createCommissionDto){
   // Formatação dos dados
   comissao.sellerCPF=comissao.sellerCPF.replace(/\D/g, '');
   comissao.clientCNPJ=comissao.clientCNPJ.replace(/\D/g, '');
@@ -66,6 +66,7 @@ export async function postCommission(comissao: any){
   return res;
 }
 
+// Products
 export async function getProductsWithFilter(filters: productFilters){
   let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
   let products: any = await instance.get("/products", { params: {
@@ -73,14 +74,16 @@ export async function getProductsWithFilter(filters: productFilters){
   }});
   return products;
 }
-export async function postProduct(produto: any){
+export async function postProduct(produto: createProductDto){
   let res = await instance.post('/products',{
     name: produto.name,
     description: produto.description,
+    status: produto.status || 0
   })
   return res;
 }
 
+// Clients
 export async function getClientsWithFilter(filters: clientFilters){
   let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
   let clients: any = await instance.get("/clients", { params: {
@@ -92,12 +95,26 @@ export async function getClientsWithFilter(filters: clientFilters){
 export async function postClient(cliente: any){
   cliente.cnpj=cliente.cnpj.replace(/\D/g, '');
   cliente.telefone=cliente.telefone.replace(/\D/g, '');
+  
   let res = await instance.post('/clients',{
     tradingName: cliente.nomeFantasia,
     companyName: cliente.razaoSocial,
     cnpj: cliente.cnpj,
     segment: cliente.segmento,
     contact: cliente.telefone
+  })
+  return res;
+}
+
+// Sellers
+export async function postSeller(user: createSellerDto){
+  user.cpf=user.cpf.replace(/\D/g, '');
+
+  let res = await instance.post('/account/register',{
+    name: user.name,
+    cpf: user.cpf,
+    username: user.username,
+    password: user.password
   })
   return res;
 }

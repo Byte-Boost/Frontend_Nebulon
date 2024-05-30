@@ -9,6 +9,7 @@ import FormCard from '@/modules/form_card';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { Seller } from '@/models/models';
 import UploadModal from '@/modules/upload_modal';
+import { postSeller } from '@/scripts/http-requests/InstanceSamples';
 
 export default function Home() {
   const emptyUser = {
@@ -31,23 +32,11 @@ export default function Home() {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
-    user.cpf=user.cpf.replace(/\D/g, '');
     
-    instance.post('/account/register',{
-      name: user.name,
-      cpf: user.cpf,
-      username: user.username,
-      password: user.password
-    })
+    postSeller(user)
     .then(function(response){
       successAlert("Vendedor cadastrado com sucesso!", "Seller/user registered successfully");
-      setUser({
-        name: '',
-        cpf: '',
-        username: '',
-        password: ''
-      })
+      setUser(emptyUser)
     })
     .catch(error => {
       failureAlert("Error registering Seller/user");

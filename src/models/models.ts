@@ -49,6 +49,17 @@ export type commissionFilters = {
 export type SortLabelType = {
     sharedSort: string | null;
 };
+export type createCommissionDto = {
+    sellerData?: any,
+    clientData?: any,
+    commissionCut?: string,
+    date?: Date,
+    value: string,
+    paymentMethod: string,
+    sellerCPF: string,
+    clientCNPJ: string,
+    productId: number | string
+}
 
 // Products
 export type Produto = {
@@ -68,6 +79,11 @@ export type productExcelTableRow = {
 }
 export type productFilters = {
     class: number | null,
+}
+export type createProductDto = {
+    name: string,
+    description: string
+    status?: number
 }
 
 // Clients
@@ -104,6 +120,12 @@ export type Seller = {
     cpf: string;
     username: string;
     password: string;
+}
+export type createSellerDto = {
+    name: string,
+    cpf: string,
+    username: string,
+    password: string
 }
 
 // Modals
