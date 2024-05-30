@@ -1,11 +1,23 @@
 // Commissions
-export type  Comissao = {
+export type Comissao = {
     value: string;
     paymentMethod: string;
     sellerCPF: string;
     clientCNPJ: string;
     productId: string;
 }
+export type CommissionTableRowProps = {
+    date: string;
+    seller_data: {name: string, cpf: string},
+    client_data: {name: string, status: number, cnpj: string},
+    product_data: {name: string, status: number, percentage: number, id: number},
+    sale_value: number,
+    comm_value: number,
+    clientsFirstPurchase: Boolean,
+    handleFilters: Function,
+    handleDateSorting : Function,
+    handleValueSorting : Function,
+};
 export type commissionExcelTableRow = {
     date: Date,
     seller_data: { id: number, name: string },
@@ -37,11 +49,17 @@ export type commissionFilters = {
 export type SortLabelType = {
     sharedSort: string | null;
 };
+
 // Products
 export type Produto = {
     name: string;
     description: string;
 }
+export type ProductTableRowProps = {
+    name: string;
+    description: string;
+    status: number;
+};
 export type productExcelTableRow = {
     id: number,
     name: string,
@@ -53,6 +71,19 @@ export type productFilters = {
 }
 
 // Clients
+export type Cliente = {
+    cnpj: string;
+    nomeFantasia: string;
+    razaoSocial: string;
+    segmento: string;
+    telefone: string;
+}
+export type ClientTableRowProps = {
+    companyName: string;
+    segment: string;
+    contact: string;
+    status: number;
+};
 export type clientExcelTableRow = {
     id: number,
     tradingName: string,
@@ -73,4 +104,12 @@ export type Seller = {
     cpf: string;
     username: string;
     password: string;
+}
+
+// Modals
+export type ModalProps = {
+    isOpen: boolean;
+    closeModal: () => void;
+    postSequence: (excelRow: any) => void;
+    success: {msg: string, log: string};
 }

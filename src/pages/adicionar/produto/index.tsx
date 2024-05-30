@@ -1,24 +1,22 @@
-
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import ProductModal from '@/modules/product_modal';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { Produto } from '@/models/models';
 import { postProduct } from '@/scripts/http-requests/InstanceSamples';
-
+import UploadModal from '@/modules/upload_modal';
+import instance from '@/scripts/http-requests/instance';
 
 export default function Home() {
-  let emptyProd = {
+  const emptyProd = {
     name: '',
     description: '',
   }
 
   const [produto, setProduct] = useState<Produto>(emptyProd);
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -29,7 +27,6 @@ export default function Home() {
     const { name, value } = e.target;
     setProduct({ ...produto, [name]: value });
   };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     
@@ -40,6 +37,13 @@ export default function Home() {
     })
     .catch(error => {
       failureAlert("Error adding new product");
+    })
+  };
+  const handleUpload = async (jsonRow:any) => {
+    await instance.post('/products',{
+      name: jsonRow.Nome,
+      description: jsonRow["Descrição"],
+      status: jsonRow.Status,
     })
   };
 
@@ -79,7 +83,7 @@ export default function Home() {
             </div>
           </div>
         </form>
-      <ProductModal isOpen={modalIsOpen} closeModal={closeModal} />
+      <UploadModal isOpen={modalIsOpen} closeModal={closeModal} postSequence={async (jsonRow)=>{await handleUpload(jsonRow)}} success={{msg: "Produtos cadastrados com sucesso!", log: "Products added"}}/>
     </FormCard>
     </main>
   );

@@ -5,22 +5,30 @@ import React, { useState } from "react";
 import { Label, TextInput } from "flowbite-react";
 import instance from '@/scripts/http-requests/instance';
 import { formatCPF } from "@/scripts/utils/dataFormatter";
-import SellerModal from '@/modules/seller_modal';
 import FormCard from '@/modules/form_card';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { Seller } from '@/models/models';
-
-
+import UploadModal from '@/modules/upload_modal';
 
 export default function Home() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [user, setUser] = useState<Seller>({
+  const emptyUser = {
     name: '',
     cpf: '',
     username: '',
     password: ''
-  });
+  }
 
+  const [user, setUser] = useState<Seller>(emptyUser);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
@@ -45,12 +53,13 @@ export default function Home() {
       failureAlert("Error registering Seller/user");
     })
   };
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+  const handleUpload = async (jsonRow:any) => {
+    await instance.post('/account/register',{
+      name: jsonRow.Nome,
+      username:jsonRow.Nome.replace(/\s/g, '').toLowerCase(),
+      cpf: jsonRow["CPF"].replace(/[^[^\w\s]/gi, ''),
+      password: '12345678',
+    })
   };
 
   return (
@@ -103,7 +112,7 @@ export default function Home() {
               </div>
             </div>
           </form>
-          <SellerModal isOpen={modalIsOpen} closeModal={closeModal} />
+          <UploadModal isOpen={modalIsOpen} closeModal={closeModal}  postSequence={async (jsonRow)=>{await handleUpload(jsonRow)}} success={{msg: "Vendedores cadastrados com sucesso!", log: "Sellers added"}}/>
         </FormCard>
     </main>
   );

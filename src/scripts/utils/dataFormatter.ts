@@ -42,3 +42,15 @@ export function extractFloat(n: string): number {
   n = n.replace(/\d{2}$/, ".$&")                 //Coloca a vírgula antes dos dois últimos dígitos
   return Number(n);
 }
+
+export function formatDateToSlash(date: string): string | undefined{
+  var parts = date.split("-");
+  if (parts.length != 3) {
+    return undefined;
+  }
+  var year = parseInt(parts[0]);
+  var month = parseInt(parts[1]) - 1; // months indexes are zero based, e.g. 9 == Octobre
+  var day = parseInt(parts[2]);
+  let new_date = new Date(year, month, day).toJSON().slice(0,10).split(/-/).reverse().join('/');
+  return new_date;
+}

@@ -1,34 +1,32 @@
 import '@/app/globals.css'
-import ClientModal from '@/modules/client_modal';
+import { Cliente } from '@/models/models';
 import FormCard from '@/modules/form_card';
 import Sidebar from '@/modules/sidebar';
+import UploadModal from '@/modules/upload_modal';
 import { postClient } from '@/scripts/http-requests/InstanceSamples';
+import instance from '@/scripts/http-requests/instance';
 import { formatCNPJ, formatPhoneNumber } from '@/scripts/utils/dataFormatter';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { Label, TextInput } from 'flowbite-react';
 import Head from 'next/head';
 import React, { useState } from 'react';
 
-interface Cliente {
-  cnpj: string;
-  nomeFantasia: string;
-  razaoSocial: string;
-  segmento: string;
-  telefone: string;
-}
 export default function Home() {
-  let emptyCli = {
+  const emptyCli = {
     cnpj: '',
     nomeFantasia: '',
     razaoSocial: '',
     segmento: '',
     telefone: ''
   }
+
   const [cliente, setCliente] = useState<Cliente>(emptyCli);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
   const closeModal = () => {
     setModalIsOpen(false);
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setCliente({ ...cliente, [name]: value });
@@ -43,6 +41,16 @@ export default function Home() {
     })
     .catch(error => {
       failureAlert("Error adding new client")
+    })
+  };
+  const handleUpload = async (jsonRow:any) => {
+    await instance.post('/clients',{
+      tradingName: jsonRow["Nome Fantasia"],
+      companyName: jsonRow["Razão Social"],
+      cnpj: jsonRow["CNPJ"].replace(/[^\w\s]/gi, ''),
+      segment: jsonRow["SEGMENTO"],
+      contact: jsonRow["CONTATO"],
+      status: jsonRow["STATUS"]
     })
   };
 
@@ -103,7 +111,7 @@ export default function Home() {
             </div>
           </div>
         </form>
-        <ClientModal isOpen={modalIsOpen} closeModal={closeModal} />
+        <UploadModal isOpen={modalIsOpen} closeModal={closeModal}  postSequence={async (jsonRow)=>{await handleUpload(jsonRow)}} success={{msg: "Clientes cadastrados com sucesso!", log: "Clients added"}}/>
       </FormCard>
     </main>
   );

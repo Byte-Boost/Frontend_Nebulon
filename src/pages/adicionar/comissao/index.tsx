@@ -3,16 +3,16 @@ import Sidebar from '@/modules/sidebar';
 import { formatCNPJ, formatCPF, formatMoney } from '@/scripts/utils/dataFormatter';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import CommissionModal from '@/modules/commissions_modal';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
-import { postCommission } from '@/scripts/http-requests/InstanceSamples';
+import { getCutFromCommission, postCommission } from '@/scripts/http-requests/InstanceSamples';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { Comissao } from '@/models/models';
-
+import UploadModal from '@/modules/upload_modal';
+import instance from '@/scripts/http-requests/instance';
 
 export default function Home() {
-  let emptyComm = {
+  const emptyComm = {
     value: '',
     paymentMethod: '',
     sellerCPF: '',
@@ -21,7 +21,6 @@ export default function Home() {
   }
   
   const [comissao, setComissao] = useState<Comissao>(emptyComm);
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -32,7 +31,6 @@ export default function Home() {
     const { name, value } = e.target;
     setComissao({ ...comissao, [name]: value });
   };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
@@ -43,6 +41,25 @@ export default function Home() {
     })
     .catch(error => {
       failureAlert("Error adding new commission");
+    })
+  };
+  const handleUpload = async (jsonRow:any) => {
+    let date = new Date(jsonRow["Data da venda"]).toISOString().slice(0, 19).replace('T', ' ');
+    let value = jsonRow["Valor de Venda"];
+    let paymentMethod = jsonRow["Forma de Pagamento"];
+    let sellerCPF = jsonRow["CPF Vendedor"].replace(/[^\w\s]/gi, '');
+    let clienteCNPJ = jsonRow["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, '');
+    let productId = jsonRow["ID Produto"];
+    let cut = await getCutFromCommission({clienteCNPJ, productId, value});
+
+    await instance.post('/commissions',{
+      date: date,
+      value: value,
+      commissionCut: cut,
+      paymentMethod: paymentMethod,
+      sellerCPF: sellerCPF,
+      clientCNPJ: clienteCNPJ,
+      productId: productId,
     })
   };
 
@@ -102,7 +119,7 @@ export default function Home() {
             </div>
           </div>
         </form>
-        <CommissionModal isOpen={modalIsOpen} closeModal={closeModal} />
+        <UploadModal isOpen={modalIsOpen} closeModal={closeModal}  postSequence={async (jsonRow)=>{await handleUpload(jsonRow)}} success={{msg: "Vendas cadastradas com sucesso!", log: "Sales added"}}/>
       </FormCard>
     </main>
   );
