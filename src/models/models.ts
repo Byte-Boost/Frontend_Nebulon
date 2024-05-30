@@ -18,9 +18,10 @@ export type commissionExcelTableRow = {
     paymentMethod: string
 }
 export type commissionFilterLabels = {
-    client: string | null,
-    seller: string | null,
-    product: string | null,
+    clientCNPJ: string | null,
+    sellerCPF: string | null,
+    productID: string | null,
+    [key: string]: null | string;
 }
 export type commissionFilters = {
     date: number | null,
@@ -28,7 +29,10 @@ export type commissionFilters = {
     sellerCPF: string | null,
     productID: number | null,
     prodClass: number | null,
-    clientClass: number | null,
+    clientsFirstPurchase: boolean | null,
+    page: number | null,
+    limit: number | null,
+    [key: string]: null | string | number | boolean;
 }
 export type SortLabelType = {
     sharedSort: string | null;

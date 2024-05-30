@@ -8,9 +8,8 @@ type CommissionTableRowProps = {
   product_data: {name: string, status: number, percentage: number, id: number},
   sale_value: number,
   comm_value: number,
-  handleSellerFilter: Function,
-  handleClientFilter: Function,
-  handleProductFilter: Function,
+  clientsFirstPurchase: Boolean,
+  handleFilters: Function,
   handleDateSorting : Function,
   handleValueSorting : Function,
   
@@ -23,9 +22,8 @@ const CommissionTableRow = ({
   product_data,
   sale_value,
   comm_value,
-  handleSellerFilter,
-  handleClientFilter,
-  handleProductFilter,
+  clientsFirstPurchase,
+  handleFilters,
   handleDateSorting,
   handleValueSorting,
 }: CommissionTableRowProps) => {    
@@ -42,19 +40,23 @@ const CommissionTableRow = ({
          <Table.Cell className="whitespace-nowrap font-medium cursor-pointer" onClick={(e:any)=>handleDateSorting()}>
           {new_date}
         </Table.Cell>
-        <Table.Cell onClick={(e:any)=>handleSellerFilter(seller_data.cpf, e.target.innerText)} className="cursor-pointer">
+        <Table.Cell onClick={(e:any)=>handleFilters("sellerCPF", seller_data.name, seller_data.cpf)} className="cursor-pointer">
           {seller_data.name}
         </Table.Cell>
-        <Table.Cell onClick={(e:any)=>handleSellerFilter(seller_data.cpf, e.target.innerText)} className="cursor-pointer">
+        <Table.Cell onClick={(e:any)=>handleFilters("sellerCPF", seller_data.name, seller_data.cpf)} className="cursor-pointer">
           {formatCPF(seller_data.cpf)}
         </Table.Cell>
-        <Table.Cell onClick={(e:any)=>handleClientFilter(client_data.cnpj, e.target.innerText)} className="cursor-pointer">
+        <Table.Cell onClick={(e:any)=>handleFilters("clientCNPJ", client_data.name, client_data.cnpj)} className="cursor-pointer">
           {client_data.name}
+          { clientsFirstPurchase ? 
+            <span className="bg-yellow-100 text-yellow-800 text-xs font-medium ml-3 me-2 px-1 py-0.5 rounded">1ª Compra</span>
+            : null
+          } 
         </Table.Cell>
-        <Table.Cell onClick={(e:any)=>handleClientFilter(client_data.cnpj, e.target.innerText)} className="cursor-pointer">
+        <Table.Cell onClick={(e:any)=>handleFilters("clientCNPJ", client_data.name, client_data.cnpj)} className="cursor-pointer">
           {formatCNPJ(client_data.cnpj)}
         </Table.Cell>
-        <Table.Cell onClick={(e:any)=>handleProductFilter(product_data.id, e.target.innerText)} className="cursor-pointer">
+        <Table.Cell onClick={(e:any)=>handleFilters("productID", product_data.name, product_data.id)} className="cursor-pointer">
           {product_data.name}
         </Table.Cell>
         <Table.Cell >   

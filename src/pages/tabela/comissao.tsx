@@ -15,11 +15,12 @@ export default function Commissions() {
   const [isLoading, setIsLoading] = useState(true);
   // Table data
   const [data, setData] = useState([]);
+
   // Filters data - what is selected to filter the data
   const [filterLabel, setFilterLabel] = useState<commissionFilterLabels>({
-    client: null,
-    seller: null,
-    product: null,
+    clientCNPJ: null,
+    sellerCPF: null,
+    productID: null,
   });
   const [filters, setFilters] = useState<commissionFilters>({
     date: null,
@@ -27,27 +28,16 @@ export default function Commissions() {
     sellerCPF: null,
     productID: null,
     prodClass: null,
-    clientClass: null,
+    clientsFirstPurchase: null,
+    page: 1,
+    limit: 30,
   });
-  // Functions to change the filters on click
-  const changeSellerFilter = (cpf: string | null, label: string | null) => {
-    console.log("filtering by seller")
-    filters.sellerCPF = cpf;
-    setFilterLabel({...filterLabel, seller: label})
+  const handleColumnFilter = (filter: string, label: string | null, value: string | null) =>{
+    filters[filter] = value;
+    filterLabel[filter] = label
     getData();
   }
-  const changeClientFilter = (cnpj: string | null, label: string | null) => {
-    console.log("filtering by client")
-    filters.clientCNPJ = cnpj;
-    setFilterLabel({...filterLabel, client: label})
-    getData();
-  }
-  const changeProductFilter = (id: number | null, label: string | null) => {
-    console.log("filtering by product")
-    filters.productID = id;
-    setFilterLabel({...filterLabel, product: label})
-    getData();
-  }
+  
   // Sort labels
   const [sortLabel, setSortLabel] = useState<SortLabelType>({
     sharedSort: null,
@@ -168,15 +158,16 @@ export default function Commissions() {
             <div className='bg-slate-100 shadow-2xl rounded-sm py-6 px-6'>
               <div>
                 <section id="Options" className='w-full text-left flex justify-between pb-6'>
+                  {/* Title */}
                   <div className="text-center">
                     <h1 className='text-6xl font-bold text-gray-900 '>Comissões</h1>
                   </div>
                   {/* Labels */}
                   <div className="inline-flex justify-end gap-2 items-end grow">
-                      { filterLabel.seller ? 
+                      { filterLabel.sellerCPF ? 
                         <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-green-800 bg-green-100 rounded dark:bg-green-900 dark:text-green-300">
-                          Seller: {filterLabel.seller}
-                          <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-green-400 bg-transparent rounded-sm hover:bg-green-200 hover:text-green-900 dark:hover:bg-green-800 dark:hover:text-green-300" aria-label="Remove" onClick={(e)=>{changeSellerFilter(null, null)}}>
+                          Seller: {filterLabel.sellerCPF}
+                          <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-green-400 bg-transparent rounded-sm hover:bg-green-200 hover:text-green-900 dark:hover:bg-green-800 dark:hover:text-green-300" aria-label="Remove" onClick={()=>{handleColumnFilter("sellerCPF", null, null)}}>
                             <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                             </svg>
@@ -185,10 +176,10 @@ export default function Commissions() {
                         </span>
                         : null
                       } 
-                      { filterLabel.client ? 
+                      { filterLabel.clientCNPJ ? 
                         <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-indigo-800 bg-indigo-100 rounded dark:bg-indigo-900 dark:text-indigo-300">
-                        Client: {filterLabel.client}
-                        <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-indigo-400 bg-transparent rounded-sm hover:bg-indigo-200 hover:text-indigo-900 dark:hover:bg-indigo-800 dark:hover:text-indigo-300" aria-label="Remove" onClick={(e)=>{changeClientFilter(null, null)}}>
+                        Client: {filterLabel.clientCNPJ}
+                        <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-indigo-400 bg-transparent rounded-sm hover:bg-indigo-200 hover:text-indigo-900 dark:hover:bg-indigo-800 dark:hover:text-indigo-300" aria-label="Remove" onClick={()=>{handleColumnFilter("clientCNPJ", null, null)}}>
                           <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
@@ -197,10 +188,10 @@ export default function Commissions() {
                       </span>
                         : null
                       }
-                      { filterLabel.product ? 
+                      { filterLabel.productID ? 
                         <span className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-pink-800 bg-pink-100 rounded dark:bg-pink-900 dark:text-pink-300">
-                        Product: {filterLabel.product}
-                        <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-pink-400 bg-transparent rounded-sm hover:bg-pink-200 hover:text-pink-900 dark:hover:bg-pink-800 dark:hover:text-pink-300" aria-label="Remove" onClick={(e)=>{changeProductFilter(null, null)}}>
+                        Product: {filterLabel.productID}
+                        <button type="button" className="inline-flex items-center p-1 ms-2 text-sm text-pink-400 bg-transparent rounded-sm hover:bg-pink-200 hover:text-pink-900 dark:hover:bg-pink-800 dark:hover:text-pink-300" aria-label="Remove" onClick={()=>{handleColumnFilter("productID", null, null)}}>
                           <svg className="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
@@ -223,6 +214,7 @@ export default function Commissions() {
                         : null
                       }
                   </div>
+                  {/* Filters */}
                   <div className="inline-block">
                     <div className='inline-block m-4'>
                       <label htmlFor="dateSelect" className="block mb-2 text-lg font-medium text-gray-900">Periodo</label>
@@ -249,18 +241,14 @@ export default function Commissions() {
                         <option value={1}>Não</option>
                       </select>  
                     </div>
-                    {/* This might not need to exist // or need to be modified. there are no 'new' clients who have purchased something. */}
-                    {/* <div className="inline-block m-4">
-                      <label htmlFor="clientSelect" className="block mb-2 text-lg font-medium text-gray-900">Tipo de cliente</label>
-                      <select className="rounded-lg block w-full p-2.5" name="clientSelect" id="clientSelect" onChange={()=>{
-                        filters.clientClass = parseInt((document.getElementById('clientSelect') as HTMLSelectElement).value)
+
+                    <div className="inline-block m-4">
+                      <input type="checkbox" name="firstPurchase" onChange={()=>{
+                        filters.clientsFirstPurchase = !filters.clientsFirstPurchase
                         getData()
-                      }}>
-                        <option value={undefined}>Qualquer</option>
-                        <option value={0}>Novo</option>
-                        <option value={1}>Velho</option>
-                      </select>
-                    </div> */}
+                        }}/>
+                      <label htmlFor="firstPurchase" className="inline mb-2 text-lg font-medium text-gray-900"> 1ª compra</label>
+                    </div>
 
                   </div>
                 </section>
@@ -279,7 +267,7 @@ export default function Commissions() {
                   </Table.Head>
 
                   <Table.Body className="text-black px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                    {data.map((commission: { date: string , value:string, commissionCut: any, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {                      
+                    {data.map((commission: { date: string , value:string, commissionCut: any, clientsFirstPurchase: any, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {                      
                       return (
                         <CommissionTableRow
                           key={index}
@@ -301,9 +289,8 @@ export default function Commissions() {
                           }}
                           sale_value={parseFloat(commission.value)}
                           comm_value={commission.commissionCut}
-                          handleSellerFilter={changeSellerFilter}
-                          handleClientFilter={changeClientFilter}
-                          handleProductFilter={changeProductFilter}
+                          clientsFirstPurchase={commission.clientsFirstPurchase}
+                          handleFilters={handleColumnFilter}
                           handleDateSorting={changeDateSorting}
                           handleValueSorting={changeValueSorting}
                         />

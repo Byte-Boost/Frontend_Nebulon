@@ -14,7 +14,6 @@ export async function getCommissionsWithFilter(filters: commissionFilters, compo
     } 
     // translate the filters into the correct format for the API
     let prodStatus = filters.prodClass == 0 ? "new" : filters.prodClass == 1 ? "old" : undefined
-    let clientStatus = filters.clientClass == 0 ? "new" : filters.clientClass == 1 ? "old" : undefined
     // fetch! Get the data from the API
     const commissions = await instance.get("/commissions", { params: {
       after: after,
@@ -22,7 +21,9 @@ export async function getCommissionsWithFilter(filters: commissionFilters, compo
       seller_cpf: filters.sellerCPF,
       product_id: filters.productID,
       product_status: prodStatus,
-      client_status: clientStatus,
+      firstPurchase: filters.clientsFirstPurchase,
+      page: filters.page,
+      limit: filters.limit,
     }});
 
     // inserts seller_data, client_data, and product_data into the commission object
