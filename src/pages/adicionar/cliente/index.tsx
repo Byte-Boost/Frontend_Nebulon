@@ -1,10 +1,9 @@
 import '@/app/globals.css'
-import { Cliente } from '@/models/models';
+import { createClienteDto } from '@/models/models';
 import FormCard from '@/modules/form_card';
 import Sidebar from '@/modules/sidebar';
 import UploadModal from '@/modules/upload_modal';
 import { postClient } from '@/scripts/http-requests/InstanceSamples';
-import instance from '@/scripts/http-requests/instance';
 import { formatCNPJ, formatPhoneNumber } from '@/scripts/utils/dataFormatter';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { Label, TextInput } from 'flowbite-react';
@@ -14,13 +13,13 @@ import React, { useState } from 'react';
 export default function Home() {
   const emptyCli = {
     cnpj: '',
-    nomeFantasia: '',
-    razaoSocial: '',
-    segmento: '',
-    telefone: ''
+    tradingName: '',
+    companyName: '',
+    segment: '',
+    contact: ''
   }
 
-  const [cliente, setCliente] = useState<Cliente>(emptyCli);
+  const [cliente, setCliente] = useState<createClienteDto>(emptyCli);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -44,14 +43,15 @@ export default function Home() {
     })
   };
   const handleUpload = async (jsonRow:any) => {
-    await instance.post('/clients',{
+    let cliente: createClienteDto = {
       tradingName: jsonRow["Nome Fantasia"],
       companyName: jsonRow["Razão Social"],
       cnpj: jsonRow["CNPJ"].replace(/[^\w\s]/gi, ''),
       segment: jsonRow["SEGMENTO"],
       contact: jsonRow["CONTATO"],
       status: jsonRow["STATUS"]
-    })
+    }
+    await postClient(cliente)
   };
 
   return (
@@ -75,30 +75,30 @@ export default function Home() {
           </div>
 
           <div>
-              <Label htmlFor="nomeFantasia" value="Nome Fantasia:" className="font-bold" />
+              <Label htmlFor="tradingName" value="Nome Fantasia:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="nomeFantasia" type="text" name="nomeFantasia" value={cliente.nomeFantasia} onChange={handleChange} required />
+                <TextInput id="tradingName" type="text" name="tradingName" value={cliente.tradingName} onChange={handleChange} required />
               </div>
           </div>
 
           <div>
-              <Label htmlFor="razaoSocial" value="Razão Social:" className="font-bold" />
+              <Label htmlFor="companyName" value="Razão Social:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="razaoSocial" type="text" name="razaoSocial" value={cliente.razaoSocial} onChange={handleChange} required />
+                <TextInput id="companyName" type="text" name="companyName" value={cliente.companyName} onChange={handleChange} required />
               </div>
           </div>
 
           <div>
-              <Label htmlFor="segmento" value="Segmento:" className="font-bold" />
+              <Label htmlFor="segment" value="Segment:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="segmento" type="text" name="segmento" value={cliente.segmento} onChange={handleChange} required />
+                <TextInput id="segment" type="text" name="segment" value={cliente.segment} onChange={handleChange} required />
               </div>
           </div>
 
           <div>
-              <Label htmlFor="telefone" value="Telefone:" className="font-bold" />
+              <Label htmlFor="contact" value="Telefone:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="telefone" type="text" name="telefone" value={formatPhoneNumber(cliente.telefone)} maxLength={15} onChange={handleChange} required />
+                <TextInput id="contact" type="text" name="contact" value={formatPhoneNumber(cliente.contact)} maxLength={15} onChange={handleChange} required />
               </div>
           </div>
           

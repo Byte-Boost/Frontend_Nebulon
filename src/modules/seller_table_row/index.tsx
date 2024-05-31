@@ -1,4 +1,4 @@
-import { Seller } from "@/models/models";
+import { SellerTableRowProps } from "@/models/models";
 import { formatCPF } from "@/scripts/utils/dataFormatter";
 import { Table } from "flowbite-react/components/Table"
 
@@ -8,7 +8,7 @@ const SellerTableRow = ({
   cpf,
   score,
   admin
-}: Seller) => {
+}: SellerTableRowProps) => {
   return(
     <Table.Row className="odd:bg-[#f1f1f1] even:bg-[#e4e4e4] font-medium">  
       <Table.Cell className="whitespace-nowrap">

@@ -1,11 +1,4 @@
 // Commissions
-export type Comissao = {
-    value: string;
-    paymentMethod: string;
-    sellerCPF: string;
-    clientCNPJ: string;
-    productId: string;
-}
 export type CommissionTableRowProps = {
     date: string;
     seller_data: {name: string, cpf: string},
@@ -53,7 +46,7 @@ export type createCommissionDto = {
     sellerData?: any,
     clientData?: any,
     commissionCut?: string,
-    date?: Date,
+    date?: Date | string,
     value: string,
     scorePoints?: number,
     paymentMethod: string,
@@ -63,10 +56,6 @@ export type createCommissionDto = {
 }
 
 // Products
-export type Produto = {
-    name: string;
-    description: string;
-}
 export type ProductTableRowProps = {
     name: string;
     description: string;
@@ -88,13 +77,6 @@ export type createProductDto = {
 }
 
 // Clients
-export type Cliente = {
-    cnpj: string;
-    nomeFantasia: string;
-    razaoSocial: string;
-    segmento: string;
-    telefone: string;
-}
 export type ClientTableRowProps = {
     companyName: string;
     segment: string;
@@ -114,9 +96,17 @@ export type clientFilters = {
     class: number | null,
     segment: string | null,
 }
+export type createClienteDto = {
+    tradingName: string,
+    companyName: string,
+    cnpj: string,
+    segment: string,
+    contact: string,
+    status?: number
+}
 
 // Sellers
-export type Seller = {
+export type SellerTableRowProps = {
     id: number
     name: string;
     cpf: string;

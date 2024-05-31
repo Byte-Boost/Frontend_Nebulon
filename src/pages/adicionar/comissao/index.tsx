@@ -7,9 +7,8 @@ import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
 import { getCutAndScoreFromCommission, postCommission } from '@/scripts/http-requests/InstanceSamples';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
-import { Comissao } from '@/models/models';
+import { createCommissionDto } from '@/models/models';
 import UploadModal from '@/modules/upload_modal';
-import instance from '@/scripts/http-requests/instance';
 
 export default function Home() {
   const emptyComm = {
@@ -20,7 +19,7 @@ export default function Home() {
     productId: ''
   }
   
-  const [comissao, setComissao] = useState<Comissao>(emptyComm);
+  const [comissao, setComissao] = useState<createCommissionDto>(emptyComm);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -44,7 +43,7 @@ export default function Home() {
     })
   };
   const handleUpload = async (jsonRow:any) => {
-    let date = new Date(jsonRow["Data da venda"]).toISOString().slice(0, 19).replace('T', ' ');
+    let date = new Date(jsonRow["Data da venda"]);
     let value = jsonRow["Valor de Venda"];
     let paymentMethod = jsonRow["Forma de Pagamento"];
     let sellerCPF = jsonRow["CPF Vendedor"].replace(/[^\w\s]/gi, '');
@@ -52,7 +51,7 @@ export default function Home() {
     let productId = jsonRow["ID Produto"];
     let calcValues = await getCutAndScoreFromCommission({clienteCNPJ, productId, value});
 
-    await instance.post('/commissions',{
+    let venda: createCommissionDto = {
       date: date,
       value: value,
       commissionCut: calcValues.cut,
@@ -61,7 +60,10 @@ export default function Home() {
       sellerCPF: sellerCPF,
       clientCNPJ: clienteCNPJ,
       productId: productId,
-    })
+
+    }
+
+    await postCommission(venda);
   };
 
   return (

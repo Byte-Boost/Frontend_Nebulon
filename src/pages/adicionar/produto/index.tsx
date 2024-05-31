@@ -5,10 +5,9 @@ import React, { useState } from 'react';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
-import { Produto } from '@/models/models';
+import { createProductDto } from '@/models/models';
 import { postProduct } from '@/scripts/http-requests/InstanceSamples';
 import UploadModal from '@/modules/upload_modal';
-import instance from '@/scripts/http-requests/instance';
 
 export default function Home() {
   const emptyProd = {
@@ -16,7 +15,7 @@ export default function Home() {
     description: '',
   }
 
-  const [produto, setProduct] = useState<Produto>(emptyProd);
+  const [produto, setProduct] = useState<createProductDto>(emptyProd);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -40,11 +39,12 @@ export default function Home() {
     })
   };
   const handleUpload = async (jsonRow:any) => {
-    await instance.post('/products',{
+    let product: createProductDto = {
       name: jsonRow.Nome,
       description: jsonRow["Descrição"],
       status: jsonRow.Status,
-    })
+    } 
+    await postProduct(product)
   };
 
   return (

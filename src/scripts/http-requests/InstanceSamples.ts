@@ -1,4 +1,4 @@
-import { clientFilters, commissionFilters, createCommissionDto, createProductDto, createSellerDto, productFilters, sellerFilters } from "@/models/models";
+import { clientFilters, commissionFilters, createClienteDto, createCommissionDto, createProductDto, createSellerDto, productFilters, sellerFilters } from "@/models/models";
 import instance from "./instance";
 import { extractFloat } from "../utils/dataFormatter";
 
@@ -99,16 +99,16 @@ export async function getClientsWithFilter(filters: clientFilters){
   }});
   return clients;
 }
-export async function postClient(cliente: any){
+export async function postClient(cliente: createClienteDto){
   cliente.cnpj=cliente.cnpj.replace(/\D/g, '');
-  cliente.telefone=cliente.telefone.replace(/\D/g, '');
+  cliente.contact=cliente.contact.toString().replace(/\D/g, '');
   
   let res = await instance.post('/clients',{
-    tradingName: cliente.nomeFantasia,
-    companyName: cliente.razaoSocial,
+    tradingName: cliente.tradingName,
+    companyName: cliente.companyName,
     cnpj: cliente.cnpj,
-    segment: cliente.segmento,
-    contact: cliente.telefone
+    segment: cliente.segment,
+    contact: cliente.contact
   })
   return res;
 }

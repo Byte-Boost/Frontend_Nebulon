@@ -43,12 +43,13 @@ export default function Home() {
     })
   };
   const handleUpload = async (jsonRow:any) => {
-    await instance.post('/account/register',{
+    let vendedor: createSellerDto = {
       name: jsonRow.Nome,
       username:jsonRow.Nome.replace(/\s/g, '').toLowerCase(),
       cpf: jsonRow["CPF"].replace(/[^[^\w\s]/gi, ''),
       password: '12345678',
-    })
+    }
+    await postSeller(vendedor)
   };
 
   return (

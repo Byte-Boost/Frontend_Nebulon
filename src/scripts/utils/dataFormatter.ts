@@ -38,6 +38,7 @@ export function formatMoney(n: string, showCurrency: boolean=true){
 }
 
 export function extractFloat(n: string): number {
+  n = String(n);
   n = n.replace(/\D/g, '');                      //Remove tudo que não é dígito
   n = n.replace(/\d{2}$/, ".$&")                 //Coloca a vírgula antes dos dois últimos dígitos
   return Number(n);
