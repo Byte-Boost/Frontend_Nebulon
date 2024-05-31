@@ -1,4 +1,4 @@
-import { clientFilters, commissionFilters, createCommissionDto, createProductDto, createSellerDto, productFilters } from "@/models/models";
+import { clientFilters, commissionFilters, createCommissionDto, createProductDto, createSellerDto, productFilters, sellerFilters } from "@/models/models";
 import instance from "./instance";
 import { extractFloat } from "../utils/dataFormatter";
 
@@ -114,6 +114,12 @@ export async function postClient(cliente: any){
 }
 
 // Sellers
+export async function getSellersWithFilter(filters: sellerFilters){
+  let sellers: any = await instance.get("/sellers", { params: {
+    adminOnly: filters.adminOnly,
+  }});
+  return sellers;
+}
 export async function postSeller(user: createSellerDto){
   user.cpf=user.cpf.replace(/\D/g, '');
 

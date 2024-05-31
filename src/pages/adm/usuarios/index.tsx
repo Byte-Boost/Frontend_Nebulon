@@ -7,7 +7,7 @@ import instance from '@/scripts/http-requests/instance';
 import { formatCPF } from "@/scripts/utils/dataFormatter";
 import FormCard from '@/modules/form_card';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
-import { Seller } from '@/models/models';
+import { createSellerDto } from '@/models/models';
 import UploadModal from '@/modules/upload_modal';
 import { postSeller } from '@/scripts/http-requests/InstanceSamples';
 
@@ -19,7 +19,7 @@ export default function Home() {
     password: ''
   }
 
-  const [user, setUser] = useState<Seller>(emptyUser);
+  const [user, setUser] = useState<createSellerDto>(emptyUser);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const closeModal = () => {

@@ -117,10 +117,16 @@ export type clientFilters = {
 
 // Sellers
 export type Seller = {
+    id: number
     name: string;
     cpf: string;
-    username: string;
-    password: string;
+    score: number;
+    admin: boolean,
+    username?: string,
+    password?: string,
+}
+export type sellerFilters = {
+    adminOnly: boolean | null,
 }
 export type createSellerDto = {
     name: string,
