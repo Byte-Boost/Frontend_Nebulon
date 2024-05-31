@@ -55,6 +55,7 @@ export type createCommissionDto = {
     commissionCut?: string,
     date?: Date,
     value: string,
+    scorePoints?: number,
     paymentMethod: string,
     sellerCPF: string,
     clientCNPJ: string,

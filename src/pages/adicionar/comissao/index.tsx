@@ -5,7 +5,7 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
-import { getCutFromCommission, postCommission } from '@/scripts/http-requests/InstanceSamples';
+import { getCutAndScoreFromCommission, postCommission } from '@/scripts/http-requests/InstanceSamples';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { Comissao } from '@/models/models';
 import UploadModal from '@/modules/upload_modal';
@@ -50,12 +50,13 @@ export default function Home() {
     let sellerCPF = jsonRow["CPF Vendedor"].replace(/[^\w\s]/gi, '');
     let clienteCNPJ = jsonRow["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, '');
     let productId = jsonRow["ID Produto"];
-    let cut = await getCutFromCommission({clienteCNPJ, productId, value});
+    let calcValues = await getCutAndScoreFromCommission({clienteCNPJ, productId, value});
 
     await instance.post('/commissions',{
       date: date,
       value: value,
-      commissionCut: cut,
+      commissionCut: calcValues.cut,
+      scorePoints: calcValues.score,
       paymentMethod: paymentMethod,
       sellerCPF: sellerCPF,
       clientCNPJ: clienteCNPJ,

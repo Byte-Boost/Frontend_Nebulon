@@ -37,18 +37,24 @@ export async function getCommissionsWithFilter(filters: commissionFilters, compo
 
     return commissions
 }
-export async function getCutFromCommission(comissao: any){
+export async function getCutAndScoreFromCommission(comissao: any){
     let cli = await instance.get(`/clients/cnpj/${comissao.clientCNPJ}`);
     let prod = await instance.get(`/products/${comissao.productId}`);
     let comm_perc = Number(process.env.NEXT_PUBLIC_BASE_COMMISSION_VALUE) + Number(cli.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_CLIENT_BONUS : 0) + Number(prod.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_PROD_BONUS : 0);
-    return (Number(comissao.value) * comm_perc).toString();
+    let score = Number(process.env.NEXT_PUBLIC_BASE_COMMISSION_SCORE) + Number(cli.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_CLIENT_SCORE_BONUS : 0) + Number(prod.data.status == 0 ? process.env.NEXT_PUBLIC_NEW_PROD_SCORE_BONUS : 0);
+    return {
+      cut: (Number(comissao.value) * comm_perc).toString(),
+      score: score
+    };
 }
 export async function postCommission(comissao: createCommissionDto){
   // Formatação dos dados
   comissao.sellerCPF=comissao.sellerCPF.replace(/\D/g, '');
   comissao.clientCNPJ=comissao.clientCNPJ.replace(/\D/g, '');
   comissao.value=extractFloat(comissao.value).toString();
-  comissao.commissionCut= await getCutFromCommission(comissao);
+  let calcValues = await getCutAndScoreFromCommission(comissao);
+  comissao.commissionCut = calcValues.cut;
+  comissao.scorePoints = calcValues.score;
 
   // Requisição POST
   let res = await instance.post('/commissions',{
@@ -56,6 +62,7 @@ export async function postCommission(comissao: createCommissionDto){
     clientData: comissao.clientData,
     date: Date.now(),
     value: comissao.value,
+    scorePoints: comissao.scorePoints,
     commissionCut: comissao.commissionCut,
     paymentMethod: comissao.paymentMethod,
     sellerCPF: comissao.sellerCPF,
