@@ -1,6 +1,6 @@
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
-import { formatCNPJ, formatCPF, formatMoney } from '@/scripts/utils/dataFormatter';
+import { extractFloat, formatCNPJ, formatCPF, formatMoney } from '@/scripts/utils/dataFormatter';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import FormCard from '@/modules/form_card';
@@ -32,7 +32,7 @@ export default function Home() {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+    comissao.value=extractFloat(comissao.value).toString();
     postCommission(comissao)
     .then(function(response){
       successAlert("Comissão cadastrada com sucesso!", "Commission added successfully");

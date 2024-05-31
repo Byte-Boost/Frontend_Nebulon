@@ -51,16 +51,16 @@ export async function postCommission(comissao: createCommissionDto){
   // Formatação dos dados
   comissao.sellerCPF=comissao.sellerCPF.replace(/\D/g, '');
   comissao.clientCNPJ=comissao.clientCNPJ.replace(/\D/g, '');
-  comissao.value=extractFloat(comissao.value).toString();
   let calcValues = await getCutAndScoreFromCommission(comissao);
   comissao.commissionCut = calcValues.cut;
   comissao.scorePoints = calcValues.score;
 
   // Requisição POST
+  console.log(comissao.value)
   let res = await instance.post('/commissions',{
     sellerData: comissao.sellerData,
     clientData: comissao.clientData,
-    date: Date.now(),
+    date: comissao.date ? comissao.date : Date.now(),
     value: comissao.value,
     scorePoints: comissao.scorePoints,
     commissionCut: comissao.commissionCut,
