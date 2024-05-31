@@ -1,5 +1,5 @@
 import '@/app/globals.css'
-import { Seller, sellerFilters } from '@/models/models';
+import { SellerTableRowProps, sellerFilters } from '@/models/models';
 import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
 import LoaderAnim from '@/modules/loader';
@@ -22,7 +22,7 @@ export default function Sellers() {
     setIsLoading(false)
   }
   function getExcelData(){
-    const excelRows = data.map((row: Seller) => {
+    const excelRows = data.map((row: SellerTableRowProps) => {
       return {
         "ID": row.id,
         "Nome": row.name,
@@ -74,7 +74,7 @@ export default function Sellers() {
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     
-                    {data.map((seller: Seller, index: number) => {
+                    {data.map((seller: SellerTableRowProps, index: number) => {
                       return (
                         <SellerTableRow
                           key={index}

@@ -76,7 +76,6 @@ export default function Clients() {
                     <Table.HeadCell>Razão Social</Table.HeadCell>
                     <Table.HeadCell>Segmento</Table.HeadCell>
                     <Table.HeadCell>Contato</Table.HeadCell>
-                    <Table.HeadCell>Novo</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     

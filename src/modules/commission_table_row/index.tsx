@@ -28,11 +28,20 @@ const CommissionTableRow = ({
         {formatCPF(seller_data.cpf)}
       </Table.Cell>
       <Table.Cell onClick={(e:any)=>handleFilters("clientCNPJ", client_data.name, client_data.cnpj)} className="cursor-pointer">
-        {client_data.name}
-        {clientsFirstPurchase ? 
-          <span className="bg-yellow-100 text-yellow-800 text-xs font-medium ml-3 me-2 px-1 py-0.5 rounded">1ª Compra</span>
-          : null
-        } 
+        <div className="flex flex-row flex-1 justify-between">
+
+          <div className="justify-start">
+            <span className="ml-2">{client_data.name}</span>
+          </div>
+
+          { clientsFirstPurchase ? 
+            <div className="justify-end">
+              <span className="bg-yellow-100 text-yellow-800 text-xs font-medium ml-3 me-2 px-1 py-0.5 rounded">Novo</span>
+            </div>
+            : null
+          } 
+          
+        </div>
       </Table.Cell>
       <Table.Cell onClick={(e:any)=>handleFilters("clientCNPJ", client_data.name, client_data.cnpj)} className="cursor-pointer">
         {formatCNPJ(client_data.cnpj)}
@@ -40,7 +49,7 @@ const CommissionTableRow = ({
       <Table.Cell onClick={(e:any)=>handleFilters("productID", product_data.name, product_data.id)} className="cursor-pointer">
         {product_data.name}
       </Table.Cell>
-      <Table.Cell >   
+      <Table.Cell>
         <div className="flex flex-row flex-1 justify-between">
           <div className="justify-start">
             <span className="ml-2">{'R$  '}</span>
