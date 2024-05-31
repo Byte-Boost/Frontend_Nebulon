@@ -128,7 +128,7 @@ const DashboardContent = () => {
   useEffect(() => {getData()}, []);
   useEffect(() => {console.log(dataX)}, [dataX]);
   return (
-    <div className='grid grid-cols-6 grid-rows-2 h-screen w-[calc(100%-3rem)]'>
+    <div className='grid grid-cols-6 grid-rows-2 h-screen w-[calc(100%-3rem)] '>
       <div id="lineGraph" className='col-span-3 flex justify-center p-2'>
         <Card className='grow border-2 rounded-lg flex justify-center'>
           <ChartTemplate 

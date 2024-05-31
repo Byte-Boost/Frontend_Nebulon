@@ -3,10 +3,15 @@ import SidebarItem from '../sidebar_item';
 import cookie from '@boiseitguru/cookie-cutter';
 import { jwtDecode } from 'jwt-decode';
 import { JwtPayload } from 'jwt-decode'; 
+import { useRouter } from 'next/router';
 interface MyJwtPayload extends JwtPayload {
   admin: boolean; 
 }
-const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
+interface SidebarProps {
+  isAdminProp?: boolean
+}
+
+const Sidebar = ({isAdminProp}:SidebarProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isAdmin, setIsAdmin] = useState(isAdminProp);
 
@@ -17,42 +22,46 @@ const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
       setIsAdmin(decoded.admin);
     }
   },[]);
+  const router = useRouter();
+  const currentPath = router.pathname;
   return (
     <div 
-      className={`transition-all duration-200 ease-in-out ${isHovered ? 'w-48' : 'w-10'} bg-gradient-to-b from-purple-500 to-[#805C90] h-screen fixed`} 
+      className={`transition-all duration-200 ease-in-out ${isHovered ? 'w-48' : 'w-[3.4rem]'} bg-[#1c1c1e] h-screen fixed flex flex-col justify-between border-r-[1px] border-[#424042]`} 
       onMouseEnter={() => setIsHovered(true)} 
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="text-white px-2 py-4">
         <ul>
           {/* Add more menu items as needed */}
-          <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'} link={'/home'}/>
+          <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'} link={'/home'} isActive={ currentPath === '/home'}/>
           
-          <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'tables'}  hasDropdown={true}>
-            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/tabela/comissao'} className='stroke-[#58ff60]' classNameText='text-[#58ff60]'/>
-            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/tabela/produto'} className='fill-[#ff6600]' classNameText='text-[#ff6600]'/>
-            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/tabela/cliente'} className='stroke-[#6fc3fc]' classNameText='text-[#6fc3fc]'/>
+          <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'tables'}  hasDropdown={true} isActive={currentPath === '/tabela/comissao' || currentPath === '/tabela/produto' ||  currentPath === '/tabela/cliente'}>
+            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/tabela/comissao'} isActive={ currentPath === '/tabela/comissao'} />
+            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/tabela/produto'}  isActive={ currentPath === '/tabela/produto'}/>
+            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/tabela/cliente'} isActive={ currentPath === '/tabela/cliente'} />
           </SidebarItem>
           
-          <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} hasDropdown={true}>
-            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/adicionar/comissao'} className='stroke-[#58ff60]' classNameText='text-[#58ff60]'/>
-            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/adicionar/produto'} className='fill-[#ff6600]' classNameText='text-[#ff6600]'/>
-            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/adicionar/cliente'} className='stroke-[#6fc3fc]' classNameText='text-[#6fc3fc]'/>
+          <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} hasDropdown={true} isActive={  currentPath === '/adicionar/comissao' || currentPath === '/adicionar/produto' || currentPath === '/adicionar/cliente'}>
+            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/adicionar/comissao'}  isActive={ currentPath === '/adicionar/comissao'}/>
+            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/adicionar/produto'} isActive={ currentPath === '/adicionar/produto'}/>
+            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/adicionar/cliente'} isActive={ currentPath === '/adicionar/cliente'}/>
           </SidebarItem>
           
           {
           isAdmin
           && 
-          <SidebarItem title={'ADMINISTRAÇÃO'} isHovered={isHovered} icon={'admin'} hasDropdown={true}>
-            <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios'} className='stroke-[#52355b]' classNameText='text-[#52355b]'/>
+          <SidebarItem title={'GERENCIA'} isHovered={isHovered} icon={'admin'} hasDropdown={true} isActive={ currentPath === '/adm/usuarios'}>
+            <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios'} isActive={ currentPath === '/adm/usuarios'}/>
             {/* <SidebarItem title={'OPÇÕES'} isHovered={isHovered} icon={'options'} link={'/adm/opcoes'}/> */}
           </SidebarItem>
           }
-
-          {/* <SidebarItem title={'OPÇÕES'} isHovered={isHovered} icon={'options'} link={'/opcoes'}/> */}
-          <SidebarItem title={'SAIR'} isHovered={isHovered} icon={'logout'} link={'/'}  />
         </ul>
       </div>
+          <div className="text-white px-2 py-4">
+            <ul>
+              <SidebarItem title={'SAIR'} isHovered={isHovered} icon={'logout'} link={'/'}  />
+            </ul>
+          </div>
     </div>
   );
 };
