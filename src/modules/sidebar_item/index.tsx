@@ -51,7 +51,7 @@ const SidebarItem = ({
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);  
   return (
-      <li className={`my-2 cursor-pointer font-JetBrainsMono ${isActive? isHovered?'bg-[#c14379]':null :null} rounded-md ${dropdownOpen?  isHovered?'bg-[#2e302e]':null: null}`} onClick={() => setDropdownOpen(!dropdownOpen)}>
+      <li className={`my-2 cursor-pointer font-JetBrainsMono rounded-md ${dropdownOpen?  isHovered?'bg-[#2e302e]':null: isActive? isHovered?'bg-[#c14379]':null :null}`} onClick={() => setDropdownOpen(!dropdownOpen)}>
         <a href={link} 
         className={`flex items-center justify-between transition-all duration-200  ease-in-out rounded-md hover:bg-[#e45693] ${dropdownOpen?  isHovered?'bg-[#1c1c1e]':null: null}`}>
           <div className={`flex items-center ${isActive? isHovered? null:'bg-[#c14379]':null} rounded-md `}>

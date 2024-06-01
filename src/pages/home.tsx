@@ -3,7 +3,7 @@ import DashboardContent from '@/modules/dashboard_content';
 import Sidebar from '@/modules/sidebar';
 import Head from 'next/head';
 export default function Home() {
-
+  
   return (
     <main>
       <Head>
