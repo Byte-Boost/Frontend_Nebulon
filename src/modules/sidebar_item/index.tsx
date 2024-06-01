@@ -12,7 +12,7 @@ import TablesIcon from "../sidebar_icons/tables_icon";
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 
 const getIcon = (iconName: keyof typeof iconMapping | string, className?: string) => {
-  const iconMapping = {
+  const iconMapping: { [key: string]: JSX.Element } = {
     'home': <HomeIcon className={className}/>,
     'dashboard': <DashboardIcon className={className}/>,
     'add': <AddIcon className={className}/>,
@@ -26,7 +26,6 @@ const getIcon = (iconName: keyof typeof iconMapping | string, className?: string
   };
   return iconMapping[iconName];
 };
-
 
 const SidebarItem = ({
   title,
