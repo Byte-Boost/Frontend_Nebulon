@@ -4,13 +4,9 @@ import { extractFloat } from "../utils/dataFormatter";
 
 // Commissions
 export async function getCommissionsWithFilter(filters: commissionFilters, compoundData: boolean = false){
-    // Essentially makes "after" equal to "null" or the date of the last month, 3 months, 6 months, or year
-    let dateRange = [0, 1, 3, 6, 12]
-    let now = new Date(Date.now());
     let after = null;
-    if (filters.date != null && filters.date != 0){
-      let start = new Date(now.setMonth(now.getMonth() - dateRange[filters.date]));
-      after = `${start.getFullYear()}-${start.getMonth() + 1}-${start.getDate()}`
+    if (filters.date != null){
+      after = `${filters.date.getUTCFullYear()}-${filters.date.getUTCMonth() + 1}-${filters.date.getUTCDate()}`
     } 
     // translate the filters into the correct format for the API
     let prodStatus = filters.prodClass == 0 ? "new" : filters.prodClass == 1 ? "old" : undefined

@@ -218,16 +218,11 @@ export default function Commissions() {
                   <div className="inline-block">
                     <div className='inline-block m-4'>
                       <label htmlFor="dateSelect" className="block mb-2 text-lg font-medium text-gray-900">Periodo</label>
-                      <select className="rounded-lg block w-full p-2.5" name="dateSelect" id="dateSelect" onChange={()=>{
-                        filters.date = parseInt((document.getElementById('dateSelect') as HTMLSelectElement).value)
+                      <input type='date' className="rounded-lg block w-full p-2.5" name="dateSelect" id="dateSelect" onChange={()=>{
+                        filters.date = new Date((document.getElementById('dateSelect') as HTMLSelectElement).value)
                         getData()
                       }}>
-                        <option value={0}>Qualquer</option>
-                        <option value={1}>Ultimos 30 dias</option>
-                        <option value={2}>Ultimos 3 Meses</option>
-                        <option value={3}>Ultimos 6 meses</option>
-                        <option value={4}>Ultimo ano</option>
-                      </select>
+                      </input>
                     </div>
 
                     <div className="inline-block m-4">

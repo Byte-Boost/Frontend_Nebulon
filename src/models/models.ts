@@ -29,7 +29,7 @@ export type commissionFilterLabels = {
     [key: string]: null | string;
 }
 export type commissionFilters = {
-    date: number | null,
+    date: Date | null,
     clientCNPJ: string | null,
     sellerCPF: string | null,
     productID: number | null,
@@ -37,7 +37,7 @@ export type commissionFilters = {
     clientsFirstPurchase: boolean | null,
     page: number | null,
     limit: number | null,
-    [key: string]: null | string | number | boolean;
+    [key: string]: null | string | number | boolean | Date;
 }
 export type SortLabelType = {
     sharedSort: string | null;
