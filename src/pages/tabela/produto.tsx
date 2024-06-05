@@ -15,6 +15,7 @@ export default function Products() {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState<productFilters>({
     class: null,
+    startsWith: null
   });
 
   async function getData() {

@@ -74,6 +74,7 @@ export async function getProductsWithFilter(filters: productFilters){
   let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
   let products: any = await instance.get("/products", { params: {
     status: status,
+    startsWith: filters.startsWith,
   }});
   return products;
 }

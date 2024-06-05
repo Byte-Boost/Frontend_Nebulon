@@ -5,10 +5,11 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
-import { getCutAndScoreFromCommission, postCommission } from '@/scripts/http-requests/InstanceSamples';
+import { getCutAndScoreFromCommission, getProductsWithFilter, postCommission } from '@/scripts/http-requests/InstanceSamples';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { createCommissionDto } from '@/models/models';
 import UploadModal from '@/modules/upload_modal';
+import { Autocomplete, TextField } from '@mui/material';
 
 export default function Home() {
   const emptyComm = {
@@ -21,6 +22,7 @@ export default function Home() {
   
   const [comissao, setComissao] = useState<createCommissionDto>(emptyComm);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  let [products, setProducts] = useState<Array<any>>([]);
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -65,7 +67,6 @@ export default function Home() {
 
     await postCommission(venda);
   };
-
   return (
     <main>
       <Head>
@@ -96,6 +97,18 @@ export default function Home() {
           <div>
               <Label htmlFor="productId" value="ID do produto:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
+                {/* In proccess of becoming auto-complete select. it's not done yet. */}
+                {/* <Autocomplete
+                  disablePortal
+                  id="selectProduct"
+                  options={products}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => <TextField {...params} label="Produto:" onChange={async ()=>{
+                    let prod = await getProductsWithFilter({class: null, startsWith: String(params.inputProps.value)});
+                    products = await prod.data
+                    console.log(products)
+                  }}/>}
+                /> */}
                 <TextInput id="productId" type="text" name="productId" value={comissao.productId} onChange={handleChange} required />
               </div>
           </div>
