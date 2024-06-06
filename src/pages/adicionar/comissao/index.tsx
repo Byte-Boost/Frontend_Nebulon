@@ -21,7 +21,6 @@ export default function Home() {
   }
   
   // Product autocomplete
-  const [value, setValue] = React.useState<any>(null);
   const [inputValue, setInputValue] = React.useState('');
   let [products, setProducts] = useState<Array<any>>([]);
 
@@ -77,12 +76,11 @@ export default function Home() {
     getProductsWithFilter({class: null, startsWith: inputValue, limit: 6})
     .then(function(response){
       setProducts(response.data);
-      console.log(products)
     })
     .catch(error => {
       failureAlert("Error fetching products");
     })
-  }, [inputValue, products, value]);
+  }, [inputValue, products]);
 
   return (
     <main>
@@ -130,17 +128,21 @@ export default function Home() {
                 <Autocomplete
                   id="selectProduct"
                   filterOptions={(x) => x}
+                  freeSolo
+                  autoHighlight
+                  clearOnEscape
+                  
                   options={products}
                   getOptionLabel={(option) => option.name}
-                  autoComplete
-                  includeInputInList
-                  filterSelectedOptions
-                  value={value}
-                  noOptionsText="Nenhum produto encontrado"
+                  onChange={(e, newValue) => {
+                    comissao.productId = newValue ? newValue.id : '';
+                  }}
+
                   onInputChange={(e, newInputValue) => {
                     setInputValue(newInputValue);
                   }}
                   renderInput={(params) => <TextField {...params} label="Produto:" />}
+                  noOptionsText="Nenhum produto encontrado"
                 />
           </div>
 
