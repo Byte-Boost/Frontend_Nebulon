@@ -75,6 +75,8 @@ export async function getProductsWithFilter(filters: productFilters){
   let products: any = await instance.get("/products", { params: {
     status: status,
     startsWith: filters.startsWith,
+    page : filters.page ? filters.page : null,
+    limit: filters.limit ? filters.limit : null
   }});
   return products;
 }

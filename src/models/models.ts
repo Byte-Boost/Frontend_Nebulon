@@ -70,6 +70,8 @@ export type productExcelTableRow = {
 export type productFilters = {
     class: number | null,
     startsWith: string | null,
+    page?: number | null,
+    limit?: number | null
 }
 export type createProductDto = {
     name: string,
