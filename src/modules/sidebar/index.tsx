@@ -26,7 +26,7 @@ const Sidebar = ({isAdminProp}:SidebarProps) => {
   const currentPath = router.pathname;
   return (
     <div 
-      className={`transition-all duration-200 ease-in-out ${isHovered ? 'w-48' : 'w-[3.4rem]'} bg-[#1c1c1e] h-screen fixed flex flex-col justify-between border-r-[1px] border-[#424042]`} 
+      className={`transition-all duration-200 ease-in-out ${isHovered ? 'w-48' : 'w-[3.4rem]'} z-50 bg-[#1c1c1e] h-screen fixed flex flex-col justify-between border-r-[1px] border-[#424042]`} 
       onMouseEnter={() => setIsHovered(true)} 
       onMouseLeave={() => setIsHovered(false)}
     >
