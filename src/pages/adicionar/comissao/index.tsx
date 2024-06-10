@@ -4,7 +4,7 @@ import { extractFloat, formatCNPJ, formatCPF, formatMoney } from '@/scripts/util
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import FormCard from '@/modules/form_card';
-import { Flowbite, Label, TextInput, theme } from 'flowbite-react';
+import { Flowbite, Label, TextInput, theme, Select } from 'flowbite-react';
 import { getClientsWithFilter, getCutAndScoreFromCommission, getProductsWithFilter, postCommission } from '@/scripts/http-requests/InstanceSamples';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { createCommissionDto } from '@/models/models';
@@ -34,7 +34,7 @@ export default function Home() {
     setModalIsOpen(false);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
     setComissao({ ...comissao, [name]: value });
   };
@@ -118,7 +118,11 @@ export default function Home() {
           <div>
               <Label htmlFor="paymentMethod" value="Método do pagamento:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="paymentMethod" type="text" name="paymentMethod" value={comissao.paymentMethod} onChange={handleChange} required />
+              <Select id="paymentMethod" name="paymentMethod" value={comissao.paymentMethod} onChange={handleChange} required>
+                  <option value="" disabled>Selecione um método</option>
+                  <option value="à vista">À vista</option>
+                  <option value="a prazo">A prazo</option>
+                </Select>
               </div>
           </div>
 
