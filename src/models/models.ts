@@ -131,6 +131,10 @@ export type createSellerDto = {
     password: string
 }
 
+export type users = {
+    
+}
+
 // Modals
 export type ModalProps = {
     isOpen: boolean;

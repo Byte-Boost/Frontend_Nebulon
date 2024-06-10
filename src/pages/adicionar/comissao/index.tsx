@@ -1,15 +1,17 @@
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
-import { extractFloat, formatCNPJ, formatCPF, formatMoney } from '@/scripts/utils/dataFormatter';
+import { extractFloat, formatCPF, formatMoney } from '@/scripts/utils/dataFormatter';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import FormCard from '@/modules/form_card';
-import { Flowbite, Label, TextInput, theme, Select } from 'flowbite-react';
-import { getClientsWithFilter, getCutAndScoreFromCommission, getProductsWithFilter, postCommission } from '@/scripts/http-requests/InstanceSamples';
+import { Label, TextInput, Select } from 'flowbite-react';
+import { getClientsWithFilter, getCutAndScoreFromCommission, getProductsWithFilter, getSellersById, postCommission } from '@/scripts/http-requests/InstanceSamples';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { createCommissionDto } from '@/models/models';
 import UploadModal from '@/modules/upload_modal';
 import { Autocomplete, TextField } from '@mui/material';
+import cookie from '@boiseitguru/cookie-cutter';
+import { jwtDecode } from 'jwt-decode';
 
 export default function Home() {
   const emptyComm = {
@@ -19,7 +21,28 @@ export default function Home() {
     clientCNPJ: '',
     productId: ''
   }
-  
+    
+  const [currentUser, setCurrentUser] = useState<any>({});
+
+  useEffect(() => {
+    async function fetchData(){
+      const token = cookie.get('token');
+      if (token) {
+        const decoded = jwtDecode<any>(token);
+        const user = await getSellersById(decoded.id);
+        setCurrentUser(user.data);
+      }      
+    };
+    fetchData();
+  },[]);
+
+  useEffect(() => {
+    if(currentUser[0] && currentUser[0].admin == false){
+      console.log(currentUser[0])
+      setComissao({...comissao, sellerCPF: currentUser[0].cpf});
+    }
+  }, [currentUser])
+
   // Product autocomplete
   const [inputValueProduct, setInputValueProduct] = React.useState('');
   let [products, setProducts] = useState<Array<any>>([]);
@@ -125,13 +148,23 @@ export default function Home() {
                 </Select>
               </div>
           </div>
-
+          {
+            currentUser[0] && currentUser[0].admin == true
+            ?
           <div>
               <Label htmlFor="sellerCPF" value="CPF do Vendedor:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
                   <TextInput id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} onChange={handleChange} required />
               </div>
           </div>
+            :
+          <div>
+              <Label htmlFor="sellerCPF" value="CPF do Vendedor:" className="font-bold" />
+              <div className="border-2 rounded-lg shadow-inner">
+                  <TextInput id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} required disabled />
+              </div>
+            </div>
+          }
 
           <div>
               <Label htmlFor="clientCNPJ" value="Cliente:" className="font-bold" />

@@ -122,6 +122,13 @@ export async function getSellersWithFilter(filters: sellerFilters){
   }});
   return sellers;
 }
+
+export async function getSellersById(id: number){
+  let seller: any = await instance.get(`/sellers/${id}`);
+  return seller;
+}
+
+
 export async function postSeller(user: createSellerDto){
   user.cpf=user.cpf.replace(/\D/g, '');
 
