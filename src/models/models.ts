@@ -98,6 +98,9 @@ export type clientExcelTableRow = {
 export type clientFilters = {
     class: number | null,
     segment: string | null,
+    startsWith?: string | null,
+    page?: number | null,
+    limit?: number | null
 }
 export type createClienteDto = {
     tradingName: string,

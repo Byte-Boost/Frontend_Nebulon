@@ -4,8 +4,8 @@ import { extractFloat, formatCNPJ, formatCPF, formatMoney } from '@/scripts/util
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import FormCard from '@/modules/form_card';
-import { Label, TextInput } from 'flowbite-react';
-import { getCutAndScoreFromCommission, getProductsWithFilter, postCommission } from '@/scripts/http-requests/InstanceSamples';
+import { Flowbite, Label, TextInput, theme } from 'flowbite-react';
+import { getClientsWithFilter, getCutAndScoreFromCommission, getProductsWithFilter, postCommission } from '@/scripts/http-requests/InstanceSamples';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { createCommissionDto } from '@/models/models';
 import UploadModal from '@/modules/upload_modal';
@@ -21,8 +21,11 @@ export default function Home() {
   }
   
   // Product autocomplete
-  const [inputValue, setInputValue] = React.useState('');
+  const [inputValueProduct, setInputValueProduct] = React.useState('');
   let [products, setProducts] = useState<Array<any>>([]);
+  // Client autocomplete
+  const [inputValueClient, setInputValueClient] = React.useState('');
+  let [clients, setClients] = useState<Array<any>>([]);
 
   // Commission form
   const [comissao, setComissao] = useState<createCommissionDto>(emptyComm);
@@ -73,14 +76,24 @@ export default function Home() {
 
   // Product autocomplete
   useEffect(() => {
-    getProductsWithFilter({class: null, startsWith: inputValue, limit: 6})
+    getProductsWithFilter({class: null, startsWith: inputValueProduct, limit: 6})
     .then(function(response){
       setProducts(response.data);
     })
     .catch(error => {
       failureAlert("Error fetching products");
     })
-  }, [inputValue, products]);
+  }, [inputValueProduct]);
+  // Client autocomplete
+  useEffect(() => {
+    getClientsWithFilter({class: null, segment: null, startsWith: inputValueClient, limit: 6})
+    .then(function(response){
+      setClients(response.data);
+    })
+    .catch(error => {
+      failureAlert("Error fetching clients");
+    })
+  }, [inputValueClient]);
 
   return (
     <main>
@@ -112,38 +125,56 @@ export default function Home() {
           <div>
               <Label htmlFor="sellerCPF" value="CPF do Vendedor:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} onChange={handleChange} required />
+                  <TextInput id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} onChange={handleChange} required />
               </div>
           </div>
 
           <div>
-              <Label htmlFor="clientCNPJ" value="CNPJ do Cliente:" className="font-bold" />
-              <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="clientCNPJ" type="text" name="clientCNPJ" value={formatCNPJ(comissao.clientCNPJ)} maxLength={18} onChange={handleChange} required />
-              </div>
-          </div>
-
-          <div>
-              <Label htmlFor="productId" value="ID do produto:" className="font-bold" />
-                <Autocomplete
-                  id="selectProduct"
+              <Label htmlFor="clientCNPJ" value="Cliente:" className="font-bold" />
+              <Autocomplete
+                  className='border-2 rounded-lg shadow-inner'
+                  id="selectClient"
                   filterOptions={(x) => x}
                   freeSolo
                   autoHighlight
                   clearOnEscape
                   
-                  options={products}
-                  getOptionLabel={(option) => option.name}
+                  options={clients}
+                  getOptionLabel={(option) => option.tradingName}
                   onChange={(e, newValue) => {
-                    comissao.productId = newValue ? newValue.id : '';
+                    comissao.clientCNPJ = newValue ? newValue.cnpj : '';
                   }}
 
                   onInputChange={(e, newInputValue) => {
-                    setInputValue(newInputValue);
+                    setInputValueClient(newInputValue);
                   }}
-                  renderInput={(params) => <TextField {...params} label="Produto:" />}
-                  noOptionsText="Nenhum produto encontrado"
+                  renderInput={(params) => <TextField {...params} size="small" />}
+                  noOptionsText="Nenhum cliente encontrado"
                 />
+          </div>
+
+          <div>
+              <Label htmlFor="productId" value="Produto:" className="font-bold" />
+              <Autocomplete
+                className='border-2 rounded-lg shadow-inner'
+                id="selectProduct"
+                filterOptions={(x) => x}
+                freeSolo
+                autoHighlight
+                clearOnEscape
+                
+                options={products}
+                getOptionLabel={(option) => option.name}
+                onChange={(e, newValue) => {
+                  comissao.productId = newValue ? newValue.id : '';
+                }}
+
+                onInputChange={(e, newInputValue) => {
+                  setInputValueProduct(newInputValue);
+                }}
+                renderInput={(params) => <TextField {...params} size="small"/>}
+                noOptionsText="Nenhum produto encontrado"
+              />
           </div>
 
           <div className='grid grid-flow-row'>

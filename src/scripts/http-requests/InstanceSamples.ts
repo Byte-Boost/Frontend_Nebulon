@@ -95,6 +95,9 @@ export async function getClientsWithFilter(filters: clientFilters){
   let clients: any = await instance.get("/clients", { params: {
     segment: filters.segment,
     status: status,
+    startsWith: filters.startsWith,
+    page : filters.page ? filters.page : null,
+    limit: filters.limit ? filters.limit : null
   }});
   return clients;
 }
