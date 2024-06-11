@@ -17,7 +17,7 @@ export default function Home() {
     cpf: '',
     username: '',
     password: '',
-    isAmin: false,
+    admin: false,
   }
 
   const [user, setUser] = useState<createSellerDto>(emptyUser);
@@ -56,6 +56,7 @@ export default function Home() {
       username: jsonRow.Nome.replace(/\s/g, '').toLowerCase(),
       cpf: jsonRow["CPF"].replace(/[^[^\w\s]/gi, ''),
       password: '12345678',
+      admin: false
     }
     await postSeller(vendedor)
   };
@@ -104,7 +105,7 @@ export default function Home() {
             <div>
               <Label htmlFor="admin" value="Administrador" className="font-bold" />
               <div className="flex items-center">
-                <input id="admin" type="checkbox" name="isAdmin" onChange={handleChange} />
+                <input id="admin" type="checkbox" name="admin" onChange={handleChange} />
                 <span className="ml-2">Habilitar privilégios de administrador</span>
               </div>
             </div>
