@@ -198,7 +198,7 @@ export default function Test() {
                         width={'100%'}
                         type="pie" 
                         series={[...dataY].reverse().slice(0,4)} 
-                        options={{ labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'] }} 
+                        options={{ labels: ['Prod. Novo p/ Cli. Novo', 'Prod. Velho p/ Cli. Novo', 'Prod. Novo p/ Cli. Velho', 'Prod. Velho p/ Cli.Velho'] }} 
                     />
                     </div>
                 </div>
