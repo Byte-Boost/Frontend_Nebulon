@@ -1,8 +1,11 @@
 import '@/app/globals.css'
+import { commissionFilters } from '@/models/models';
 import DashboardNumberCard from '@/modules/dashboard_number_card';
 import Sidebar from '@/modules/sidebar';
+import { getCommissionsWithFilter } from '@/scripts/http-requests/InstanceSamples';
 import instance from '@/scripts/http-requests/instance';
 import { formatMoney } from '@/scripts/utils/dataFormatter';
+import { set } from '@boiseitguru/cookie-cutter';
 import { Card } from 'flowbite-react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -24,95 +27,93 @@ export default function Test() {
     const [dataX, setDataX] = useState<string[]>([]);
    
     // Current Month Stats
+    const [unfilteredTotalSales, setUnfilteredTotalSales] = useState([]);
     const [quantitySellsCurrentMonth, setQuantitySellsCurrentMonth] = useState<number>(0);
     const [totalSellsValue, setTotalSellsValue] = useState<number>(0);
-    const [totalComissionValueCurrentMonth, setTotalComissionValueCurrentMonth] = useState<number>(0);
+    const [totalCommissionValueCurrentMonth, setTotalCommissionValueCurrentMonth] = useState<number>(0);
     const [totalSellsPerMonth, setTotalSellsPerMonth] = useState({});
-    
-  
-  
-    const [filterLabel, setFilterLabel] = useState<{
-      client: string | null,
-      seller: string | null,
-      product: string | null,
-    }>({
-      client: null,
-      seller: null,
-      product: null,
+    const [filters, setFilters] = useState<commissionFilters>({
+      date: null,
+      clientCNPJ: null,
+      sellerCPF: null,
+      productID: null,
+      prodClass: null,
+      clientsFirstPurchase: null,
+      page: 1,
+      limit: null,
     });
-  
+    
+    async function refreshUTSale(){
+      setUnfilteredTotalSales((await getCommissionsWithFilter(filters, false)).data);
+    }
     async function getDataForGraph() {
       let now = new Date(Date.now());
-      let promises = [];
+      const results = [];
     
       for(let i = 0; i < fetchDataFromLastMonths; i++){
-  
-        let newDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        let month_start = `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${1}`;
-        
-        // Get the last day of the current month
-        let lastDayOfMonth = new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0).getDate();
-        let month_end = `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${lastDayOfMonth}`;
-  
-        promises.push(
-          instance.get("/commissions/stats", {params :{
-            sale_value_after: month_start,
-            sale_value_before: month_end,
-          }})
-        );
+        // the first of each month, starting from the current, and ending in (FetchDataFromLastMonths - 1) months ago.
+        // and the last of each month, by getting day "0" of the next month, through each iteration.
+        let firstDayOfMonth = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        let lastDayOfMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth()+1, 0);
+        lastDayOfMonth.setUTCHours(23,59,59,999)
+
+        // get ONLY the commissions that are between the first and last day of the month
+        let filtered = unfilteredTotalSales.filter((commission: any) => {
+          let after  =  new Date(commission.date) >= firstDayOfMonth
+          let before =  new Date(commission.date) <= lastDayOfMonth
+          return after && before
+        });
+
+        // Sum all the values of the filtered commissions
+        let monthSaleValue = filtered.reduce((acc, commission: any) => acc + commission.value, 0);
+        results.push(monthSaleValue);
       }
-      // Fetch all the data from the API
-      const results = await Promise.all(promises);
+
       // Create a new object with the total sells per month
       let newTotalSellsPerMonth : {[key: string]: number} = {...totalSellsPerMonth};
       // Reverse the array to get the months in ascending order
       results.reverse().forEach((commissions_12m, i) => {
         let newDate = new Date(now.getFullYear(), now.getMonth() - (results.length - 1 - i), 1);
-        newTotalSellsPerMonth[MonthName(newDate)+'/'+newDate.getFullYear()] = commissions_12m.data.saleValue;
+        newTotalSellsPerMonth[MonthName(newDate)+'/'+newDate.getFullYear()] = commissions_12m;
       });
       setTotalSellsPerMonth(newTotalSellsPerMonth);
     }
+
     async function getOverallData(){
 
       let now = new Date(Date.now());
-      let start = new Date(now.setMonth(now.getMonth()));
-  
       // Gets the first and last day of the current year
-      let current_year_start = `${start.getFullYear()}-${1}-${1}`;
-      let current_year_end = `${start.getFullYear()}-${12}-${31}`;
+      let current_year_start = new Date(now.getFullYear(), 0, 1);
+      let current_year_end = new Date(now.getFullYear(), 12, 0);
+      current_year_end.setUTCHours(23,59,59,999);
   
       // Gets the first and last day of the current month
-      let current_month_start = `${start.getFullYear()}-${start.getMonth() + 1}-${1}`;
-  
-      // Get the last day of the current month
-      let lastDayOfMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate();
-      let current_month_end =new Date(`${start.getFullYear()}-${'0'+ (start.getMonth() + 1)}-${lastDayOfMonth}`);
+      let current_month_start = new Date(now.getFullYear(), now.getMonth(), 1);
+      let current_month_end =new Date(now.getFullYear(), now.getMonth()+1, 0);
+      current_month_end.setUTCHours(23,59,59,999);
       
-      // Fetches the data from the API
-      const commissions_stats = await instance.get("/commissions/stats" ,{params :{
-        comm_value_after: current_month_start,
-        comm_value_before: current_month_end,
-  
-        sale_value_after: current_year_start,
-        sale_value_before: current_year_end,
-        
-        sale_qty_after: current_month_start,
-        sale_qty_before: current_month_end
-      }});
-  
+      // Filtering the commissions that are between the first and last day of the current month and year
+      let salesThisMonth = unfilteredTotalSales.filter((commission: any) => {
+        let after  =  new Date(commission.date) >= current_month_start
+        let before =  new Date(commission.date) <= current_month_end
+        return after && before
+      });
+      let salesThisYear = unfilteredTotalSales.filter((commission: any) => {
+        let after  =  new Date(commission.date) >= current_year_start
+        let before =  new Date(commission.date) <= current_year_end
+        return after && before
+      });
+      // Turning it into data
+      let saleValueYear = salesThisYear.reduce((acc, commission: any) => acc + commission.value, 0);
+      let commValueMonth = Number(salesThisMonth.reduce((acc, commission: any) => acc + commission.commissionCut, 0).toFixed(2));
+      console.log(saleValueYear, commValueMonth)
       
       // Sets the data to the states
-      setTotalSellsValue(commissions_stats.data.saleValue);
-      setQuantitySellsCurrentMonth(commissions_stats.data.saleQty);
-      setTotalComissionValueCurrentMonth(commissions_stats.data.commValue);
+      setTotalSellsValue(saleValueYear);
+      setQuantitySellsCurrentMonth(salesThisMonth.length);
+      setTotalCommissionValueCurrentMonth(commValueMonth);
     }
-    useEffect(() => {
-      console.log(totalSellsPerMonth);
-    }, [totalComissionValueCurrentMonth]);
-    async function getData() {
-      getDataForGraph();
-      getOverallData();
-    }
+
     useEffect(() => {
       // Get the keys and values from totalSellsPerMonth
       const newKeys = Object.keys(totalSellsPerMonth);
@@ -128,10 +129,17 @@ export default function Test() {
       setDataX([...filteredKeys,...dataX]);
       setDataY([...filteredValues,...dataY] as never[]);
     }, [totalSellsPerMonth]);
-  
-  
-    useEffect(() => {getData()}, []);
-    useEffect(() => {console.log(dataX)}, [dataX]);
+
+    // On mount, fetch the overall data
+    useEffect(()=>{refreshUTSale()}, []);
+    // When overall data changes, as long as it's not zero, fetch the data for the graph
+    useEffect(()=>{
+      // So it doesn't try to build graph from empty data (before the first fetch)
+      if (unfilteredTotalSales.length > 0){
+        getDataForGraph()
+        getOverallData();
+      }
+    }, [unfilteredTotalSales]);
   return (
     <main className='h-screen w-screen'>
       <Head>
@@ -229,25 +237,25 @@ export default function Test() {
                     <div className='grow flex flex-col p-4 border-2 rounded-lg justify-around gap-2'>
                         <div className="text-left">
                             <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                            Ultimo mês
+                            Este mes
                             </button>
                         </div>
 
                         <div className="text-left">
                             <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                            Ultimos 3 meses
+                            Este trimestre
                             </button>
                         </div>
 
                         <div className="text-left">
                             <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                            Ultimos 6 meses
+                            Este semestre
                             </button>
                         </div>
 
                         <div className="text-left">
                             <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                            Ultimos 12 meses
+                            Este ano
                             </button>
                         </div>
                     </div>
@@ -257,7 +265,7 @@ export default function Test() {
         {/*far-left*/}
         <div className='flex flex-col md:w-1/4  w-full row-span-2  justify-center p-2 md:gap-0 gap-10 '>
               <DashboardNumberCard title={`Total de Vendas (${(new Date()).getFullYear()})`}number={`${formatMoney(totalSellsValue.toString() + "00")}`} percentage="" />
-              <DashboardNumberCard title={`Total de Vendas: ${MonthName(new Date())}`} number={`${formatMoney(totalComissionValueCurrentMonth.toString() + "00")}`} percentage=""/>
+              <DashboardNumberCard title={`Total em Comissões (${MonthName(new Date())})`} number={`${formatMoney(totalCommissionValueCurrentMonth.toString() + "00")}`} percentage=""/>
               <DashboardNumberCard title={`Número de Vendas: ${MonthName(new Date())}`} number={`${quantitySellsCurrentMonth}`} percentage=""/>
         </div>
         <div id="infoBar" className=''>
