@@ -16,7 +16,8 @@ export default function Home() {
     name: '',
     cpf: '',
     username: '',
-    password: ''
+    password: '',
+    isAmin: false,
   }
 
   const [user, setUser] = useState<createSellerDto>(emptyUser);
@@ -27,8 +28,15 @@ export default function Home() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    const { name, value, type, checked } = e.target;
+    switch (type) {
+      case 'checkbox':
+        setUser({ ...user, [name]: checked });
+        break;
+      default:
+        setUser({ ...user, [name]: value });
+        break;
+    }
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -42,10 +50,10 @@ export default function Home() {
       failureAlert("Error registering Seller/user");
     })
   };
-  const handleUpload = async (jsonRow:any) => {
+  const handleUpload = async (jsonRow: any) => {
     let vendedor: createSellerDto = {
       name: jsonRow.Nome,
-      username:jsonRow.Nome.replace(/\s/g, '').toLowerCase(),
+      username: jsonRow.Nome.replace(/\s/g, '').toLowerCase(),
       cpf: jsonRow["CPF"].replace(/[^[^\w\s]/gi, ''),
       password: '12345678',
     }
@@ -91,6 +99,14 @@ export default function Home() {
                 <div className="border-2 rounded-lg shadow-inner mb-6">
                   <TextInput id="password" type="password" name="password" value={user.password} onChange={handleChange} required />
                 </div>
+            </div>
+
+            <div>
+              <Label htmlFor="admin" value="Administrador" className="font-bold" />
+              <div className="flex items-center">
+                <input id="admin" type="checkbox" name="isAdmin" onChange={handleChange} />
+                <span className="ml-2">Habilitar privilégios de administrador</span>
+              </div>
             </div>
  
             <div className="grid grid-flow-row">
