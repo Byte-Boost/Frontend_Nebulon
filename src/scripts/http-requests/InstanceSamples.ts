@@ -136,7 +136,8 @@ export async function postSeller(user: createSellerDto){
     name: user.name,
     cpf: user.cpf,
     username: user.username,
-    password: user.password
+    password: user.password,
+    admin: user.admin
   })
   return res;
 }
