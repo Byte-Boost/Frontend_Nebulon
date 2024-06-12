@@ -89,7 +89,7 @@ export default function Home() {
           </div>
 
           <div>
-              <Label htmlFor="segment" value="Segment:" className="font-bold" />
+              <Label htmlFor="segment" value="Área de atuação:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
                 <TextInput id="segment" type="text" name="segment" value={cliente.segment} onChange={handleChange} required />
               </div>
