@@ -15,6 +15,9 @@ const Sidebar = ({isAdminProp}:SidebarProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isAdmin, setIsAdmin] = useState(isAdminProp);
 
+  let tableRoutes = [ '/tabela/comissao', '/tabela/produto','/tabela/cliente','/tabela/vendedores']
+  let addRoutes =['/adicionar/comissao','/adicionar/produto','/adicionar/cliente']
+
   useEffect(() => {
     const token = cookie.get('token');
     if (token) {
@@ -35,16 +38,21 @@ const Sidebar = ({isAdminProp}:SidebarProps) => {
           {/* Add more menu items as needed */}
           <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'} link={'/home'} isActive={ currentPath === '/home'}/>
           
-          <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'tables'}  hasDropdown={true} isActive={currentPath === '/tabela/comissao' || currentPath === '/tabela/produto' ||  currentPath === '/tabela/cliente'}>
-            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/tabela/comissao'} isActive={ currentPath === '/tabela/comissao'} />
-            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/tabela/produto'}  isActive={ currentPath === '/tabela/produto'}/>
-            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/tabela/cliente'} isActive={ currentPath === '/tabela/cliente'} />
+          <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'tables'}  hasDropdown={true} isActive={tableRoutes.includes(currentPath)}>
+            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/tabela/comissao'} isActive={ currentPath === tableRoutes[0]} />
+            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/tabela/produto'}  isActive={ currentPath === tableRoutes[1]}/>
+            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/tabela/cliente'} isActive={ currentPath === tableRoutes[2]} />    
+            {
+            isAdmin
+            && 
+            <SidebarItem title='USUARIOS' isHovered={isHovered} icon={'home'} link={'/tabela/vendedor'} isActive={currentPath ===tableRoutes[3]}/>
+            }
           </SidebarItem>
           
-          <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} hasDropdown={true} isActive={  currentPath === '/adicionar/comissao' || currentPath === '/adicionar/produto' || currentPath === '/adicionar/cliente'}>
-            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/adicionar/comissao'}  isActive={ currentPath === '/adicionar/comissao'}/>
-            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/adicionar/produto'} isActive={ currentPath === '/adicionar/produto'}/>
-            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/adicionar/cliente'} isActive={ currentPath === '/adicionar/cliente'}/>
+          <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} hasDropdown={true} isActive={addRoutes.includes(currentPath)}>
+            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/adicionar/comissao'}  isActive={ currentPath === addRoutes[0]}/>
+            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/adicionar/produto'} isActive={ currentPath === addRoutes[1]}/>
+            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/adicionar/cliente'} isActive={ currentPath === addRoutes[2]}/>
           </SidebarItem>
           
           {
