@@ -21,6 +21,18 @@ export default function Sellers() {
     setData(sellers.data);
     setIsLoading(false)
   }
+  const goToPreviousPage = () => {
+    if (filters.page && filters.page > 1) {
+      setFilters({...filters, page: filters.page - 1});
+      getData();
+    }
+  }
+  
+  const goToNextPage = () => {
+    if (filters.page)
+    setFilters({...filters, page: filters.page + 1});
+    getData();
+  }
   function getExcelData(){
     const excelRows = data.map((row: SellerTableRowProps) => {
       return {
@@ -90,6 +102,21 @@ export default function Sellers() {
                   </Table.Body> 
                 </Table>   
                   }
+                  <div className="flex justify-between mt-4"> 
+                <button 
+                  className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700 disabled:opacity-50" 
+                  onClick={goToPreviousPage}
+                  disabled={filters.page === 1}
+                >
+                  Página Anterior
+                </button>
+                <button 
+                  className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700" 
+                  onClick={goToNextPage}
+                >
+                  Próxima Página
+                </button>
+              </div>
                   </div>
             </div>
           </div>
