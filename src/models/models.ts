@@ -123,6 +123,8 @@ export type SellerTableRowProps = {
 }
 export type sellerFilters = {
     adminOnly: boolean | null,
+    page?: number | null,
+    limit?: number | null
 }
 export type createSellerDto = {
     name: string,

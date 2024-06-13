@@ -17,35 +17,19 @@ export default function Clients() {
     class: null,
     segment: null,
     page: 1,
-    limit: 30,
+    limit: 20,
   });
-
-  export type clientFilters = {
-    class: number | null,
-    segment: string | null,
-    startsWith: string | null,
-    page: number,
-    limit: number,
-}
   
   async function getData() {
     setIsLoading(true)
     let clients = await getClientsWithFilter(filters)
+    if(clients.data.length == 0 && filters.page && filters.page > 1){
+      setFilters({...filters, page: filters.page - 1})
+    }
     setData(clients.data);
     setIsLoading(false)
   }
-  const goToPreviousPage = () => {
-    if (filters.page && filters.page > 1) {
-      setFilters({...filters, page: filters.page - 1});
-      getData();
-    }
-  }
-  
-  const goToNextPage = () => {
-    if (filters.page)
-    setFilters({...filters, page: filters.page + 1});
-    getData();
-  }
+
   function getExcelData(){
     const excelRows = data.map((row: clientExcelTableRow) => {
       return {
@@ -60,12 +44,10 @@ export default function Clients() {
     })
     return excelRows
   }
+
   useEffect(() => {
     getData()
-    setInterval(() =>{
-    getData()
-    },60000)
-  }, [])
+  }, [filters])
 
   return (
     <main> 
@@ -82,8 +64,7 @@ export default function Clients() {
                   <div className="inline-block m-4">
                     <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Cliente Novo</label>
                     <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
-                      filters.class = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
-                      getData()
+                      setFilters({...filters, class: parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)})
                     }}>
                       <option value={undefined}>Qualquer</option>
                       <option value={0}>Sim</option>
@@ -118,14 +99,18 @@ export default function Clients() {
                   <div className="flex justify-between mt-4"> 
                 <button 
                   className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700 disabled:opacity-50" 
-                  onClick={goToPreviousPage}
+                  onClick={()=>{
+                    setFilters({...filters, page: (filters.page && filters.page >= 1) ? filters.page - 1 : 1})
+                  }}
                   disabled={filters.page === 1}
                 >
-                  Página Anterior
+                  Página Anterior 
                 </button>
                 <button 
                   className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700" 
-                  onClick={goToNextPage}
+                  onClick={()=>{
+                    setFilters({...filters, page: filters.page ? filters.page+1 : 2})
+                  }}
                 >
                   Próxima Página
                 </button>

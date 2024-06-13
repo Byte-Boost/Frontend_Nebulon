@@ -119,6 +119,8 @@ export async function postClient(cliente: createClienteDto){
 export async function getSellersWithFilter(filters: sellerFilters){
   let sellers: any = await instance.get("/sellers", { params: {
     adminOnly: filters.adminOnly,
+    page : filters.page ? filters.page : null,
+    limit: filters.limit ? filters.limit : null
   }});
   return sellers;
 }

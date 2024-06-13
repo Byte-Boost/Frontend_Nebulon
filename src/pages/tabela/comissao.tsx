@@ -33,9 +33,8 @@ export default function Commissions() {
     limit: 30,
   });
   const handleColumnFilter = (filter: string, label: string | null, value: string | null) =>{
-    filters[filter] = value;
-    filterLabel[filter] = label
-    getData();
+    setFilterLabel({...filterLabel, [filter]: label})
+    setFilters({...filters, [filter]: value})
   }
   
   // Sort labels
@@ -45,24 +44,6 @@ export default function Commissions() {
   const [sortTarget, setSortTarget] = useState<string | null>(null)
 
   // Functions to change the sorting on click
-  // *TODO This function works and gives you an arrow but i am too lazy to implement it right now, will stick with the big ternary for now
-  const setSortArrowDirection = (sort : keyof SortLabelType, target : any, equal : any) =>{
-    if (sort == null){
-      return null
-    }
-    else if (sort != null){
-      if(sortLabel[sort] && sortTarget === target){
-      if(equal){
-        return '↑'
-      }
-      else{
-        return '↓'
-      }
-    }
-    }
-   return null
- }
-
   const changeDateSorting = (killSwitch? : boolean) => {
     if (killSwitch) {
       setSortLabel({ ...sortLabel, sharedSort: null });
@@ -121,21 +102,11 @@ export default function Commissions() {
     setIsLoading(true)
     let commissions = await getCommissionsWithFilter(filters, true)
     // set the data to the fetched data
+    if(commissions.data.length == 0 && filters.page && filters.page > 1){
+      setFilters({...filters, page: filters.page - 1})
+    }
     setData(commissions.data);
     setIsLoading(false)
-  }
-
-  const goToPreviousPage = () => {
-    if (filters.page && filters.page > 1) {
-      setFilters({...filters, page: filters.page - 1});
-      getData();
-    }
-  }
-  
-  const goToNextPage = () => {
-    if (filters.page)
-    setFilters({...filters, page: filters.page + 1});
-    getData();
   }
 
   function getExcelData(){
@@ -159,7 +130,7 @@ export default function Commissions() {
   }
   useEffect(() => {
     getData()
-  }, [])
+  }, [filters])
 
   return (
     <main> 
@@ -334,20 +305,24 @@ export default function Commissions() {
                   </tfoot>
                 </Table>}
                 <div className="flex justify-between mt-4"> 
-                <button 
-                  className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700 disabled:opacity-50" 
-                  onClick={goToPreviousPage}
-                  disabled={filters.page === 1}
-                >
-                  Página Anterior
-                </button>
-                <button 
-                  className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700" 
-                  onClick={goToNextPage}
-                >
-                  Próxima Página
-                </button>
-              </div>
+                  <button 
+                    className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700 disabled:opacity-50" 
+                    onClick={()=>{
+                      setFilters({...filters, page: (filters.page && filters.page >= 1) ? filters.page - 1 : 1})
+                    }}
+                    disabled={filters.page === 1}
+                  >
+                    Página Anterior
+                  </button>
+                  <button 
+                    className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700" 
+                    onClick={()=>{
+                      setFilters({...filters, page: filters.page ? filters.page+1 : 2})
+                    }}
+                  >
+                    Próxima Página
+                  </button>
+                </div>
               </div>
             </div>
           </div>            

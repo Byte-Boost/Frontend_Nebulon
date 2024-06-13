@@ -13,25 +13,20 @@ import { useEffect, useState } from 'react';
 export default function Sellers() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filters, setFilters] = useState<sellerFilters>({adminOnly: false});
+  const [filters, setFilters] = useState<sellerFilters>({
+    adminOnly: false,
+    page: 1,
+    limit: 20,
+  });
   
   async function getData() {
     setIsLoading(true)
     let sellers = await getSellersWithFilter(filters)
+    if(sellers.data.length == 0 && filters.page && filters.page > 1){
+      setFilters({...filters, page: filters.page - 1})
+    }
     setData(sellers.data);
     setIsLoading(false)
-  }
-  const goToPreviousPage = () => {
-    if (filters.page && filters.page > 1) {
-      setFilters({...filters, page: filters.page - 1});
-      getData();
-    }
-  }
-  
-  const goToNextPage = () => {
-    if (filters.page)
-    setFilters({...filters, page: filters.page + 1});
-    getData();
   }
   function getExcelData(){
     const excelRows = data.map((row: SellerTableRowProps) => {
@@ -47,10 +42,7 @@ export default function Sellers() {
   }
   useEffect(() => {
     getData()
-    setInterval(() =>{
-    getData()
-    },60000)
-  }, [])
+  }, [filters])
 
   return (
     <main> 
@@ -68,8 +60,7 @@ export default function Sellers() {
                   <div className="inline-block m-4">
                     <div className="inline-block m-4">
                       <input type="checkbox" name="adminOnly" onChange={()=>{
-                        filters.adminOnly = !filters.adminOnly
-                        getData()
+                        setFilters({...filters, adminOnly: !filters.adminOnly})
                         }}/>
                       <label htmlFor="adminOnly" className="inline mb-2 text-lg font-medium text-gray-900"> Admin</label>
                     </div>
@@ -105,14 +96,18 @@ export default function Sellers() {
                   <div className="flex justify-between mt-4"> 
                 <button 
                   className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700 disabled:opacity-50" 
-                  onClick={goToPreviousPage}
+                  onClick={()=>{
+                    setFilters({...filters, page: (filters.page && filters.page >= 1) ? filters.page - 1 : 1})
+                  }}
                   disabled={filters.page === 1}
                 >
                   Página Anterior
                 </button>
                 <button 
                   className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700" 
-                  onClick={goToNextPage}
+                  onClick={()=>{
+                    setFilters({...filters, page: filters.page ? filters.page+1 : 2})
+                  }}
                 >
                   Próxima Página
                 </button>
