@@ -69,6 +69,11 @@ export async function postCommission(comissao: createCommissionDto){
   return res;
 }
 
+export async function getScoreboard(){
+  let scores = await instance.get(`/scores/scoreboard`);
+  return scores.data;
+}
+
 // Products
 export async function getProductsWithFilter(filters: productFilters){
   let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
