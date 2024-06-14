@@ -9,7 +9,7 @@ import { formatCPF } from "@/scripts/utils/dataFormatter";
 import FormCard from '@/modules/form_card';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
 import { createSellerDto } from '@/models/models';
-import { deleteSellersById, getSellersById } from '@/scripts/http-requests/InstanceSamples';
+import { deleteSellers, getSellersById, putSellers } from '@/scripts/http-requests/InstanceSamples';
 import Swal from 'sweetalert2';
 
 const EditSeller = () => {
@@ -42,14 +42,16 @@ const EditSeller = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    
-    instance.put(`/sellers/${id}`, user)
-      .then(response => {
-        router.push('/tabela/vendedor');
-      })
-      .catch(error => {
-        failureAlert("Erro ao atualizar o vendedor");
+    putSellers(Number(id), user).then(()=>{
+      Swal.fire({
+        title: "Atualizado!",
+        text: "Usuário atualizado com sucesso!",
+        icon: "success"
       });
+      router.push('/tabela/vendedor')
+    }).catch(error => {
+      failureAlert("Algo deu errado!")
+    });
   };
 
 
@@ -97,7 +99,7 @@ const EditSeller = () => {
                                   confirmButtonText: "Sim, delete!"
                                 }).then((result) => {
                                   if (result.isConfirmed) {
-                                    deleteSellersById(user.id)
+                                    deleteSellers(user.id)
                                     Swal.fire({
                                       title: "Deletado!",
                                       text: "Usuário deletado com sucesso!",

@@ -93,6 +93,17 @@ export async function postProduct(produto: createProductDto){
   })
   return res;
 }
+export async function updateProduct(id: number, produto: createProductDto){
+  let res = await instance.put(`/products/${id}`,{
+    name: produto.name,
+    description: produto.description
+  })
+  return res;
+}
+export async function deleteProduct(id: number){
+  let res = await instance.delete(`/products/${id}`)
+  return res;
+}
 
 // Clients
 export async function getClientsWithFilter(filters: clientFilters){
@@ -119,6 +130,19 @@ export async function postClient(cliente: createClienteDto){
   })
   return res;
 }
+export async function updateClient(id: number, cliente: createClienteDto){
+  let res = await instance.put(`/clients/${id}`,{
+    tradingName: cliente.tradingName,
+    companyName: cliente.companyName,
+    segment: cliente.segment,
+    contact: cliente.contact
+  })
+  return res;
+}
+export async function deleteClient(id: number){
+  let res = await instance.delete(`/clients/${id}`)
+  return res;
+}
 
 // Sellers
 export async function getSellersWithFilter(filters: sellerFilters){
@@ -135,12 +159,17 @@ export async function getSellersById(id: number){
   return seller;
 }
 
-export async function deleteSellersById(id: number){
-  let seller: any = await instance.post(`/account/delete/${id}`);
-  return seller;
+export async function putSellers(id: number, user: any){
+  let res:any = await instance.put(`/account/${id}`, { 
+    name: user.name,
+  });
+  return res;
 }
 
-
+export async function deleteSellers(id: number){
+  let res: any = await instance.delete(`/account/${id}`);
+  return res;
+}
 
 export async function postSeller(user: createSellerDto){
   user.cpf=user.cpf.replace(/\D/g, '');

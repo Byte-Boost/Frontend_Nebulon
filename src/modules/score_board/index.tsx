@@ -23,9 +23,9 @@ const Scoreboard = () => {
   let color = "#eeeeee"
   return (
     <div className="w-full h-full grid gap-3 grid-rows-4 grid-cols-1">
-      <p className="bg-[#d4af37]">{topScores.top_three[0].score} Pontos - {topScores.top_three[0].sellersAmount} pessoas aqui</p>
-      <p className="bg-[#c0c0c0]">{topScores.top_three[1].score} Pontos - {topScores.top_three[1].sellersAmount} pessoas aqui</p>
-      <p className="bg-[#cd7f32]">{topScores.top_three[2].score} Pontos - {topScores.top_three[2].sellersAmount} pessoas aqui</p>
+      {topScores.top_three.length >= 1 ? <p className="bg-[#d4af37]">{topScores.top_three[0].score} Pontos - {topScores.top_three[0].sellersAmount} pessoas aqui</p> : null}
+      {topScores.top_three.length >= 2 ? <p className="bg-[#c0c0c0]">{topScores.top_three[1].score} Pontos - {topScores.top_three[1].sellersAmount} pessoas aqui</p> : null}
+      {topScores.top_three.length >= 3 ? <p className="bg-[#cd7f32]">{topScores.top_three[2].score} Pontos - {topScores.top_three[2].sellersAmount} pessoas aqui</p> : null}
       <p className="bg-[#eeeeee]">{topScores.self.score} - rank: {topScores.self.rank}</p>
     </div>
   );
