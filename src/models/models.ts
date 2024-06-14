@@ -131,7 +131,7 @@ export type createSellerDto = {
     cpf: string,
     username: string,
     password: string,
-    admin: boolean
+    admin?: boolean
 }
 
 export type users = {

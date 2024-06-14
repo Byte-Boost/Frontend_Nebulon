@@ -130,6 +130,12 @@ export async function getSellersById(id: number){
   return seller;
 }
 
+export async function deleteSellersById(id: number){
+  let seller: any = await instance.post(`/account/delete/${id}`);
+  return seller;
+}
+
+
 
 export async function postSeller(user: createSellerDto){
   user.cpf=user.cpf.replace(/\D/g, '');

@@ -59,10 +59,10 @@ export default function Sellers() {
                   <h1 className='text-6xl font-bold text-gray-900 inline'>Usuários</h1>
                   <div className="inline-block m-4">
                     <div className="inline-block m-4">
-                      <input type="checkbox" name="adminOnly" onChange={()=>{
+                      <label htmlFor="adminOnly" className="inline mb-2 text-lg font-medium text-gray-900"> Admin</label>
+                      <input title="adminOnly" type="checkbox" name="adminOnly" onChange={()=>{
                         setFilters({...filters, adminOnly: !filters.adminOnly})
                         }}/>
-                      <label htmlFor="adminOnly" className="inline mb-2 text-lg font-medium text-gray-900"> Admin</label>
                     </div>
                   </div>
                 </section>

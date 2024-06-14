@@ -42,11 +42,6 @@ const Sidebar = ({isAdminProp}:SidebarProps) => {
             <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/tabela/comissao'} isActive={ currentPath === tableRoutes[0]} />
             <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/tabela/produto'}  isActive={ currentPath === tableRoutes[1]}/>
             <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/tabela/cliente'} isActive={ currentPath === tableRoutes[2]} />    
-            {
-            isAdmin
-            && 
-            <SidebarItem title='USUARIOS' isHovered={isHovered} icon={'home'} link={'/tabela/vendedor'} isActive={currentPath ===tableRoutes[3]}/>
-            }
           </SidebarItem>
           
           <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} hasDropdown={true} isActive={addRoutes.includes(currentPath)}>
@@ -56,10 +51,11 @@ const Sidebar = ({isAdminProp}:SidebarProps) => {
           </SidebarItem>
           
           {
-          isAdmin
-          && 
-          <SidebarItem title={'GERENCIA'} isHovered={isHovered} icon={'admin'} hasDropdown={true} isActive={ currentPath === '/adm/usuarios'}>
+            isAdmin
+            && 
+            <SidebarItem title={'GERENCIA'} isHovered={isHovered} icon={'admin'} hasDropdown={true} isActive={ currentPath === '/adm/usuarios'}>
             <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios'} isActive={ currentPath === '/adm/usuarios'}/>
+            <SidebarItem title='USUARIOS' isHovered={isHovered} icon={'client'} link={'/tabela/vendedor'} isActive={currentPath ===tableRoutes[3]}/>
             {/* <SidebarItem title={'OPÇÕES'} isHovered={isHovered} icon={'options'} link={'/adm/opcoes'}/> */}
           </SidebarItem>
           }

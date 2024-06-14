@@ -1,6 +1,9 @@
 import { SellerTableRowProps } from "@/models/models";
 import { formatCPF } from "@/scripts/utils/dataFormatter";
 import { Table } from "flowbite-react/components/Table"
+import Link from "next/link";
+import { useRouter } from "next/router";
+
 
 const SellerTableRow = ({
   id,
@@ -9,6 +12,8 @@ const SellerTableRow = ({
   score,
   admin
 }: SellerTableRowProps) => {
+
+
   return(
     <Table.Row className="odd:bg-[#f1f1f1] even:bg-[#e4e4e4] font-medium">  
       <Table.Cell className="whitespace-nowrap">
@@ -26,6 +31,17 @@ const SellerTableRow = ({
       </Table.Cell>
       <Table.Cell>
         {score}
+      </Table.Cell>
+      <Table.Cell>
+        <Link href={{
+          pathname: '/adm/editar_usuario/[id]',
+          query: { id }
+        }}>
+        <button 
+          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+          Editar
+        </button>
+        </Link>
       </Table.Cell>
     </Table.Row>
   )
