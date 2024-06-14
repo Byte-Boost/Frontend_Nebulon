@@ -75,15 +75,15 @@ export default function Home() {
             </div>
 
             <div>
-                <Label htmlFor="name" value="Nome" className="font-bold" />
+                <Label htmlFor="name" value="Nome" className="font-bold dark:text-black" />
                 <div className="border-2 rounded-lg shadow-inner">
                   <TextInput id="name" type="text" name="name" value={user.name} onChange={handleChange} required />
                 </div>
             </div>
 
             <div>
-                <Label htmlFor="cpf" value="CPF" className="font-bold" />
-                <div className="border-2 rounded-lg shadow-inner">
+                <Label htmlFor="cpf" value="CPF" className="font-bold dark:text-black" />
+                <div className="border-2 rounded-lg shadow-inner ">
                   <TextInput id="cpf" type="text" name="cpf"value={formatCPF(user.cpf)} maxLength={14} onChange={handleChange} required />
                 </div>
             </div>

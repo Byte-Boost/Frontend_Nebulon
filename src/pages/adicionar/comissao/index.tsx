@@ -21,7 +21,7 @@ export default function Home() {
     clientCNPJ: '',
     productId: ''
   }
-    
+  const [active, setActive] = useState(true); // [true, false] => [admin, seller]
   const [currentUser, setCurrentUser] = useState<any>({});
 
   useEffect(() => {
@@ -39,6 +39,7 @@ export default function Home() {
   useEffect(() => {
     if(currentUser[0] && currentUser[0].admin == false){
       console.log(currentUser[0])
+      setActive(false);
       setComissao({...comissao, sellerCPF: currentUser[0].cpf});
     }
   }, [currentUser])
@@ -151,17 +152,17 @@ export default function Home() {
           {
             currentUser[0] && currentUser[0].admin == true
             ?
-          <div>
-              <Label htmlFor="sellerCPF" value="CPF do Vendedor:" className="font-bold" />
-              <div className="border-2 rounded-lg shadow-inner">
-                  <TextInput id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} onChange={handleChange} required />
-              </div>
+        <div >
+          <Label htmlFor="sellerCPF" value="CPF do Vendedor:" className={`font-weight-bold ${active ? 'bg-gray-5' : ''}`} />
+          <div className="border rounded-3">
+            <TextInput id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} onChange={handleChange} required />
           </div>
+        </div>
             :
-          <div>
-              <Label htmlFor="sellerCPF" value="CPF do Vendedor:" className="font-bold" />
-              <div className="border-2 rounded-lg shadow-inner">
-                  <TextInput id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} required disabled />
+          <div className=''>
+              <Label htmlFor="sellerCPF" value="CPF do Vendedor:" className="font-bold " />
+              <div className="border-2 rounded-lg shadow-inner ">
+                  <TextInput style={{backgroundColor: '#A0AEC0'}} id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} required disabled />
               </div>
             </div>
           }
