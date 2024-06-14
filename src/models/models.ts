@@ -55,6 +55,11 @@ export type createCommissionDto = {
     productId: number | string
 }
 
+export type scoreboardData = {
+    top_three: [{score: number, sellersAmount: number}, {score: number, sellersAmount: number}, {score: number, sellersAmount: number}]
+    self: {name: string, score: number, rank: number}
+}
+
 // Products
 export type ProductTableRowProps = {
     name: string;

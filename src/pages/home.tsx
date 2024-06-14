@@ -1,6 +1,7 @@
 import '@/app/globals.css'
 import { commissionFilters } from '@/models/models';
 import DashboardNumberCard from '@/modules/dashboard_number_card';
+import Scoreboard from '@/modules/score_board';
 import Sidebar from '@/modules/sidebar';
 import { getCommissionsWithFilter } from '@/scripts/http-requests/InstanceSamples';
 import instance from '@/scripts/http-requests/instance';
@@ -193,6 +194,7 @@ export default function Test() {
                 <div id="scoreBoard" className='col-span-2 flex justify-center p-2 md:w-1/3 md:h-full h-1/3'>
                     <div className='grow flex flex-col p-4 border-2 rounded-lg justify-around'>
                         <Card className='grow flex justify-center'>
+                          <Scoreboard/>
                         </Card>
                     </div>
                 </div>
