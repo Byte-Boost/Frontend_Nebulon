@@ -1,7 +1,9 @@
 import { ProductTableRowProps } from "@/models/models";
 import { Table } from "flowbite-react/components/Table"
+import Link from "next/link";
 
 const ProductTableRow = ({
+  id,
   name,
   description,
   status,
@@ -26,6 +28,17 @@ const ProductTableRow = ({
       </Table.Cell>
       <Table.Cell>
         {description}
+      </Table.Cell>
+            <Table.Cell>
+        <Link href={{
+          pathname: '/adm/editar_produto/[id]',
+          query: { id }
+        }}>
+        <button 
+          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+          Editar
+        </button>
+        </Link>
       </Table.Cell>
     </Table.Row>
   )

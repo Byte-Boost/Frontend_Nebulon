@@ -77,10 +77,11 @@ export default function Products() {
                     <Table.HeadCell>Descrição</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                        {data.map((product: { name: string , description:string, status:number }, index: number) => {
+                        {data.map((product: { id: number, name: string , description:string, status:number }, index: number) => {
                       return (
                         <ProductTableRow
                           key={index}
+                          id={product.id}
                           name={product.name}
                           description={product.description}
                           status={product.status}

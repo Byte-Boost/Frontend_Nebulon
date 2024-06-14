@@ -53,9 +53,9 @@ const Sidebar = ({isAdminProp}:SidebarProps) => {
           {
             isAdmin
             && 
-            <SidebarItem title={'GERENCIA'} isHovered={isHovered} icon={'admin'} hasDropdown={true} isActive={ currentPath === '/adm/usuarios'}>
-            <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios'} isActive={ currentPath === '/adm/usuarios'}/>
-            <SidebarItem title='USUARIOS' isHovered={isHovered} icon={'client'} link={'/tabela/vendedor'} isActive={currentPath ===tableRoutes[3]}/>
+            <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'admin'} hasDropdown={true} isActive={ currentPath === '/adm/usuarios'}>
+            <SidebarItem title={'CADASTRO'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios'} isActive={ currentPath === '/adm/usuarios'}/>
+            <SidebarItem title='LISTA' isHovered={isHovered} icon={'client'} link={'/tabela/vendedor'} isActive={currentPath ===tableRoutes[3]}/>
             {/* <SidebarItem title={'OPÇÕES'} isHovered={isHovered} icon={'options'} link={'/adm/opcoes'}/> */}
           </SidebarItem>
           }

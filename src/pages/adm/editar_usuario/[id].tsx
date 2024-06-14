@@ -4,12 +4,10 @@ import Sidebar from '@/modules/sidebar';
 import React, { useEffect, useState } from "react";
 import { Label, TextInput } from "flowbite-react";
 import { useRouter } from "next/router";
-import instance from '@/scripts/http-requests/instance';
 import { formatCPF } from "@/scripts/utils/dataFormatter";
 import FormCard from '@/modules/form_card';
-import { failureAlert, successAlert } from '@/scripts/utils/shared';
-import { createSellerDto } from '@/models/models';
-import { deleteSellers, getSellersById, putSellers } from '@/scripts/http-requests/InstanceSamples';
+import { failureAlert} from '@/scripts/utils/shared';
+import { deleteSellers, getSellersById, updateSellers } from '@/scripts/http-requests/InstanceSamples';
 import Swal from 'sweetalert2';
 
 const EditSeller = () => {
@@ -25,7 +23,6 @@ const EditSeller = () => {
 
   let getData = async () => {
     let userInfo = await getSellersById(Number(id))
-    console.log(userInfo.data[0]);
     setUser(userInfo.data[0]);
   }
   
@@ -42,7 +39,7 @@ const EditSeller = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    putSellers(Number(id), user).then(()=>{
+    updateSellers(Number(id), user).then(()=>{
       Swal.fire({
         title: "Atualizado!",
         text: "Usuário atualizado com sucesso!",

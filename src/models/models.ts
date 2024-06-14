@@ -62,6 +62,7 @@ export type scoreboardData = {
 
 // Products
 export type ProductTableRowProps = {
+    id?: number;
     name: string;
     description: string;
     status: number;

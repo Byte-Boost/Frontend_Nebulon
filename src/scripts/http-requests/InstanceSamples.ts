@@ -85,6 +85,10 @@ export async function getProductsWithFilter(filters: productFilters){
   }});
   return products;
 }
+export async function getProductById(id: number){
+  let product: any = await instance.get(`/products/${id}`);
+  return product;
+}
 export async function postProduct(produto: createProductDto){
   let res = await instance.post('/products',{
     name: produto.name,
@@ -159,7 +163,7 @@ export async function getSellersById(id: number){
   return seller;
 }
 
-export async function putSellers(id: number, user: any){
+export async function updateSellers(id: number, user: any){
   let res:any = await instance.put(`/account/${id}`, { 
     name: user.name,
   });
