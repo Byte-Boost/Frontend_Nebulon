@@ -218,12 +218,12 @@ export default function Test() {
         <title>Nebulon - Home</title>
       </Head>
       <Sidebar/>
-      <div className='dark:bg-[#121212] ml-[3.4rem] flex flex-row w-[calc(100%-3.4rem)] md:h-screen h-fit md:flex-nowrap flex-wrap'>
+      <div className=' ml-[3.4rem] flex flex-row w-[calc(100%-3.4rem)] md:h-screen h-fit md:flex-nowrap flex-wrap'>
         <div className='flex flex-col w-full md:h-full h-fit '>
             {/*top*/}
             <div className='flex md:flex-row w-full h-1/2 flex-col'>
                 <div id="lineChart" className='  md:w-2/3 md:h-full h-72 col-span-2 flex justify-center p-2'>
-                    <div className=' dark:bg-[#1d1d1d] grow border-2 dark:border-none rounded-lg '>
+                    <div className='  grow border-2  rounded-lg '>
                     {isLoading ? <div className=' w-full h-full grid place-content-center '><LoaderAnim className='scale-50' /></div>  :
                     <Graph 
                         key={'lineChart'}
@@ -265,8 +265,8 @@ export default function Test() {
                     </div>
                 </div>
                 <div id="scoreBoard" className='col-span-2 flex justify-center p-2 md:w-1/3 md:h-full h-1/3'>
-                    <div className='dark:bg-[#1d1d1d] dark:border-none grow flex flex-col p-4 border-2 rounded-lg justify-around'>
-                        <Card className='dark:bg-[#1d1d1d] grow flex justify-center'>
+                    <div className=' grow flex flex-col p-4 border-2 rounded-lg justify-around'>
+                        <Card className=' grow flex justify-center'>
                           <Scoreboard/>
                         </Card>
                     </div>
@@ -275,7 +275,7 @@ export default function Test() {
             {/*bottom*/}
             <div className='flex md:flex-row  w-full h-1/2 flex-col'>
                 <div id="pieChart" className=' md:w-1/2 md:h-full h-72 col-span-2 flex justify-center p-2'>
-                    <div className='dark:bg-[#1d1d1d] dark:border-none grow border-2 rounded-lg '>
+                    <div className='grow border-2 rounded-lg '>
                     {isLoading ? <div className=' w-full h-full grid place-content-center '><LoaderAnim className='scale-50' /></div>  :
                       <Graph
                           key={'pieChart'}
@@ -296,7 +296,7 @@ export default function Test() {
                     </div>
                 </div>
                 <div id="pieChartOpt" className='flex justify-center p-2 md:w-1/6'>
-                    <div className=' dark:bg-[#1d1d1d] dark:border-none grow flex flex-col p-4 border-2 rounded-lg justify-around gap-2'>  
+                    <div className=' grow flex flex-col p-4 border-2 rounded-lg justify-around gap-2'>  
                       {isAdmin && 
                         <div className="text-left"> 
                           <button onClick={()=>{
@@ -330,7 +330,7 @@ export default function Test() {
                     </div>
                 </div>
                 <div id="timeOpt" className='col-span-2 flex justify-center p-2 md:w-1/3'>
-                    <div className='dark:bg-[#1d1d1d] dark:border-none  grow flex flex-col p-4 border-2 rounded-lg justify-around gap-2'>
+                    <div className='  grow flex flex-col p-4 border-2 rounded-lg justify-around gap-2'>
                         <div className="text-left">
                             <button onClick={() => {
                              
@@ -361,7 +361,7 @@ export default function Test() {
             </div>
         </div>
         {/*far-left*/}
-        <div className='dark:bg-[#1d1d1d] dark:border-none flex flex-col md:w-1/4  w-full row-span-2  justify-center p-2 md:gap-0 gap-10 '>
+        <div className=' flex flex-col md:w-1/4  w-full row-span-2  justify-center p-2 md:gap-0 gap-10 '>
               <DashboardNumberCard 
               title={`Total de Vendas (${(new Date()).getFullYear()})`}
               number={`${Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalSellsValue)}`} 
