@@ -74,6 +74,11 @@ export async function getScoreboard(){
   return scores.data;
 }
 
+export async function deleteCommission(id: number){
+  let venda = await instance.delete(`/commissions/${id}`)
+  return venda;
+}
+
 // Products
 export async function getProductsWithFilter(filters: productFilters){
   let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
@@ -139,13 +144,17 @@ export async function updateClient(id: number, cliente: createClienteDto){
     tradingName: cliente.tradingName,
     companyName: cliente.companyName,
     segment: cliente.segment,
-    contact: cliente.contact
+    contact: cliente.contact.toString().replace(/\D/g, '')
   })
   return res;
 }
 export async function deleteClient(id: number){
   let res = await instance.delete(`/clients/${id}`)
   return res;
+}
+export async function getClientsById(id: number){
+  let cliente: any = await instance.get(`/clients/${id}`);
+  return cliente;
 }
 
 // Sellers

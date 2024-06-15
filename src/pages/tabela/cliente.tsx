@@ -82,10 +82,11 @@ export default function Clients() {
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     
-                    {data.map((client: { companyName: string, segment:string, contact:string, status:number }, index: number) => {
+                    {data.map((client: { id: number, companyName: string, segment:string, contact:string, status:number }, index: number) => {
                       return (
                         <ClientTableRow
                           key={index}
+                          id={client.id}
                           companyName={client.companyName}
                           segment={client.segment}
                           contact={client.contact}

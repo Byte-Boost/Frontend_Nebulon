@@ -1,6 +1,13 @@
 import { ProductTableRowProps } from "@/models/models";
+import cookie from "@boiseitguru/cookie-cutter";
 import { Table } from "flowbite-react/components/Table"
+import { jwtDecode, JwtPayload } from "jwt-decode";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
+interface MyJwtPayload extends JwtPayload {
+  admin: boolean; 
+}
 
 const ProductTableRow = ({
   id,
@@ -8,6 +15,20 @@ const ProductTableRow = ({
   description,
   status,
 }: ProductTableRowProps) => {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+  const token = cookie.get('token');
+  if (token) {
+    try {
+      const decoded = jwtDecode<MyJwtPayload>(token);
+      setIsAdmin(decoded.admin);
+    } catch (error) {
+      console.log("Error decoding token:", error);
+    }
+  }
+  }, []);
+
   return(      
       <Table.Row className="odd:bg-[#f1f1f1] even:bg-[#e4e4e4] font-medium">
       <Table.Cell className="whitespace-nowrap font-medium">
@@ -29,7 +50,10 @@ const ProductTableRow = ({
       <Table.Cell>
         {description}
       </Table.Cell>
-            <Table.Cell>
+      {
+        isAdmin
+        &&
+      <Table.Cell>
         <Link href={{
           pathname: '/adm/editar_produto/[id]',
           query: { id }
@@ -39,7 +63,8 @@ const ProductTableRow = ({
           Editar
         </button>
         </Link>
-      </Table.Cell>
+      </Table.Cell>          
+      }
     </Table.Row>
   )
 }

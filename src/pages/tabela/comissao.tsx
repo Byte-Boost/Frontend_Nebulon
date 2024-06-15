@@ -223,7 +223,7 @@ export default function Commissions() {
                     </div>
 
                     <div className="inline-block m-4">
-                      <input type="checkbox" name="firstPurchase" onChange={()=>{
+                      <input title="firstP" type="checkbox" name="firstPurchase" onChange={()=>{
                         filters.clientsFirstPurchase = !filters.clientsFirstPurchase
                         getData()
                         }}/>
@@ -247,10 +247,11 @@ export default function Commissions() {
                   </Table.Head>
 
                   <Table.Body className="text-black px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                    {data.map((commission: { date: string , value:string, commissionCut: any, clientsFirstPurchase: any, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {                      
+                    {data.map((commission: { id: number, date: string , value:string, commissionCut: any, clientsFirstPurchase: any, client_data: any, product_data: any, seller_data: any, paymentMethod:string }, index: number) => {                      
                       return (
                         <CommissionTableRow
                           key={index}
+                          id={commission.id}
                           date={commission.date}
                           seller_data={{
                             cpf: commission.seller_data.cpf,

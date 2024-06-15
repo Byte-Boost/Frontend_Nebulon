@@ -1,5 +1,6 @@
 // Commissions
 export type CommissionTableRowProps = {
+    id?: number;
     date: string;
     seller_data: {name: string, cpf: string},
     client_data: {name: string, status: number, cnpj: string},
@@ -10,6 +11,7 @@ export type CommissionTableRowProps = {
     handleFilters: Function,
     handleDateSorting : Function,
     handleValueSorting : Function,
+    isAdmin?: boolean
 };
 export type commissionExcelTableRow = {
     date: Date,
@@ -87,6 +89,7 @@ export type createProductDto = {
 
 // Clients
 export type ClientTableRowProps = {
+    id?: number;
     companyName: string;
     segment: string;
     contact: string;

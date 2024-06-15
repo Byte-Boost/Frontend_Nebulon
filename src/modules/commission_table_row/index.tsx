@@ -1,8 +1,19 @@
 import { CommissionTableRowProps } from "@/models/models";
+import { deleteCommission } from "@/scripts/http-requests/InstanceSamples";
 import { formatCNPJ, formatCPF, formatDateToSlash, formatMoney } from "@/scripts/utils/dataFormatter";
+import cookie, { set } from "@boiseitguru/cookie-cutter";
 import { Table } from "flowbite-react/components/Table"
+import { jwtDecode, JwtPayload } from "jwt-decode";
+import router from "next/router";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+
+interface MyJwtPayload extends JwtPayload {
+  admin: boolean; 
+}
 
 const CommissionTableRow = ({
+  id,
   date,
   seller_data,
   client_data,
@@ -14,6 +25,19 @@ const CommissionTableRow = ({
   handleDateSorting,
   handleValueSorting,
 }: CommissionTableRowProps) => {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+  const token = cookie.get('token');
+  if (token) {
+    try {
+      const decoded = jwtDecode<MyJwtPayload>(token);
+      setIsAdmin(decoded.admin);
+    } catch (error) {
+      console.log("Error decoding token:", error);      
+    }
+  }
+  }, []);
   
   let new_date= formatDateToSlash(date) 
   return(
@@ -69,7 +93,39 @@ const CommissionTableRow = ({
           </div>
         </div>
       </Table.Cell>
+      {
+      isAdmin
+      &&
+      <Table.Cell>
+      <div className="text-right">
+              <button className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4 w-full' type="button" onClick={() => {
+                                Swal.fire({
+                                  title: "Tem certeza?",
+                                  text: "Não será possível reverter o processo!",
+                                  icon: "warning",
+                                  showCancelButton: true,
+                                  confirmButtonColor: "#3085d6",
+                                  cancelButtonColor: "#d33",
+                                  confirmButtonText: "Sim, delete!"
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    console.log(id)
+                                    deleteCommission(Number(id))
+                                    Swal.fire({
+                                      title: "Deletado!",
+                                      text: "Cliente deletado com sucesso!",
+                                      icon: "success"
+                                    });
+                                    router.reload();
+
+                                  }
+                                });
+                
+                }}>Deletar</button>
+            </div>
+      </Table.Cell>
+      }
     </Table.Row>
-  )
-}
+  );
+};
 export default CommissionTableRow;

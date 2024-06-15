@@ -4,9 +4,8 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
-import { failureAlert, successAlert } from '@/scripts/utils/shared';
+import { failureAlert } from '@/scripts/utils/shared';
 import { useRouter } from 'next/router';
-import instance from '@/scripts/http-requests/instance';
 import Swal from 'sweetalert2';
 import { deleteProduct, getProductById, updateProduct } from '@/scripts/http-requests/InstanceSamples';
 import { createProductDto } from '@/models/models';
@@ -32,8 +31,7 @@ const EditProduct = () => {
         getData();
     }
   }, [id]);
-
-  
+ 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setProduct({ ...produto, [name]: value });
