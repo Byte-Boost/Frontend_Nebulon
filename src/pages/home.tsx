@@ -4,10 +4,8 @@ import DashboardNumberCard from '@/modules/dashboard_number_card';
 import LoaderAnim from '@/modules/loader';
 import Scoreboard from '@/modules/scoreboard';
 import Sidebar from '@/modules/sidebar';
-import { getCommissionsWithFilter, getProductById, getProductsWithFilter } from '@/scripts/http-requests/InstanceSamples';
-import { formatMoney } from '@/scripts/utils/dataFormatter';
+import { getCommissionsWithFilter } from '@/scripts/http-requests/InstanceSamples';
 import cookie from '@boiseitguru/cookie-cutter';
-import { Card } from 'flowbite-react';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -123,19 +121,10 @@ export default function Test() {
         return acc;
       },{});
       setFilteredTotalSales(totalSalesPerClient)
-      console.log(totalSalesPerClient)
       return
      }
       else if (filter=='category'){
-        let totalSalesPerCategory = unfilteredTotalSales.reduce((acc:any, curr:any) =>{
-          if (curr.product_data.status == 0 ){
-            acc['Prod. Novo p/ Cli. Velho'] = (acc['Prod. Novo p/ Cli. Velho'] || 0) + curr.value;
-          }
-          else if (curr.product_data.status == 1 ){
-            acc['Prod. Velho p/ Cli.Velho'] = (acc['Prod. Velho p/ Cli.Velho'] || 0) + curr.value;
-          }
-          return acc;
-        }, {});
+        let totalSalesPerCategory 
         let filter = {
           date: filters.date,
           clientCNPJ: filters.clientCNPJ,
@@ -148,41 +137,64 @@ export default function Test() {
         }
         let firstPro = (await getCommissionsWithFilter(filter, true)).data;
         if (timeFilter != null){
-          let filtered = firstPro.filter((commission: any) => {
+        totalSalesPerCategory = timeFilteredTotalSales.reduce((acc:any, curr:any) =>{
+          if (curr.product_data.status == 0 && curr.client_data.status == 1){
+            acc['Prod. Novo p/ Cli. Velho'] = (acc['Prod. Novo p/ Cli. Velho'] || 0) + curr.commissionCut;
+          }
+          else if (curr.product_data.status == 1 && curr.client_data.status == 1){
+            acc['Prod. Velho p/ Cli.Velho'] = (acc['Prod. Velho p/ Cli.Velho'] || 0) + curr.commissionCut;
+          }
+          return acc;
+        }, {});
+          let firstProFiltered = firstPro
+          let filtered = firstProFiltered.filter((commission: any) => {
             let after  =  new Date(commission.date) >= timeFilter
             return after;
           })
           totalSalesPerCategory = filtered.reduce((acc:any, curr:any) =>{
-            if (curr.product_data.status == 0){
-              acc['Prod. Novo p/ Cli. Novo'] = (acc['Prod. Novo p/ Cli. Novo'] || 0) + curr.value;
+            if (curr.product_data.status == 0 && curr.client_data.status == 0){
+              acc['Prod. Novo p/ Cli. Novo'] = (acc['Prod. Novo p/ Cli. Novo'] || 0) + curr.commissionCut;
             }
-            else if (curr.product_data.status == 1){
-              acc['Prod. Velho p/ Cli. Novo'] = (acc['Prod. Velho p/ Cli. Novo'] || 0) + curr.value;
+            else if (curr.product_data.status == 1 && curr.client_data.status == 0){
+              acc['Prod. Velho p/ Cli. Novo'] = (acc['Prod. Velho p/ Cli. Novo'] || 0) + curr.commissionCut;
             }
             return acc
           }, totalSalesPerCategory)
-          console.log(totalSalesPerCategory)
+          // console.log(totalSalesPerCategory)
           setFilteredTotalSales(totalSalesPerCategory);
           return 
-        } else {
-          totalSalesPerCategory = firstPro.reduce((acc:any, curr:any) =>{
-            if (curr.product_data.status == 0){
-              acc['Prod. Novo p/ Cli. Novo'] = (acc['Prod. Novo p/ Cli. Novo'] || 0) + curr.value;
+        } 
+        else 
+        {
+          // console.log(unfilteredTotalSales)
+          // console.log(filteredTotalSales)
+          let totalSalesPerCategoryTemp  = unfilteredTotalSales.reduce((acc:any, curr:any) =>{
+            if (curr.product_data.status == 0 && curr.clientsFirstPurchase == false){
+              acc['Prod. Novo p/ Cli. Velho'] = (acc['Prod. Novo p/ Cli. Velho'] || 0) + curr.commissionCut;
+              console.log(curr)
             }
-            else if (curr.product_data.status == 1){
-              acc['Prod. Velho p/ Cli. Novo'] = (acc['Prod. Velho p/ Cli. Novo'] || 0) + curr.value;
+            else if (curr.product_data.status == 1 && curr.clientsFirstPurchase == false){
+              acc['Prod. Velho p/ Cli.Velho'] = (acc['Prod. Velho p/ Cli.Velho'] || 0) + curr.commissionCut;
+            }
+            return acc;
+          }, {});
+          // console.log(totalSalesPerCategoryTemp)
+          // console.log(firstPro)
+          totalSalesPerCategoryTemp = firstPro.reduce((acc:any, curr:any) =>{
+            if (curr.product_data.status == 0 && curr.clientsFirstPurchase == true){
+              acc['Prod. Novo p/ Cli. Novo'] = (acc['Prod. Novo p/ Cli. Novo'] || 0) + curr.commissionCut;
+            }
+            else if (curr.product_data.status == 1 && curr.clientsFirstPurchase == true){
+              acc['Prod. Velho p/ Cli. Novo'] = (acc['Prod. Velho p/ Cli. Novo'] || 0) + curr.commissionCut;
             }
             return acc
-          }, totalSalesPerCategory)
-          console.log(totalSalesPerCategory)
-          setFilteredTotalSales(totalSalesPerCategory);
+          }, totalSalesPerCategoryTemp)
+          // console.log(totalSalesPerCategoryTemp)
+          // let sum = Object.values(totalSalesPerCategoryTemp).reduce((accumulator : any, currentValue :any)  => accumulator + currentValue, 0)
+          // console.log(sum);
+          setFilteredTotalSales(totalSalesPerCategoryTemp);
           return 
         }
-        
-      
-        
-       
-      
     }
   }
     async function getDataForGraph() {
