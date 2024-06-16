@@ -56,7 +56,8 @@ export default function Test() {
     const [totalCommissionValueCurrentMonth, setTotalCommissionValueCurrentMonth] = useState<number>(0);
     const [totalSellsPerMonth, setTotalSellsPerMonth] = useState({});
 
-    const [pieFilter, setPieFilter] = useState('product')
+    const [pieData, setPieData] = useState([]);
+    const [pieFilter, setPieFilter] = useState('category')
     const [filters, setFilters] = useState<commissionFilters>({
       date: null,
       clientCNPJ: null,
@@ -112,8 +113,40 @@ export default function Test() {
       console.log(totalSalesPerClient)
       return
      }
-      
+      else if (filter=='category'){
+        let totalSalesPerCategory = unfilteredTotalSales.reduce((acc:any, curr:any) =>{
+          if (curr.product_data.status == 0 ){
+            acc['Prod. Novo p/ Cli. Velho'] = (acc['Prod. Novo p/ Cli. Velho'] || 0) + curr.value;
+          }
+          else if (curr.product_data.status == 1 ){
+            acc['Prod. Velho p/ Cli.Velho'] = (acc['Prod. Velho p/ Cli.Velho'] || 0) + curr.value;
+          }
+          return acc;
+        }, {});
+        let filter = {
+          date: null,
+          clientCNPJ: null,
+          sellerCPF: null,
+          productID: null,
+          prodClass: null,
+          clientsFirstPurchase: true,
+          page: 1,
+          limit: null,
+        }
+        let firstPro = (await getCommissionsWithFilter(filter, true)).data;
+        totalSalesPerCategory = firstPro.reduce((acc:any, curr:any) =>{
+          if (curr.product_data.status == 0){
+            acc['Prod. Novo p/ Cli. Novo'] = (acc['Prod. Novo p/ Cli. Novo'] || 0) + curr.value;
+          }
+          else if (curr.product_data.status == 1){
+            acc['Prod. Velho p/ Cli. Novo'] = (acc['Prod. Velho p/ Cli. Novo'] || 0) + curr.value;
+          }
+          return acc
+        }, totalSalesPerCategory)
+        setFilteredTotalSales(totalSalesPerCategory);
+        return 
     }
+  }
     async function getDataForGraph() {
       let now = new Date(Date.now());
       const results = [];
@@ -321,7 +354,7 @@ export default function Test() {
                         <div className="text-left">
                           <button onClick={()=>{
                             setPieFilter('category')
-                          }} className='bg-gray-500 cursor-not-allowed pointer-events-none text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+                          }} className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
                               Categoria
                           </button>
                         </div>
