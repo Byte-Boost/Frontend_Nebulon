@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SidebarItem from '../sidebar_item';
 import cookie from '@boiseitguru/cookie-cutter';
 import { jwtDecode } from 'jwt-decode';
 import { JwtPayload } from 'jwt-decode'; 
+import { useRouter } from 'next/router';
 interface MyJwtPayload extends JwtPayload {
   admin: boolean; 
 }
-const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
+interface SidebarProps {
+  isAdminProp?: boolean
+}
+
+const Sidebar = ({isAdminProp}:SidebarProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isAdmin, setIsAdmin] = useState(isAdminProp);
+
+  let tableRoutes = [ '/tabela/comissao', '/tabela/produto','/tabela/cliente','/tabela/vendedores']
+  let addRoutes =['/adicionar/comissao','/adicionar/produto','/adicionar/cliente']
 
   useEffect(() => {
     const token = cookie.get('token');
@@ -17,42 +25,65 @@ const Sidebar = ({isAdmin: isAdminProp = false }:{isAdmin?:boolean}) => {
       setIsAdmin(decoded.admin);
     }
   },[]);
+  
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    
+    function handleClickOutside(event :any) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsHovered(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Cleanup function to remove the event listener when the component unmounts
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  const router = useRouter();
+  const currentPath = router.pathname;
   return (
     <div 
-      className={`transition-all duration-200 ease-in-out ${isHovered ? 'w-48' : 'w-10'} bg-gradient-to-b from-purple-500 to-[#805C90] h-screen fixed`} 
+      ref={sidebarRef}
+      onClick={() => setIsHovered(true)}
+      className={`transition-all duration-200 ease-in-out ${isHovered ? 'w-48' : 'w-[3.4rem]'} z-50 bg-[#1c1c1e] h-screen fixed flex flex-col justify-between border-r-[1px] border-[#424042]`} 
       onMouseEnter={() => setIsHovered(true)} 
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="text-white px-2 py-4">
         <ul>
           {/* Add more menu items as needed */}
-          <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'} link={'/home'}/>
+          <SidebarItem title={'DASHBOARD'} isHovered={isHovered} icon={'dashboard'} link={'/home'} isActive={ currentPath === '/home'}/>
           
-          <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'tables'}  hasDropdown={true}>
-            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/tabela/comissao'} className='stroke-[#58ff60]' classNameText='text-[#58ff60]'/>
-            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/tabela/produto'} className='fill-[#ff6600]' classNameText='text-[#ff6600]'/>
-            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/tabela/cliente'} className='stroke-[#6fc3fc]' classNameText='text-[#6fc3fc]'/>
+          <SidebarItem title={'TABELAS'} isHovered={isHovered} icon={'tables'}  hasDropdown={true} isActive={tableRoutes.includes(currentPath)}>
+            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/tabela/comissao'} isActive={ currentPath === tableRoutes[0]} />
+            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/tabela/produto'}  isActive={ currentPath === tableRoutes[1]}/>
+            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/tabela/cliente'} isActive={ currentPath === tableRoutes[2]} />    
           </SidebarItem>
           
-          <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} hasDropdown={true}>
-            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/adicionar/comissao'} className='stroke-[#58ff60]' classNameText='text-[#58ff60]'/>
-            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/adicionar/produto'} className='fill-[#ff6600]' classNameText='text-[#ff6600]'/>
-            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/adicionar/cliente'} className='stroke-[#6fc3fc]' classNameText='text-[#6fc3fc]'/>
+          <SidebarItem title={'ADICIONAR'} isHovered={isHovered} icon={'add'} hasDropdown={true} isActive={addRoutes.includes(currentPath)}>
+            <SidebarItem title={'COMISSÃO'} isHovered={isHovered} icon={'commission'} link={'/adicionar/comissao'}  isActive={ currentPath === addRoutes[0]}/>
+            <SidebarItem title={'PRODUTOS'} isHovered={isHovered} icon={'product'} link={'/adicionar/produto'} isActive={ currentPath === addRoutes[1]}/>
+            <SidebarItem title={'CLIENTES'} isHovered={isHovered} icon={'client'} link={'/adicionar/cliente'} isActive={ currentPath === addRoutes[2]}/>
           </SidebarItem>
           
           {
-          isAdmin
-          && 
-          <SidebarItem title={'ADMINISTRAÇÃO'} isHovered={isHovered} icon={'admin'} hasDropdown={true}>
-            <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios'} className='stroke-[#52355b]' classNameText='text-[#52355b]'/>
+            isAdmin
+            && 
+            <SidebarItem title={'USUÁRIOS'} isHovered={isHovered} icon={'admin'} hasDropdown={true} isActive={ currentPath === '/adm/usuarios'}>
+            <SidebarItem title={'CADASTRO'} isHovered={isHovered} icon={'client'} link={'/adm/usuarios'} isActive={ currentPath === '/adm/usuarios'}/>
+            <SidebarItem title='LISTA' isHovered={isHovered} icon={'client'} link={'/tabela/vendedor'} isActive={currentPath ===tableRoutes[3]}/>
             {/* <SidebarItem title={'OPÇÕES'} isHovered={isHovered} icon={'options'} link={'/adm/opcoes'}/> */}
           </SidebarItem>
           }
-
-          {/* <SidebarItem title={'OPÇÕES'} isHovered={isHovered} icon={'options'} link={'/opcoes'}/> */}
-          <SidebarItem title={'SAIR'} isHovered={isHovered} icon={'logout'} link={'/'}  />
         </ul>
       </div>
+          <div className="text-white px-2 py-4">
+            <ul>
+              <SidebarItem title={'SAIR'} isHovered={isHovered} icon={'logout'} link={'/'}  />
+            </ul>
+          </div>
     </div>
   );
 };

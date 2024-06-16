@@ -1,69 +1,50 @@
-
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/requests/instance';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import Swal from 'sweetalert2';
-import ProductModal from '@/modules/product_modal';
 import FormCard from '@/modules/form_card';
 import { Label, TextInput } from 'flowbite-react';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
-
-interface Produto {
-  name: string;
-  description: string;
-  percentage: string;
-}
+import { createProductDto } from '@/models/models';
+import { postProduct } from '@/scripts/http-requests/InstanceSamples';
+import UploadModal from '@/modules/upload_modal';
 
 export default function Home() {
-  const [produto, setProduct] = useState<Produto>({
+  const emptyProd = {
     name: '',
     description: '',
-    percentage: '',    
-  });
+  }
 
+  const [produto, setProduct] = useState<createProductDto>(emptyProd);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalSize, setModalSize] = useState<string>('md');
-
-  let jsonData: Array<any> = [];
-  const [file, setFile] = useState()
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
 
   const closeModal = () => {
     setModalIsOpen(false);
   };
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setProduct({ ...produto, [name]: value });
   };
-  const postProduct = () => {
-      
-    instance.post('/products',{
-      name: produto.name,
-      description: produto.description,
-      percentage: produto.percentage,      
-    })
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    
+    postProduct(produto)
     .then(function(response){
       successAlert("Produto cadastrado com sucesso!", "Product added");
-      setProduct({
-        name: '',
-        description: '',
-        percentage: '',
-      });
+      setProduct(emptyProd);
     })
     .catch(error => {
       failureAlert("Error adding new product");
     })
-  }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    postProduct();
+  };
+  const handleUpload = async (jsonRow:any) => {
+    let product: createProductDto = {
+      name: jsonRow.Nome,
+      description: jsonRow["Descrição"],
+      status: jsonRow.Status,
+    } 
+    await postProduct(product)
   };
 
   return (
@@ -92,13 +73,6 @@ export default function Home() {
                 <TextInput id="description" type="text" name="description" value={produto.description} onChange={handleChange} required />
               </div>
           </div>
-
-          <div>
-              <Label htmlFor="valuePercentage" value="Porcentagem:" className="font-bold" />
-              <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="valuePercentage" type="text" name="percentage" value={produto.percentage} onChange={handleChange} required />
-              </div>
-          </div>
           
           <div className="grid grid-flow-row">
             <div className="text-right">
@@ -109,7 +83,7 @@ export default function Home() {
             </div>
           </div>
         </form>
-      <ProductModal isOpen={modalIsOpen} closeModal={closeModal} />
+      <UploadModal isOpen={modalIsOpen} closeModal={closeModal} postSequence={async (jsonRow)=>{await handleUpload(jsonRow)}} success={{msg: "Produtos cadastrados com sucesso!", log: "Products added"}}/>
     </FormCard>
     </main>
   );

@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 
 import UploadCard from "../upload_card";
-import instance from "@/scripts/requests/instance";
-import xlsxToJSON from "@/scripts/dataUtils/xlsxToJSON";
+import xlsxToJSON from "@/scripts/file-format-scripts/xlsxToJSON";
 import { Modal } from "flowbite-react";
 import { failureAlert, successAlert } from "@/scripts/utils/shared";
+import { ModalProps } from "@/models/models";
 
-
-interface ModalProps {
-  isOpen: boolean;
-  closeModal: () => void;
-}
-
-const ProductModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
+const UploadModal: React.FC<ModalProps> = ({ isOpen, closeModal, postSequence, success }) => {
   const [file, setFile] = useState()
 
   function handleChange(event:any) {
@@ -24,21 +18,16 @@ const ProductModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
       let i = 0;
       try{
         while(jsonData.length > i) {
-          await instance.post('/products',{
-            name: jsonData[i].Nome,
-            description: jsonData[i]["Descrição"],
-            percentage: jsonData[i]["Alíquota"],
-            status: jsonData[i].Status,
-          }).catch(()=>{throw new Error("Error adding new Product")})
+          postSequence(jsonData[i])
           i++;
         };
-        successAlert("Produto cadastrado com sucesso!", "Product added", closeModal);
+        successAlert(success.msg, success.log, closeModal);
       } catch (err: any){
         failureAlert(err.message)
       }
-    } 
-  }  
-
+    }
+  }
+      
   return (
     <Modal show={isOpen} onClose={closeModal} dismissible className="bg-black bg-opacity-30 grid place-content-center" size={"lg"}>
       <Modal.Body>
@@ -48,4 +37,4 @@ const ProductModal: React.FC<ModalProps> = ({ isOpen, closeModal }) => {
   );
 };
 
-export default ProductModal;
+export default UploadModal;

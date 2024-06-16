@@ -9,9 +9,10 @@ import ProductIcon from "../sidebar_icons/products_icon";
 import ClientIcon from "../sidebar_icons/client_icon";
 import CommissionIcon from "../sidebar_icons/commission_icon";
 import TablesIcon from "../sidebar_icons/tables_icon";
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 
 const getIcon = (iconName: keyof typeof iconMapping | string, className?: string) => {
-  const iconMapping = {
+  const iconMapping: { [key: string]: JSX.Element } = {
     'home': <HomeIcon className={className}/>,
     'dashboard': <DashboardIcon className={className}/>,
     'add': <AddIcon className={className}/>,
@@ -26,20 +27,20 @@ const getIcon = (iconName: keyof typeof iconMapping | string, className?: string
   return iconMapping[iconName];
 };
 
-
-const SidebarItem = 
-({ 
-  title, 
+const SidebarItem = ({
+  title,
   icon,
+  isActive,
   isHovered,
-  hasDropdown = false,
+  hasDropdown,
   link,
   children,
   className,
   classNameText
 }: {
   title: string, 
-  icon: string, 
+  icon: string,
+  isActive?: boolean, 
   isHovered: boolean,
   hasDropdown?: boolean,
   link?: string,
@@ -49,15 +50,21 @@ const SidebarItem =
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);  
   return (
-      <li className="my-2 cursor-pointer " onClick={() => setDropdownOpen(!dropdownOpen)}>
-        <a href={link} className="flex items-center  transition-all duration-200  ease-in-out hover:scale-105 active:scale-90">
-          {getIcon(icon,className)}
-          <span className={`transition-all duration-200 ease-in-out ${isHovered ? 'ml-2' : 'ml-0'} ${isHovered ? 'block' : 'hidden'} font-semibold ${classNameText}`}>{title.toUpperCase()}</span>
+      <li className={`my-2 cursor-pointer font-JetBrainsMono rounded-md ${dropdownOpen?  isHovered?'bg-[#2e302e]':null: isActive? isHovered?'bg-[#c14379]':null :null}`} onClick={() => setDropdownOpen(!dropdownOpen)}>
+        <a href={link} 
+        className={`flex items-center justify-between transition-all duration-200  ease-in-out rounded-md hover:bg-[#e45693] ${dropdownOpen?  isHovered?'bg-[#1c1c1e]':null: null}`}>
+          <div className={`flex items-center ${isActive? isHovered? null:'bg-[#c14379]':null} rounded-md `}>
+            {getIcon(icon,className)}
+            <span className={`transition-all duration-200 ease-in-out ${isHovered ? 'ml-2' : 'ml-0'} ${isHovered ? 'block' : 'hidden'} font-semibold ${classNameText}`}>{title.toUpperCase()}</span>
+          </div>
+          {hasDropdown && <span className={` pr-2  transition-all duration-200 ease-in-out ${isHovered ? 'ml-2' : 'ml-0'} ${isHovered ? 'block' : 'hidden'}`}>{dropdownOpen ?<FaAngleUp /> : <FaAngleDown />}</span>}
         </a>
         {hasDropdown 
         && dropdownOpen && (
-        <ul className={`${isHovered ? 'ml-0' : 'ml-0'} ${isHovered ? 'block' : 'hidden'}`}>
-          {children}
+        <ul className={` ${isHovered ? 'block' : 'hidden ml-0'} `}>
+          {React.Children.map(children, child => (
+            <li className={``}>{child}</li>
+          ))}
         </ul>
       )}
       </li>

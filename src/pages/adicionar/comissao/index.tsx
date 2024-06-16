@@ -1,82 +1,123 @@
 import '@/app/globals.css'
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/requests/instance';
-import { extractFloat, formatCNPJ, formatCPF, formatMoney } from '@/scripts/validation/dataFormatter';
+import { extractFloat, formatCPF, formatMoney } from '@/scripts/utils/dataFormatter';
 import Head from 'next/head';
-import React, { useState } from 'react';
-import Swal from 'sweetalert2';
-import CommissionModal from '@/modules/commissions_modal';
+import React, { useEffect, useState } from 'react';
 import FormCard from '@/modules/form_card';
-import { Label, TextInput } from 'flowbite-react';
+import { Label, TextInput, Select } from 'flowbite-react';
+import { getClientsWithFilter, getCutAndScoreFromCommission, getProductsWithFilter, getSellersById, postCommission } from '@/scripts/http-requests/InstanceSamples';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
-
-interface Comissao {
-  sellerData: string;
-  clientData: string;
-  value: string;
-  paymentMethod: string;
-  sellerCPF: string;
-  clientCNPJ: string;
-  productId: string;
-}
+import { createCommissionDto } from '@/models/models';
+import UploadModal from '@/modules/upload_modal';
+import { Autocomplete, TextField } from '@mui/material';
+import cookie from '@boiseitguru/cookie-cutter';
+import { jwtDecode } from 'jwt-decode';
 
 export default function Home() {
-  const [comissao, setComissao] = useState<Comissao>({
-    sellerData: '',
-    clientData: '',
+  const emptyComm = {
     value: '',
     paymentMethod: '',
     sellerCPF: '',
     clientCNPJ: '',
     productId: ''
-  });
+  }
+  const [active, setActive] = useState(true); // [true, false] => [admin, seller]
+  const [currentUser, setCurrentUser] = useState<any>({});
 
+  useEffect(() => {
+    async function fetchData(){
+      const token = cookie.get('token');
+      if (token) {
+        const decoded = jwtDecode<any>(token);
+        const user = await getSellersById(decoded.id);
+        setCurrentUser(user.data);
+      }      
+    };
+    fetchData();
+  },[]);
+
+  useEffect(() => {
+    if(currentUser[0] && currentUser[0].admin == false){
+      console.log(currentUser[0])
+      setActive(false);
+      setComissao({...comissao, sellerCPF: currentUser[0].cpf});
+    }
+  }, [currentUser])
+
+  // Product autocomplete
+  const [inputValueProduct, setInputValueProduct] = React.useState('');
+  let [products, setProducts] = useState<Array<any>>([]);
+  // Client autocomplete
+  const [inputValueClient, setInputValueClient] = React.useState('');
+  let [clients, setClients] = useState<Array<any>>([]);
+
+  // Commission form
+  const [comissao, setComissao] = useState<createCommissionDto>(emptyComm);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   const closeModal = () => {
     setModalIsOpen(false);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
     setComissao({ ...comissao, [name]: value });
   };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Formatação dos dados
-    comissao.sellerCPF=comissao.sellerCPF.replace(/\D/g, '');
-    comissao.clientCNPJ=comissao.clientCNPJ.replace(/\D/g, '');
     comissao.value=extractFloat(comissao.value).toString();
-
-    // Requisição POST
-    instance.post('/commissions',{
-      sellerData: comissao.sellerData,
-      clientData: comissao.clientData,
-      date: Date.now(),
-      value: comissao.value,
-      paymentMethod: comissao.paymentMethod,
-      sellerCPF: comissao.sellerCPF,
-      clientCNPJ: comissao.clientCNPJ,
-      productId: comissao.productId
-    }) 
+    postCommission(comissao)
     .then(function(response){
       successAlert("Comissão cadastrada com sucesso!", "Commission added successfully");
-      setComissao({
-        sellerData: '',
-        clientData: '',
-        value: '',
-        paymentMethod: '',
-        sellerCPF: '',
-        clientCNPJ: '',
-        productId: ''
-      });
+      setComissao(emptyComm);
     })
     .catch(error => {
       failureAlert("Error adding new commission");
     })
   };
+  const handleUpload = async (jsonRow:any) => {
+    let date = new Date(jsonRow["Data da venda"]);
+    let value = jsonRow["Valor de Venda"];
+    let paymentMethod = jsonRow["Forma de Pagamento"];
+    let sellerCPF = jsonRow["CPF Vendedor"].replace(/[^\w\s]/gi, '');
+    let clienteCNPJ = jsonRow["CNPJ/CPF Cliente"].replace(/[^\w\s]/gi, '');
+    let productId = jsonRow["ID Produto"];
+    let calcValues = await getCutAndScoreFromCommission({clienteCNPJ, productId, value});
+
+    let venda: createCommissionDto = {
+      date: date,
+      value: value,
+      commissionCut: calcValues.cut,
+      scorePoints: calcValues.score,
+      paymentMethod: paymentMethod,
+      sellerCPF: sellerCPF,
+      clientCNPJ: clienteCNPJ,
+      productId: productId,
+
+    }
+
+    await postCommission(venda);
+  };
+
+  // Product autocomplete
+  useEffect(() => {
+    getProductsWithFilter({class: null, startsWith: inputValueProduct, limit: 6})
+    .then(function(response){
+      setProducts(response.data);
+    })
+    .catch(error => {
+      failureAlert("Error fetching products");
+    })
+  }, [inputValueProduct]);
+  // Client autocomplete
+  useEffect(() => {
+    getClientsWithFilter({class: null, segment: null, startsWith: inputValueClient, limit: 6})
+    .then(function(response){
+      setClients(response.data);
+    })
+    .catch(error => {
+      failureAlert("Error fetching clients");
+    })
+  }, [inputValueClient]);
 
   return (
     <main>
@@ -101,30 +142,79 @@ export default function Home() {
           <div>
               <Label htmlFor="paymentMethod" value="Método do pagamento:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="paymentMethod" type="text" name="paymentMethod" value={comissao.paymentMethod} onChange={handleChange} required />
+              <Select id="paymentMethod" name="paymentMethod" value={comissao.paymentMethod} onChange={handleChange} required>
+                  <option value="" disabled>Selecione um método</option>
+                  <option value="à vista">À vista</option>
+                  <option value="a prazo">A prazo</option>
+                </Select>
               </div>
+          </div>
+          {
+            currentUser[0] && currentUser[0].admin == true
+            ?
+        <div >
+          <Label htmlFor="sellerCPF" value="CPF do Vendedor:" className={`font-weight-bold ${active ? 'bg-gray-5' : ''}`} />
+          <div className="border rounded-3">
+            <TextInput id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} onChange={handleChange} required />
+          </div>
+        </div>
+            :
+          <div className=''>
+              <Label htmlFor="sellerCPF" value="CPF do Vendedor:" className="font-bold " />
+              <div className="border-2 rounded-lg shadow-inner ">
+                  <TextInput style={{backgroundColor: '#A0AEC0'}} id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} required disabled />
+              </div>
+            </div>
+          }
+
+          <div>
+              <Label htmlFor="clientCNPJ" value="Cliente:" className="font-bold" />
+              <Autocomplete
+                  className='border-2 rounded-lg shadow-inner'
+                  id="selectClient"
+                  filterOptions={(x) => x}
+                  freeSolo
+                  autoHighlight
+                  clearOnEscape
+                  
+                  options={clients}
+                  getOptionLabel={(option) => option.tradingName}
+                  onChange={(e, newValue) => {
+                    comissao.clientCNPJ = newValue ? newValue.cnpj : '';
+                  }}
+
+                  onInputChange={(e, newInputValue) => {
+                    setInputValueClient(newInputValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} size="small" />}
+                  noOptionsText="Nenhum cliente encontrado"
+                />
           </div>
 
           <div>
-              <Label htmlFor="productId" value="ID do produto:" className="font-bold" />
-              <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="productId" type="text" name="productId" value={comissao.productId} onChange={handleChange} required />
-              </div>
+              <Label htmlFor="productId" value="Produto:" className="font-bold" />
+              <Autocomplete
+                className='border-2 rounded-lg shadow-inner'
+                id="selectProduct"
+                filterOptions={(x) => x}
+                freeSolo
+                autoHighlight
+                clearOnEscape
+                
+                options={products}
+                getOptionLabel={(option) => option.name}
+                onChange={(e, newValue) => {
+                  comissao.productId = newValue ? newValue.id : '';
+                }}
+
+                onInputChange={(e, newInputValue) => {
+                  setInputValueProduct(newInputValue);
+                }}
+                renderInput={(params) => <TextField {...params} size="small"/>}
+                noOptionsText="Nenhum produto encontrado"
+              />
           </div>
 
-          <div>
-              <Label htmlFor="sellerCPF" value="CPF do Vendedor:" className="font-bold" />
-              <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="sellerCPF" type="text" name="sellerCPF" value={formatCPF(comissao.sellerCPF)} maxLength={14} onChange={handleChange} required />
-              </div>
-          </div>
-
-          <div>
-              <Label htmlFor="clientCNPJ" value="CNPJ do Cliente:" className="font-bold" />
-              <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="clientCNPJ" type="text" name="clientCNPJ" value={formatCNPJ(comissao.clientCNPJ)} maxLength={18} onChange={handleChange} required />
-              </div>
-          </div>
           <div className='grid grid-flow-row'>
             <div className="text-right">
               <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-8 w-full' type="button" onClick={() => setModalIsOpen(true)}>Cadastro por upload</button>
@@ -133,8 +223,9 @@ export default function Home() {
               <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4 w-full' type="submit">Cadastrar</button>
             </div>
           </div>
+
         </form>
-        <CommissionModal isOpen={modalIsOpen} closeModal={closeModal} />
+        <UploadModal isOpen={modalIsOpen} closeModal={closeModal}  postSequence={async (jsonRow)=>{await handleUpload(jsonRow)}} success={{msg: "Vendas cadastradas com sucesso!", log: "Sales added"}}/>
       </FormCard>
     </main>
   );

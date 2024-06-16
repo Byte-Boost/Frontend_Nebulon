@@ -1,10 +1,11 @@
 import '@/app/globals.css'
+import { productExcelTableRow, productFilters } from '@/models/models';
 import ContentArea from '@/modules/content_area';
 import ExportButton from '@/modules/export_button';
 import LoaderAnim from '@/modules/loader';
 import ProductTableRow from '@/modules/product_table_row';
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/requests/instance';
+import { getProductsWithFilter } from '@/scripts/http-requests/InstanceSamples';
 import { Table } from 'flowbite-react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -12,48 +13,38 @@ import { useEffect, useState } from 'react';
 export default function Products() {
   const [isLoading, setIsLoading] = useState(true); 
   const [data, setData] = useState([]);
-  const [filters, setFilters] = useState<{
-    class: number | null,
-  }>({
+  const [filters, setFilters] = useState<productFilters>({
     class: null,
+    startsWith: null, 
+    page: 1,
+    limit: 20,
   });
 
   async function getData() {
-    setIsLoading(true)
-    let status = filters.class == 0 ? "new" : filters.class == 1 ? "old" : undefined
-    let products: any = await instance.get("/products", { params: {
-      status: status,
-    }});
-
+    setIsLoading(true)    
+    let products = await getProductsWithFilter(filters)
+    if(products.data.length == 0 && filters.page && filters.page > 1){
+      setFilters({...filters, page: filters.page - 1})
+    }
     setData(products.data);
     setIsLoading(false)
   }
-  function getExcelData(){
-    const newArray = data.map((row: {
-      id: number,
-      name: string,
-      description: string,
-      status: number,
-    }) => {
-      // Aliquota Should be `=IF(INDIRECT("RC[-1]",0)= 0, ${0.025}, ${0.015}))`, but formulas aren't working
-      // 0.025 and 0.015 are magic numbers, and should be in ENV
+
+  function dataToExcel(){
+    const excelRows = data.map((row: productExcelTableRow) => {
       return {
         "ID": row.id,
         "Nome": row.name,
         "Descrição": row.description,
         "Status": row.status,
-        "Alíquota": `${0.015}`,
       }
     })
-    return newArray
+    return excelRows
   }
 
   useEffect(() => {
     getData()
-    setInterval(() =>{
-    getData()
-    },60000)
-  }, [])
+  }, [filters])
 
   return (
     <main> 
@@ -70,8 +61,7 @@ export default function Products() {
                   <div className="inline-block m-4">
                     <label htmlFor="prodSelect" className="block mb-2 text-lg font-medium text-gray-900">Produto novo</label>
                     <select className="rounded-lg block w-full p-2.5" name="prodSelect" id="prodSelect" onChange={()=>{
-                      filters.class = parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)
-                      getData()
+                      setFilters({...filters, class: parseInt((document.getElementById('prodSelect') as HTMLSelectElement).value)})
                     }}>
                       <option value={undefined}>Qualquer</option>
                       <option value={0}>Sim</option>
@@ -83,29 +73,47 @@ export default function Products() {
                 {isLoading ? <div className='grid place-content-center '> <LoaderAnim /></div>:
                 <Table className="w-100 rounded-lg bg-purple-500 text-black">
                   <Table.Head className='text-left text-lg text-[#fbfbfb]'>
-                    <Table.HeadCell>Nome</Table.HeadCell>
-                    <Table.HeadCell>Descrição</Table.HeadCell>
-                    <Table.HeadCell>Porcentagem</Table.HeadCell>
-                    <Table.HeadCell>Novo</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Nome</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Descrição</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'></Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
-                        {data.map((product: { name: string , description:string, percentage:number, status:number }, index: number) => {
+                        {data.map((product: { id: number, name: string , description:string, status:number }, index: number) => {
                       return (
                         <ProductTableRow
                           key={index}
+                          id={product.id}
                           name={product.name}
                           description={product.description}
-                          percentage={product.percentage}
                           status={product.status}
                         />
                       )
                     })}
                   </Table.Body>
                 </Table>}
+                <div className="flex justify-between mt-4"> 
+                <button 
+                  className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700 disabled:opacity-50" 
+                  onClick={()=>{
+                    setFilters({...filters, page: (filters.page && filters.page >= 1) ? filters.page - 1 : 1})
+                  }}
+                  disabled={filters.page === 1}
+                >
+                  Página Anterior
+                </button>
+                <button 
+                  className="px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700" 
+                  onClick={()=>{
+                    setFilters({...filters, page: filters.page ? filters.page+1 : 2})
+                  }}
+                >
+                  Próxima Página
+                </button>
+              </div>
                 </div>
               </div>
             </div>
-          <ExportButton jsonData={getExcelData()} filename="produtos"/>
+          <ExportButton jsonData={dataToExcel()} filename="produtos"/>
         </ContentArea>
     </main>
   );

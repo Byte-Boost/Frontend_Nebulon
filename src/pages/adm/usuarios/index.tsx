@@ -3,59 +3,62 @@ import Head from 'next/head';
 import Sidebar from '@/modules/sidebar';
 import React, { useState } from "react";
 import { Label, TextInput } from "flowbite-react";
-import Swal from 'sweetalert2';
-import instance from '@/scripts/requests/instance';
-import { formatCPF } from "@/scripts/validation/dataFormatter";
-import SellerModal from '@/modules/seller_modal';
+import instance from '@/scripts/http-requests/instance';
+import { formatCPF } from "@/scripts/utils/dataFormatter";
 import FormCard from '@/modules/form_card';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
-
-interface Seller {
-  name: string;
-  cpf: string;
-  username: string;
-  password: string;
-}
+import { createSellerDto } from '@/models/models';
+import UploadModal from '@/modules/upload_modal';
+import { postSeller } from '@/scripts/http-requests/InstanceSamples';
 
 export default function Home() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [user, setUser] = useState<Seller>({
+  const emptyUser = {
     name: '',
     cpf: '',
     username: '',
-    password: ''
-  });
+    password: '',
+    admin: false,
+  }
 
+  const [user, setUser] = useState<createSellerDto>(emptyUser);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value, type, checked } = e.target;
+    switch (type) {
+      case 'checkbox':
+        setUser({ ...user, [name]: checked });
+        break;
+      default:
+        setUser({ ...user, [name]: value });
+        break;
+    }
+  };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
-    user.cpf=user.cpf.replace(/\D/g, '');
     
-    instance.post('/account/register',{
-      name: user.name,
-      cpf: user.cpf,
-      username: user.username,
-      password: user.password
-    })
+    postSeller(user)
     .then(function(response){
       successAlert("Vendedor cadastrado com sucesso!", "Seller/user registered successfully");
-      setUser({
-        name: '',
-        cpf: '',
-        username: '',
-        password: ''
-      })
+      setUser(emptyUser)
     })
     .catch(error => {
       failureAlert("Error registering Seller/user");
     })
   };
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+  const handleUpload = async (jsonRow: any) => {
+    let vendedor: createSellerDto = {
+      name: jsonRow.Nome,
+      username: jsonRow.Nome.replace(/\s/g, '').toLowerCase(),
+      cpf: jsonRow["CPF"].replace(/[^[^\w\s]/gi, ''),
+      password: '12345678',
+      admin: false
+    }
+    await postSeller(vendedor)
   };
 
   return (
@@ -72,15 +75,15 @@ export default function Home() {
             </div>
 
             <div>
-                <Label htmlFor="name" value="Nome" className="font-bold" />
+                <Label htmlFor="name" value="Nome" className="font-bold dark:text-black" />
                 <div className="border-2 rounded-lg shadow-inner">
                   <TextInput id="name" type="text" name="name" value={user.name} onChange={handleChange} required />
                 </div>
             </div>
 
             <div>
-                <Label htmlFor="cpf" value="CPF" className="font-bold" />
-                <div className="border-2 rounded-lg shadow-inner">
+                <Label htmlFor="cpf" value="CPF" className="font-bold dark:text-black" />
+                <div className="border-2 rounded-lg shadow-inner ">
                   <TextInput id="cpf" type="text" name="cpf"value={formatCPF(user.cpf)} maxLength={14} onChange={handleChange} required />
                 </div>
             </div>
@@ -98,6 +101,14 @@ export default function Home() {
                   <TextInput id="password" type="password" name="password" value={user.password} onChange={handleChange} required />
                 </div>
             </div>
+
+            <div>
+              <Label htmlFor="admin" value="Administrador" className="font-bold" />
+              <div className="flex items-center">
+                <input id="admin" type="checkbox" name="admin" onChange={handleChange} />
+                <span className="ml-2">Habilitar privilégios de administrador</span>
+              </div>
+            </div>
  
             <div className="grid grid-flow-row">
               <div className="text-right">
@@ -108,7 +119,7 @@ export default function Home() {
               </div>
             </div>
           </form>
-          <SellerModal isOpen={modalIsOpen} closeModal={closeModal} />
+          <UploadModal isOpen={modalIsOpen} closeModal={closeModal}  postSequence={async (jsonRow)=>{await handleUpload(jsonRow)}} success={{msg: "Vendedores cadastrados com sucesso!", log: "Sellers added"}}/>
         </FormCard>
     </main>
   );

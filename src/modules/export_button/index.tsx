@@ -1,5 +1,5 @@
-import jsonToCSV from "@/scripts/dataUtils/jsonToCSV";
-import { jsonToExcel } from "@/scripts/dataUtils/jsonToXLSX";
+import jsonToCSV from "@/scripts/file-format-scripts/jsonToCSV";
+import { jsonToExcel } from "@/scripts/file-format-scripts/jsonToXLSX";
 import { Modal } from "flowbite-react";
 import { useState } from "react";
 

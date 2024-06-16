@@ -1,63 +1,57 @@
 import '@/app/globals.css'
-import ClientModal from '@/modules/client_modal';
+import { createClienteDto } from '@/models/models';
 import FormCard from '@/modules/form_card';
 import Sidebar from '@/modules/sidebar';
-import instance from '@/scripts/requests/instance';
+import UploadModal from '@/modules/upload_modal';
+import { postClient } from '@/scripts/http-requests/InstanceSamples';
+import { formatCNPJ, formatPhoneNumber } from '@/scripts/utils/dataFormatter';
 import { failureAlert, successAlert } from '@/scripts/utils/shared';
-import { formatCNPJ, formatPhoneNumber } from '@/scripts/validation/dataFormatter';
 import { Label, TextInput } from 'flowbite-react';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import Swal from 'sweetalert2';
 
-interface Cliente {
-  cnpj: string;
-  nomeFantasia: string;
-  razaoSocial: string;
-  segmento: string;
-  telefone: string;
-}
 export default function Home() {
-  const [cliente, setCliente] = useState<Cliente>({
+  const emptyCli = {
     cnpj: '',
-    nomeFantasia: '',
-    razaoSocial: '',
-    segmento: '',
-    telefone: ''
-  });
+    tradingName: '',
+    companyName: '',
+    segment: '',
+    contact: ''
+  }
+
+  const [cliente, setCliente] = useState<createClienteDto>(emptyCli);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
   const closeModal = () => {
     setModalIsOpen(false);
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setCliente({ ...cliente, [name]: value });
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    cliente.cnpj=cliente.cnpj.replace(/\D/g, '');
-    cliente.telefone=cliente.telefone.replace(/\D/g, '');
-
-    instance.post('/clients',{
-      tradingName: cliente.nomeFantasia,
-      companyName: cliente.razaoSocial,
-      cnpj: cliente.cnpj,
-      segment: cliente.segmento,
-      contact: cliente.telefone
-    })
+    
+    postClient(cliente)
     .then(function(response){
       successAlert("Cliente cadastrado com sucesso!", "Client added successfully");
-      setCliente({
-        cnpj: '',
-        nomeFantasia: '',
-        razaoSocial: '',
-        segmento: '',
-        telefone: ''
-      });
+      setCliente(emptyCli);
     })
     .catch(error => {
       failureAlert("Error adding new client")
     })
+  };
+  const handleUpload = async (jsonRow:any) => {
+    let cliente: createClienteDto = {
+      tradingName: jsonRow["Nome Fantasia"],
+      companyName: jsonRow["Razão Social"],
+      cnpj: jsonRow["CNPJ"].replace(/[^\w\s]/gi, ''),
+      segment: jsonRow["SEGMENTO"],
+      contact: jsonRow["CONTATO"],
+      status: jsonRow["STATUS"]
+    }
+    await postClient(cliente)
   };
 
   return (
@@ -81,30 +75,30 @@ export default function Home() {
           </div>
 
           <div>
-              <Label htmlFor="nomeFantasia" value="Nome Fantasia:" className="font-bold" />
+              <Label htmlFor="tradingName" value="Nome Fantasia:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="nomeFantasia" type="text" name="nomeFantasia" value={cliente.nomeFantasia} onChange={handleChange} required />
+                <TextInput id="tradingName" type="text" name="tradingName" value={cliente.tradingName} onChange={handleChange} required />
               </div>
           </div>
 
           <div>
-              <Label htmlFor="razaoSocial" value="Razão Social:" className="font-bold" />
+              <Label htmlFor="companyName" value="Razão Social:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="razaoSocial" type="text" name="razaoSocial" value={cliente.razaoSocial} onChange={handleChange} required />
+                <TextInput id="companyName" type="text" name="companyName" value={cliente.companyName} onChange={handleChange} required />
               </div>
           </div>
 
           <div>
-              <Label htmlFor="segmento" value="Segmento:" className="font-bold" />
+              <Label htmlFor="segment" value="Área de atuação:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="segmento" type="text" name="segmento" value={cliente.segmento} onChange={handleChange} required />
+                <TextInput id="segment" type="text" name="segment" value={cliente.segment} onChange={handleChange} required />
               </div>
           </div>
 
           <div>
-              <Label htmlFor="telefone" value="Telefone:" className="font-bold" />
+              <Label htmlFor="contact" value="Telefone:" className="font-bold" />
               <div className="border-2 rounded-lg shadow-inner">
-                <TextInput id="telefone" type="text" name="telefone" value={formatPhoneNumber(cliente.telefone)} maxLength={15} onChange={handleChange} required />
+                <TextInput id="contact" type="text" name="contact" value={formatPhoneNumber(cliente.contact)} maxLength={15} onChange={handleChange} required />
               </div>
           </div>
           
@@ -117,7 +111,7 @@ export default function Home() {
             </div>
           </div>
         </form>
-        <ClientModal isOpen={modalIsOpen} closeModal={closeModal} />
+        <UploadModal isOpen={modalIsOpen} closeModal={closeModal}  postSequence={async (jsonRow)=>{await handleUpload(jsonRow)}} success={{msg: "Clientes cadastrados com sucesso!", log: "Clients added"}}/>
       </FormCard>
     </main>
   );
