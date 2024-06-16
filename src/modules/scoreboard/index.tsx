@@ -67,11 +67,11 @@ const Scoreboard = () => {
       {/* User */}
       {/* topScores.self.rank-1 > 2 ? topColors[3] : topColors[topScores.self.rank-1] */}
       
-      <div className="flex justify-between gap-4 p-4 shadow-md bg-gray-200">
+      <div className="flex md:flex-row flex-col  justify-between gap-4 p-4 shadow-md bg-gray-200">
         <div className="h-full rounded-full aspect-square flex justify-center items-center">
           <ClientIcon className="invert"/>
         </div>
-        <div className="h-full grow flex flex-col">
+        <div className="h-full grow flex md:flex-col justify-center items-center">
           <h3 className="text-xl font-bold">{topScores.self.score} Pontos</h3>
           <h6 className="text-xl font-bold ml-4">{currentUser.username}</h6>
         </div>

@@ -69,7 +69,7 @@ export default function Sellers() {
 
                 {isLoading ?<div  className='grid place-content-center '> <LoaderAnim />   </div>:
                 <Table className="w-100 rounded-lg bg-purple-500 text-black">
-                  <Table.Head className='w-full text-lg w-full text-lg text-[#fbfbfb]'>
+                  <Table.Head className='w-full text-lg  text-[#fbfbfb]'>
                     <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>ID</Table.HeadCell>
                     <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Nome</Table.HeadCell>
                     <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>CPF</Table.HeadCell>
