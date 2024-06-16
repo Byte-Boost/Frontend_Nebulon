@@ -51,14 +51,15 @@ export default function Test() {
     const [timeFilteredTotalSales, setTimeFilteredTotalSales] = useState([]);
     const [filteredTotalSales, setFilteredTotalSales] = useState([]);
 
-    const [quantitySellsCurrentMonth, setQuantitySellsCurrentMonth] = useState<number>(0);
-
-    const [totalSellsValue, setTotalSellsValue] = useState<number>(0);
-    const [totalCommissionValueCurrentMonth, setTotalCommissionValueCurrentMonth] = useState<number>(0);
+    const [sidebarQuantitySold, setSidebarQuantitySold] = useState<number>(0);
+    const [sidebarTotalSellsValue, setSidebarTotalSellsValue] = useState<number>(0);
+    const [sidebarTotalCommValue, setSidebarTotalCommValue] = useState<number>(0);
+    
     const [totalSellsPerMonth, setTotalSellsPerMonth] = useState({});
 
     const [pieFilter, setPieFilter] = useState('category')
     const [timeFilter, setTimeFilter] = useState<Date | null>(null)
+    const [timeFilterLabel, setTimeFilterLabel] = useState('Sempre')
     const [filters, setFilters] = useState<commissionFilters>({
       date: null,
       clientCNPJ: null,
@@ -217,38 +218,15 @@ export default function Test() {
       setTotalSellsPerMonth(newTotalSellsPerMonth);
     }
     async function getSidebarData(){
-
-      let now = new Date(Date.now());
-      // Gets the first and last day of the current year
-      let current_year_start = new Date(now.getFullYear(), 0, 1);
-      let current_year_end = new Date(now.getFullYear(), 12, 0);
-      current_year_end.setUTCHours(23,59,59,999);
-  
-      // Gets the first and last day of the current month
-      let current_month_start = new Date(now.getFullYear(), now.getMonth(), 1);
-      let current_month_end =new Date(now.getFullYear(), now.getMonth()+1, 0);
-      current_month_end.setUTCHours(23,59,59,999);
-      
-      // Filtering the commissions that are between the first and last day of the current month and year
-      let salesThisMonth = unfilteredTotalSales.filter((commission: any) => {
-        let after  =  new Date(commission.date) >= current_month_start
-        let before =  new Date(commission.date) <= current_month_end
-        return after && before
-      });
-      let salesThisYear = unfilteredTotalSales.filter((commission: any) => {
-        let after  =  new Date(commission.date) >= current_year_start
-        let before =  new Date(commission.date) <= current_year_end
-        return after && before
-      });
       // Turning it into data
-      let saleValueYear = salesThisYear.reduce((acc, commission: any) => acc + commission.value, 0);
-      let commValueMonth = Number(salesThisMonth.reduce((acc, commission: any) => acc + commission.commissionCut, 0).toFixed(2));
-      console.log(saleValueYear, commValueMonth)
+      let saleValue = timeFilteredTotalSales.reduce((acc, commission: any) => acc + commission.value, 0);
+      let commValue = Number(timeFilteredTotalSales.reduce((acc, commission: any) => acc + commission.commissionCut, 0).toFixed(2));
+      console.log(saleValue, commValue)
       
       // Sets the data to the states
-      setTotalSellsValue(saleValueYear);
-      setQuantitySellsCurrentMonth(salesThisMonth.length);
-      setTotalCommissionValueCurrentMonth(commValueMonth);
+      setSidebarTotalSellsValue(saleValue);
+      setSidebarQuantitySold(timeFilteredTotalSales.length);
+      setSidebarTotalCommValue(commValue);
     }
 
     useEffect(() => {
@@ -288,6 +266,7 @@ export default function Test() {
     useEffect(() =>{
       getDataForPie()
     },[pieFilter])
+
   return (
     <main className='h-screen w-screen'>
       <Head>
@@ -410,8 +389,9 @@ export default function Test() {
                               let now = new Date(Date.now());
                               let current_month_start = new Date(now.getFullYear(), now.getMonth(), 1);
                               setTimeFilter(current_month_start);
+                              setTimeFilterLabel("Este mês")
                             }} className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                            Este mes
+                            Este mês
                             </button>
                         </div>
 
@@ -421,6 +401,7 @@ export default function Test() {
                               let semester = now.getMonth() < 5 ? 0 : 5;
                               let current_semester_start = new Date(now.getFullYear(), semester, 1);
                               setTimeFilter(current_semester_start);
+                              setTimeFilterLabel("Este semestre")
                             }} className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
                               Este semestre
                             </button>
@@ -431,6 +412,7 @@ export default function Test() {
                               let now = new Date(Date.now());
                               let current_year_start = new Date(now.getFullYear(), 0, 1);
                               setTimeFilter(current_year_start);
+                              setTimeFilterLabel("Este ano")
                             }} className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
                               Este ano
                             </button>
@@ -440,6 +422,7 @@ export default function Test() {
                         <div className="text-left">
                             <button onClick={()=>{
                               setTimeFilter(null);
+                              setTimeFilterLabel("Sempre")
                             }} className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
                               Sempre
                             </button>
@@ -451,20 +434,20 @@ export default function Test() {
         {/*far-left*/}
         <div className=' flex flex-col md:w-1/4  w-full row-span-2  justify-center p-2 md:gap-0 gap-10 '>
               <DashboardNumberCard 
-              title={`Total de Vendas (${(new Date()).getFullYear()})`}
-              number={`${Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalSellsValue)}`} 
+              title={`Total de Vendas (${timeFilterLabel})`}
+              number={`${Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(sidebarTotalSellsValue)}`} 
               percentage="" 
               isLoading={isLoading}
               />
               <DashboardNumberCard 
-              title={`Total em Comissões (${MonthName(new Date())})`} 
-              number={`${Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalCommissionValueCurrentMonth)}`} 
+              title={`Total em Comissões (${timeFilterLabel})`} 
+              number={`${Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(sidebarTotalCommValue)}`} 
               percentage=""
               isLoading={isLoading}
               />
               <DashboardNumberCard 
-              title={`Número de Vendas: ${MonthName(new Date())}`} 
-              number={`${quantitySellsCurrentMonth}`} 
+              title={`Número de Vendas (${timeFilterLabel})`} 
+              number={`${sidebarQuantitySold}`} 
               percentage=""
               isLoading={isLoading}
               />
