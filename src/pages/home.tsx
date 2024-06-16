@@ -56,7 +56,6 @@ export default function Test() {
     const [totalCommissionValueCurrentMonth, setTotalCommissionValueCurrentMonth] = useState<number>(0);
     const [totalSellsPerMonth, setTotalSellsPerMonth] = useState({});
 
-    const [pieData, setPieData] = useState([]);
     const [pieFilter, setPieFilter] = useState('category')
     const [filters, setFilters] = useState<commissionFilters>({
       date: null,
@@ -306,7 +305,7 @@ export default function Test() {
             {/*bottom*/}
             <div className='flex md:flex-row  w-full h-1/2 flex-col'>
                 <div id="pieChart" className=' md:w-1/2 md:h-full h-72 col-span-2 flex justify-center p-2'>
-                    <div className='grow border-2 rounded-lg '>
+                    <div className='grow border-2 rounded-lg md:pt-0 pt-14'>
                     {isLoading ? <div className=' w-full h-full grid place-content-center '><LoaderAnim className='scale-50' /></div>  :
                       <Graph
                           key={'pieChart'}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SidebarItem from '../sidebar_item';
 import cookie from '@boiseitguru/cookie-cutter';
 import { jwtDecode } from 'jwt-decode';
@@ -25,10 +25,28 @@ const Sidebar = ({isAdminProp}:SidebarProps) => {
       setIsAdmin(decoded.admin);
     }
   },[]);
+  
+  const sidebarRef = useRef(null);
+  useEffect(() => {
+    
+    function handleClickOutside(event :any) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsHovered(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Cleanup function to remove the event listener when the component unmounts
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   const router = useRouter();
   const currentPath = router.pathname;
   return (
     <div 
+      ref={sidebarRef}
+      onClick={() => setIsHovered(true)}
       className={`transition-all duration-200 ease-in-out ${isHovered ? 'w-48' : 'w-[3.4rem]'} z-50 bg-[#1c1c1e] h-screen fixed flex flex-col justify-between border-r-[1px] border-[#424042]`} 
       onMouseEnter={() => setIsHovered(true)} 
       onMouseLeave={() => setIsHovered(false)}
