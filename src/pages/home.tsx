@@ -2,7 +2,7 @@ import '@/app/globals.css'
 import { commissionFilters } from '@/models/models';
 import DashboardNumberCard from '@/modules/dashboard_number_card';
 import LoaderAnim from '@/modules/loader';
-import Scoreboard from '@/modules/score_board';
+import Scoreboard from '@/modules/scoreboard';
 import Sidebar from '@/modules/sidebar';
 import { getCommissionsWithFilter, getProductById, getProductsWithFilter } from '@/scripts/http-requests/InstanceSamples';
 import { formatMoney } from '@/scripts/utils/dataFormatter';
@@ -265,10 +265,8 @@ export default function Test() {
                     </div>
                 </div>
                 <div id="scoreBoard" className='col-span-2 flex justify-center p-2 md:w-1/3 md:h-full h-1/3'>
-                    <div className=' grow flex flex-col p-4 border-2 rounded-lg justify-around'>
-                        <Card className=' grow flex justify-center'>
-                          <Scoreboard/>
-                        </Card>
+                    <div className='grow flex flex-col p-4 border-2 rounded-lg justify-around'>
+                        <Scoreboard/>
                     </div>
                 </div>
             </div>

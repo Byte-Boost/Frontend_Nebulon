@@ -40,6 +40,13 @@ export function formatMoney(n: string, showCurrency: boolean=true){
   if (showCurrency) n=`R$ ${n}`;
   return n;
 }
+export function formatOrdinal(n: number){
+    if ([11, 12, 13].includes(n)) return n+"th"
+    else if (n%10 == 1) return n+"st"
+    else if (n%10 == 2) return n+"nd"
+    else if (n%10 == 3) return n+"rd"
+    else return n+"th"
+}
 
 export function extractFloat(n: string): number {
   n = String(n);
