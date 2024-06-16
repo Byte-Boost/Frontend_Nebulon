@@ -76,9 +76,10 @@ export default function Clients() {
                 {isLoading ?<div  className='grid place-content-center '> <LoaderAnim />   </div>:
                 <Table className="w-100 rounded-lg bg-purple-500 text-black">
                   <Table.Head className='w-full text-lg text-[#fbfbfb]'>
-                    <Table.HeadCell>Razão Social</Table.HeadCell>
-                    <Table.HeadCell>Segmento</Table.HeadCell>
-                    <Table.HeadCell>Contato</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Razão Social</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Segmento</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Contato</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'></Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     

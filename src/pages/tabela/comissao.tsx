@@ -236,14 +236,15 @@ export default function Commissions() {
                 {isLoading ? <div className='grid place-content-center '><LoaderAnim /></div>  :
                 <Table className="w-100 rounded-lg bg-purple-500">
                   <Table.Head className='w-full text-left text-md text-[#fbfbfb]'>
-                    <Table.HeadCell onClick={(e:any) => changeDateSorting()} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Data da Venda {sortLabel.sharedSort && sortTarget==='date'? sortLabel.sharedSort =='Mais Velha'? '\u2193': '\u2191' : null }</Table.HeadCell>
-                    <Table.HeadCell onClick={(e:any) => changeAlphabeticalSorting(false,['seller_data','name'])} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Vendendor {sortLabel.sharedSort && sortTarget === 'seller_data' ? sortLabel.sharedSort =='Alfabética Inversa'? '\u2193': '\u2191' : null }</Table.HeadCell>
-                    <Table.HeadCell>CPF do Vendendor</Table.HeadCell>
-                    <Table.HeadCell onClick={(e:any) => changeAlphabeticalSorting(false,['client_data','tradingName'])} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Cliente {sortLabel.sharedSort && sortTarget === 'client_data'? sortLabel.sharedSort =='Alfabética Inversa' ? '\u2193': '\u2191' : null }</Table.HeadCell>
-                    <Table.HeadCell>CNPJ/CPF do Cliente</Table.HeadCell>
-                    <Table.HeadCell onClick={(e:any) => changeAlphabeticalSorting(false,['product_data','name'])} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Produto {sortLabel.sharedSort && sortTarget === 'product_data'? sortLabel.sharedSort =='Alfabética Inversa'? '\u2193': '\u2191' : null }</Table.HeadCell>
-                    <Table.HeadCell>Comissão</Table.HeadCell> 
-                    <Table.HeadCell onClick={(e:any) => changeValueSorting()} className='cursor-pointer hover:text-gray-200 hover:scale-90 transition-all'>Valor da Venda {sortLabel.sharedSort && sortTarget === 'value'? sortLabel.sharedSort =='Menor Valor'? '\u2193': '\u2191' : null }</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb] cursor-pointer hover:text-gray-200 hover:scale-90 transition-all' onClick={(e:any) => changeDateSorting()}>Data da Venda {sortLabel.sharedSort && sortTarget==='date'? sortLabel.sharedSort =='Mais Velha'? '\u2193': '\u2191' : null }</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb] cursor-pointer hover:text-gray-200 hover:scale-90 transition-all' onClick={(e:any) => changeAlphabeticalSorting(false,['seller_data','name'])}>Vendendor {sortLabel.sharedSort && sortTarget === 'seller_data' ? sortLabel.sharedSort =='Alfabética Inversa'? '\u2193': '\u2191' : null }</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>CPF do Vendendor</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb] cursor-pointer hover:text-gray-200 hover:scale-90 transition-all' onClick={(e:any) => changeAlphabeticalSorting(false,['client_data','tradingName'])}>Cliente {sortLabel.sharedSort && sortTarget === 'client_data'? sortLabel.sharedSort =='Alfabética Inversa' ? '\u2193': '\u2191' : null }</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>CNPJ/CPF do Cliente</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb] cursor-pointer hover:text-gray-200 hover:scale-90 transition-all' onClick={(e:any) => changeAlphabeticalSorting(false,['product_data','name'])}>Produto {sortLabel.sharedSort && sortTarget === 'product_data'? sortLabel.sharedSort =='Alfabética Inversa'? '\u2193': '\u2191' : null }</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Comissão</Table.HeadCell> 
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb] cursor-pointer hover:text-gray-200 hover:scale-90 transition-all' onClick={(e:any) => changeValueSorting()}>Valor da Venda {sortLabel.sharedSort && sortTarget === 'value'? sortLabel.sharedSort =='Menor Valor'? '\u2193': '\u2191' : null }</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'></Table.HeadCell> 
                   </Table.Head>
 
                   <Table.Body className="text-black px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">

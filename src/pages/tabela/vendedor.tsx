@@ -69,11 +69,12 @@ export default function Sellers() {
 
                 {isLoading ?<div  className='grid place-content-center '> <LoaderAnim />   </div>:
                 <Table className="w-100 rounded-lg bg-purple-500 text-black">
-                  <Table.Head className='w-full text-lg text-[#fbfbfb]'>
-                    <Table.HeadCell>ID</Table.HeadCell>
-                    <Table.HeadCell>Nome</Table.HeadCell>
-                    <Table.HeadCell>CPF</Table.HeadCell>
-                    <Table.HeadCell>Pontuação</Table.HeadCell>
+                  <Table.Head className='w-full text-lg w-full text-lg text-[#fbfbfb]'>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>ID</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Nome</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>CPF</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Pontuação</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'></Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                     

@@ -73,8 +73,9 @@ export default function Products() {
                 {isLoading ? <div className='grid place-content-center '> <LoaderAnim /></div>:
                 <Table className="w-100 rounded-lg bg-purple-500 text-black">
                   <Table.Head className='text-left text-lg text-[#fbfbfb]'>
-                    <Table.HeadCell>Nome</Table.HeadCell>
-                    <Table.HeadCell>Descrição</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Nome</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'>Descrição</Table.HeadCell>
+                    <Table.HeadCell className='bg-purple-500 rounded-lg text-[#fbfbfb]'></Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg">
                         {data.map((product: { id: number, name: string , description:string, status:number }, index: number) => {
