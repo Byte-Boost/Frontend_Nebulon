@@ -26,7 +26,7 @@ const Sidebar = ({isAdminProp}:SidebarProps) => {
     }
   },[]);
   
-  const sidebarRef = useRef(null);
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     
     function handleClickOutside(event :any) {

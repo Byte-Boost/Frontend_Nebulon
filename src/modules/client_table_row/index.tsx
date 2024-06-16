@@ -55,8 +55,7 @@ const ClientTableRow = ({
       {formatPhoneNumber(contact)}
     </Table.Cell>
     {
-      isAdmin
-    &&
+      isAdmin?
     <Table.Cell>
         <Link href={{
           pathname: '/adm/editar_cliente/[id]',
@@ -68,6 +67,10 @@ const ClientTableRow = ({
         </button>
         </Link>
       </Table.Cell>
+           :
+           <Table.Cell>
+     
+           </Table.Cell>
       }
   </Table.Row>
   )

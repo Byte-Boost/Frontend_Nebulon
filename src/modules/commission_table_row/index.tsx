@@ -94,8 +94,7 @@ const CommissionTableRow = ({
         </div>
       </Table.Cell>
       {
-      isAdmin
-      &&
+      isAdmin?
       <Table.Cell>
       <div className="text-right">
               <button className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto mt-4 w-full' type="button" onClick={() => {
@@ -123,6 +122,10 @@ const CommissionTableRow = ({
                 
                 }}>Deletar</button>
             </div>
+      </Table.Cell>
+      :
+      <Table.Cell>
+
       </Table.Cell>
       }
     </Table.Row>

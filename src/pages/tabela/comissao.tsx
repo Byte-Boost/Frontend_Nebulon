@@ -139,7 +139,7 @@ export default function Commissions() {
         </Head>
         <Sidebar/>
         <ContentArea>
-          <div className='w-full p-14'>
+          <div className='w-full p-14 md:scale-90'>
             <div className='bg-slate-100 shadow-2xl rounded-sm py-6 px-6'>
               <div>
                 <section id="Options" className='w-full text-left flex justify-between pb-6'>

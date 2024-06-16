@@ -51,8 +51,7 @@ const ProductTableRow = ({
         {description}
       </Table.Cell>
       {
-        isAdmin
-        &&
+        isAdmin?
       <Table.Cell>
         <Link href={{
           pathname: '/adm/editar_produto/[id]',
@@ -63,7 +62,11 @@ const ProductTableRow = ({
           Editar
         </button>
         </Link>
-      </Table.Cell>          
+      </Table.Cell>
+           :
+           <Table.Cell>
+     
+           </Table.Cell>          
       }
     </Table.Row>
   )
