@@ -48,6 +48,7 @@ export default function Test() {
     // Current Month Stats
 
     const [unfilteredTotalSales, setUnfilteredTotalSales] = useState([]);
+    const [timeFilteredTotalSales, setTimeFilteredTotalSales] = useState([]);
     const [filteredTotalSales, setFilteredTotalSales] = useState([]);
 
     const [quantitySellsCurrentMonth, setQuantitySellsCurrentMonth] = useState<number>(0);
@@ -57,6 +58,7 @@ export default function Test() {
     const [totalSellsPerMonth, setTotalSellsPerMonth] = useState({});
 
     const [pieFilter, setPieFilter] = useState('category')
+    const [timeFilter, setTimeFilter] = useState<Date | null>(null)
     const [filters, setFilters] = useState<commissionFilters>({
       date: null,
       clientCNPJ: null,
@@ -72,10 +74,21 @@ export default function Test() {
     async function refreshUTSale(){
       setUnfilteredTotalSales((await getCommissionsWithFilter(filters, true)).data);
     }
+    async function getDateFilteredData(){
+      if (timeFilter != null){
+        let filtered = unfilteredTotalSales.filter((commission: any) => {
+          let after  =  new Date(commission.date) >= timeFilter
+          return after;
+        })
+        setTimeFilteredTotalSales(filtered);
+      } else {
+        setTimeFilteredTotalSales(unfilteredTotalSales);
+      }
+    }
     async function getDataForPie(){
       let filter = pieFilter
       if (filter == 'product'){
-      const totalSalesPerProduct = unfilteredTotalSales.reduce((acc : any, curr :any) => {
+      const totalSalesPerProduct = timeFilteredTotalSales.reduce((acc : any, curr :any) => {
         console.log(acc,curr,curr.product_data)
         if (acc[curr.product_data.name]) {
           acc[curr.product_data.name] += curr.value;
@@ -88,7 +101,7 @@ export default function Test() {
       return 
       }
       else if (filter == 'seller'){
-      const totalSalesPerSeller = unfilteredTotalSales.reduce((acc:any, curr:any) =>{
+      const totalSalesPerSeller = timeFilteredTotalSales.reduce((acc:any, curr:any) =>{
         if (acc[curr.seller_data.name]) {
           acc[curr.seller_data.name] += curr.value;
         } else {
@@ -100,7 +113,7 @@ export default function Test() {
       return  
       } 
       else if (filter == 'client'){
-      const totalSalesPerClient = unfilteredTotalSales.reduce((acc:any, curr:any) =>{
+      const totalSalesPerClient = timeFilteredTotalSales.reduce((acc:any, curr:any) =>{
         if (acc[curr.client_data.tradingName]) {
           acc[curr.client_data.tradingName] += curr.value;
         } else {
@@ -178,7 +191,7 @@ export default function Test() {
       });
       setTotalSellsPerMonth(newTotalSellsPerMonth);
     }
-    async function getOverallData(){
+    async function getSidebarData(){
 
       let now = new Date(Date.now());
       // Gets the first and last day of the current year
@@ -235,12 +248,18 @@ export default function Test() {
       // So it doesn't try to build graph from empty data (before the first fetch)
       if (unfilteredTotalSales.length > 0){
         setIsLoading(true)
+        getDateFilteredData();
         getDataForGraph();
-        getOverallData();
-        getDataForPie();
         setIsLoading(false)
       }
     }, [unfilteredTotalSales]);
+    useEffect(()=>{
+      getSidebarData();
+      getDataForPie();
+    }, [timeFilteredTotalSales])
+    useEffect(() => {
+      getDateFilteredData()
+    }, [timeFilter]);
     useEffect(() =>{
       getDataForPie()
     },[pieFilter])
@@ -363,27 +382,41 @@ export default function Test() {
                     <div className='  grow flex flex-col p-4 border-2 rounded-lg justify-around gap-2'>
                         <div className="text-left">
                             <button onClick={() => {
-                             
-                            }} className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+                              let now = new Date(Date.now());
+                              let current_month_start = new Date(now.getFullYear(), now.getMonth(), 1);
+                              setTimeFilter(current_month_start);
+                            }} className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
                             Este mes
                             </button>
                         </div>
 
                         <div className="text-left">
-                            <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                            Este trimestre
+                            <button onClick={()=>{
+                              let now = new Date(Date.now());
+                              let semester = now.getMonth() < 5 ? 0 : 5;
+                              let current_semester_start = new Date(now.getFullYear(), semester, 1);
+                              setTimeFilter(current_semester_start);
+                            }} className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+                              Este semestre
                             </button>
                         </div>
 
                         <div className="text-left">
-                            <button className='bg-gray-500 cursor-default text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                            Este semestre
+                            <button onClick={()=>{
+                              let now = new Date(Date.now());
+                              let current_year_start = new Date(now.getFullYear(), 0, 1);
+                              setTimeFilter(current_year_start);
+                            }} className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+                              Este ano
                             </button>
                         </div>
+                        
 
                         <div className="text-left">
-                            <button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
-                            Este ano
+                            <button onClick={()=>{
+                              setTimeFilter(null);
+                            }} className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline block mx-auto w-full'>
+                              Sempre
                             </button>
                         </div>
                     </div>
