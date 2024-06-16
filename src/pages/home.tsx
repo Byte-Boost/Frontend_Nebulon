@@ -136,27 +136,52 @@ export default function Test() {
           return acc;
         }, {});
         let filter = {
-          date: null,
-          clientCNPJ: null,
-          sellerCPF: null,
-          productID: null,
-          prodClass: null,
+          date: filters.date,
+          clientCNPJ: filters.clientCNPJ,
+          sellerCPF: filters.sellerCPF,
+          productID: filters.productID,
+          prodClass: filters.prodClass,
           clientsFirstPurchase: true,
-          page: 1,
-          limit: null,
+          page: filters.page,
+          limit: filters.limit,
         }
         let firstPro = (await getCommissionsWithFilter(filter, true)).data;
-        totalSalesPerCategory = firstPro.reduce((acc:any, curr:any) =>{
-          if (curr.product_data.status == 0){
-            acc['Prod. Novo p/ Cli. Novo'] = (acc['Prod. Novo p/ Cli. Novo'] || 0) + curr.value;
-          }
-          else if (curr.product_data.status == 1){
-            acc['Prod. Velho p/ Cli. Novo'] = (acc['Prod. Velho p/ Cli. Novo'] || 0) + curr.value;
-          }
-          return acc
-        }, totalSalesPerCategory)
-        setFilteredTotalSales(totalSalesPerCategory);
-        return 
+        if (timeFilter != null){
+          let filtered = firstPro.filter((commission: any) => {
+            let after  =  new Date(commission.date) >= timeFilter
+            return after;
+          })
+          totalSalesPerCategory = filtered.reduce((acc:any, curr:any) =>{
+            if (curr.product_data.status == 0){
+              acc['Prod. Novo p/ Cli. Novo'] = (acc['Prod. Novo p/ Cli. Novo'] || 0) + curr.value;
+            }
+            else if (curr.product_data.status == 1){
+              acc['Prod. Velho p/ Cli. Novo'] = (acc['Prod. Velho p/ Cli. Novo'] || 0) + curr.value;
+            }
+            return acc
+          }, totalSalesPerCategory)
+          console.log(totalSalesPerCategory)
+          setFilteredTotalSales(totalSalesPerCategory);
+          return 
+        } else {
+          totalSalesPerCategory = firstPro.reduce((acc:any, curr:any) =>{
+            if (curr.product_data.status == 0){
+              acc['Prod. Novo p/ Cli. Novo'] = (acc['Prod. Novo p/ Cli. Novo'] || 0) + curr.value;
+            }
+            else if (curr.product_data.status == 1){
+              acc['Prod. Velho p/ Cli. Novo'] = (acc['Prod. Velho p/ Cli. Novo'] || 0) + curr.value;
+            }
+            return acc
+          }, totalSalesPerCategory)
+          console.log(totalSalesPerCategory)
+          setFilteredTotalSales(totalSalesPerCategory);
+          return 
+        }
+        
+      
+        
+       
+      
     }
   }
     async function getDataForGraph() {
